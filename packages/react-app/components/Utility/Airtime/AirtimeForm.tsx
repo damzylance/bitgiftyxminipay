@@ -46,6 +46,10 @@ export const AirtimeForm = (props: Props) => {
   const { address, isConnected } = useAccount();
   const fetchRates = async () => {
     setIsLoading(true);
+    toast({
+      title: `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`,
+      status: "warning",
+    });
     await axios
       .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
       .then((response) => {
@@ -116,11 +120,9 @@ export const AirtimeForm = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
+      fetchRates();
     }
   }, [address, isConnected]);
-  useEffect(() => {
-    fetchRates;
-  }, []);
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>
       <HStack width={"full"} alignItems={"center"}>
