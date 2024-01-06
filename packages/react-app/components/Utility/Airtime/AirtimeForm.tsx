@@ -47,7 +47,7 @@ export const AirtimeForm = (props: Props) => {
   const fetchRates = async () => {
     setIsLoading(true);
     await axios
-      .get(`https://server.bitgifty.com/swap/get-dollar-price`)
+      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
       .then((response) => {
         console.log(response);
         setTokenToNairaRate(parseFloat(response.data));
@@ -58,7 +58,7 @@ export const AirtimeForm = (props: Props) => {
         console.log(error);
         setIsLoading(false);
         toast({
-          title: error,
+          title: error.response.data.error,
           status: "warning",
         });
       });
@@ -135,8 +135,6 @@ export const AirtimeForm = (props: Props) => {
             width={"full"}
           >
             BUY {props.telco} AIRTIME
-            <br />
-            {userAddress}
           </Text>
         </HStack>
       </HStack>
