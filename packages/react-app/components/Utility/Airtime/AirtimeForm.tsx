@@ -58,7 +58,7 @@ export const AirtimeForm = (props: Props) => {
         console.log(error);
         setIsLoading(false);
         toast({
-          title: error.response.data.error,
+          title: error.response.data,
           status: "warning",
         });
       });
