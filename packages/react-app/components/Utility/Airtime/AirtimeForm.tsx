@@ -116,9 +116,11 @@ export const AirtimeForm = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
-      fetchRates();
     }
   }, [address, isConnected]);
+  useEffect(() => {
+    fetchRates;
+  }, []);
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>
       <HStack width={"full"} alignItems={"center"}>
