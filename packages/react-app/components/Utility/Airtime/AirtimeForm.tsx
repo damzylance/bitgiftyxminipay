@@ -47,7 +47,7 @@ export const AirtimeForm = (props: Props) => {
   const fetchRates = async () => {
     setIsLoading(true);
     await axios
-      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
+      .get(`https://server.bitgifty.com/swap/get-dollar-price`)
       .then((response) => {
         console.log(response);
         setTokenToNairaRate(parseFloat(response.data));
