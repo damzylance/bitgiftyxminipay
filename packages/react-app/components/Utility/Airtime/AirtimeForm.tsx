@@ -45,25 +45,24 @@ export const AirtimeForm = (props: Props) => {
 
   const { address, isConnected } = useAccount();
   const fetchRates = async () => {
-    setIsLoading(true);
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
-      .then((response) => {
-        console.log(response);
-        setTokenToNairaRate(parseFloat(response.data));
-        setIsLoading(false);
-        // rate = parseFloat(response.data);
-      })
-      .catch((error) => {
-        alert(error);
-        setIsLoading(false);
-        toast({
-          title: error,
-          status: "warning",
-        });
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
+      );
+      console.log(response);
+      setTokenToNairaRate(parseFloat(response.data));
+    } catch (error: any) {
+      const errorMessage = error.response ? error.response.data : error.message;
+      alert(errorMessage);
+      toast({
+        title: errorMessage,
+        status: "warning",
       });
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   // setInterval(fetchRates, 60000);
   const rechargeAirtime = async (data: any) => {
     try {
