@@ -46,10 +46,6 @@ export const AirtimeForm = (props: Props) => {
   const { address, isConnected } = useAccount();
   const fetchRates = async () => {
     setIsLoading(true);
-    toast({
-      title: `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`,
-      status: "warning",
-    });
     await axios
       .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
       .then((response) => {
@@ -129,7 +125,7 @@ export const AirtimeForm = (props: Props) => {
         <ArrowBackIcon
           fontSize={"20px"}
           cursor={"pointer"}
-          onClick={props.back}
+          onClick={props.onClose}
         />
         <HStack width={"full"} justifyContent={"center"}>
           <Text
@@ -139,8 +135,6 @@ export const AirtimeForm = (props: Props) => {
             width={"full"}
           >
             BUY {props.telco} AIRTIME
-            <br />
-            {userAddress}
           </Text>
         </HStack>
       </HStack>

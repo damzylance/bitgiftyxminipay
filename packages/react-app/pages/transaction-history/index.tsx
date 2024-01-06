@@ -22,7 +22,9 @@ const History = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       axios
-        .get(`${process.env.NEXT_PUBLIC_BASE_URL}transactions/`)
+        .get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}transactions/?wallet_address=${address}`
+        )
         .then((response) => {
           setLoading(false);
           setTransactions(response.data.results.reverse());
