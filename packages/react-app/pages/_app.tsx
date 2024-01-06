@@ -12,15 +12,15 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../Theme";
 import logo from "../public/assets/logo-inline-transparent.png";
 import WidgetContainer from "@/components/WidgetContainer";
-const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
+// const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
 const { chains, publicClient } = configureChains(
   [Celo, Alfajores],
   [publicProvider()]
 );
 
-// const connectors = [new InjectedConnector({ chains })];
+const connectors = [new InjectedConnector({ chains })];
 
-const connectors = celoGroups({ chains, projectId });
+// const connectors = celoGroups({ chains, projectId });
 
 const appInfo = {
   appName: "Celo Composer",
