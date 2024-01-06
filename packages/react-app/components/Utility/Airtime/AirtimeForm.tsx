@@ -58,7 +58,7 @@ export const AirtimeForm = (props: Props) => {
         console.log(error);
         setIsLoading(false);
         toast({
-          title: error.response.data,
+          title: error,
           status: "warning",
         });
       });
@@ -135,6 +135,8 @@ export const AirtimeForm = (props: Props) => {
             width={"full"}
           >
             BUY {props.telco} AIRTIME
+            <br />
+            {userAddress}
           </Text>
         </HStack>
       </HStack>
