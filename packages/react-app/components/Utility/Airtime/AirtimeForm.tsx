@@ -135,6 +135,8 @@ export const AirtimeForm = (props: Props) => {
             width={"full"}
           >
             BUY {props.telco} AIRTIME
+            <br />
+            {userAddress}
           </Text>
         </HStack>
       </HStack>

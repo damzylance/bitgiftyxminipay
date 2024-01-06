@@ -36,9 +36,9 @@ function App({ Component, pageProps }: AppProps) {
     <ChakraProvider theme={theme}>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains} appInfo={appInfo} coolMode={true}>
-          <WidgetContainer>
+          <Layout>
             <Component {...pageProps} />
-          </WidgetContainer>
+          </Layout>
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>
