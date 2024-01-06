@@ -55,7 +55,7 @@ export const AirtimeForm = (props: Props) => {
         // rate = parseFloat(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
         setIsLoading(false);
         toast({
           title: error,
