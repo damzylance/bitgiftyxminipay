@@ -47,22 +47,28 @@ export const AirtimeForm = (props: Props) => {
   const fetchRates = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
+      const response = await fetch(
         `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
       );
-      console.log(response);
-      setTokenToNairaRate(parseFloat(response.data));
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log(responseData);
+      setTokenToNairaRate(parseFloat(responseData));
     } catch (error: any) {
-      const errorMessage = error.response ? error.response.data : error.message;
-      alert(errorMessage);
+      alert(error.message);
       toast({
-        title: errorMessage,
+        title: error.message,
         status: "warning",
       });
     } finally {
       setIsLoading(false);
     }
   };
+
   // setInterval(fetchRates, 60000);
   const rechargeAirtime = async (data: any) => {
     try {
