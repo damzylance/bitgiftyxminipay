@@ -100,6 +100,28 @@ export const DataForm = (props: any) => {
     // delete data.network;
     // delete data.data;
   };
+  const fetchDataPlans = async () => {
+    setIsLoading(true);
+    await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
+      )
+      .then((response) => {
+        setPlans(
+          response.data.data.filter((plan: any) => {
+            return plan.biller_code === props.telco;
+          })
+        );
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        toast({
+          title:
+            error.response?.data?.error || "Error occured fetching data plan",
+          status: "warning",
+        });
+      });
+  };
 
   const fetchRates = async () => {
     setIsLoading(true);
@@ -131,32 +153,9 @@ export const DataForm = (props: any) => {
     if (isConnected && address) {
       setUserAddress(address);
     }
+    // fetchRates();
   }, [address, isConnected]);
-  useEffect(() => {
-    const fetchDataPlans = async () => {
-      setIsLoading(true);
-      await axios
-        .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
-        )
-        .then((response) => {
-          setPlans(
-            response.data.data.filter((plan: any) => {
-              return plan.biller_code === props.telco;
-            })
-          );
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          toast({
-            title:
-              error.response?.data?.error || "Error occured fetching data plan",
-            status: "warning",
-          });
-        });
-    };
-    fetchDataPlans();
-  }, [props.telco, toast]);
+
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>
       <HStack width={"full"} alignItems={"center"}>
@@ -179,6 +178,7 @@ export const DataForm = (props: any) => {
 
       <form style={{ width: "100%" }} onSubmit={handleSubmit(buyData)}>
         <VStack width={"full"} gap={"20px"}>
+          <Text onClick={() => fetchDataPlans()}>FetchRate</Text>
           <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}
