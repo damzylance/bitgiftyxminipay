@@ -27,6 +27,7 @@ const Utility = () => {
   const [type, setType] = useState("");
   const { address, isConnected } = useAccount();
   const balance = useBalance(address, isConnected);
+  const floatedBalance = parseFloat(balance).toFixed(2);
   const { tokenToNairaRate } = useFetchRates();
   return (
     <Container>
@@ -65,7 +66,9 @@ const Utility = () => {
           >
             <Text fontSize={"sm"}>&#8358;</Text>
             <Text fontSize={"md"}>
-              {parseFloat(balance) * tokenToNairaRate}
+              {(
+                parseFloat(balance) * parseFloat(tokenToNairaRate.toString())
+              ).toFixed(2)}
             </Text>
           </HStack>
         </VStack>
