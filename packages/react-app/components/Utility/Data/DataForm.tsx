@@ -46,6 +46,35 @@ export const DataForm = (props: any) => {
   const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
 
+  const fetchPlans = async () => {
+    setLoading(true);
+    await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
+      )
+      .then((response) => {
+        console.log(response);
+        setPlans(
+          response.data.data.filter((plan: any) => {
+            return plan.biller_code === props.telco;
+          })
+        );
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast({
+          title:
+            error.response?.data?.error || "Error occured fetching data plan",
+          status: "warning",
+        });
+      });
+  };
+
+  const handlePlanChange = (e: any) => {
+    const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
+    setNairaAmount(tempNairaAmount);
+    setTokenAmount(tempNairaAmount / tokenToNairaRate);
+  };
   const buyData = async (data: any) => {
     if (
       parseInt(data.type.split(",")[1]) <
@@ -101,40 +130,12 @@ export const DataForm = (props: any) => {
     // delete data.network;
     // delete data.data;
   };
-  const fetchDataPlans = async () => {
-    setLoading(true);
-    await axios
-      .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
-      )
-      .then((response) => {
-        setPlans(
-          response.data.data.filter((plan: any) => {
-            return plan.biller_code === props.telco;
-          })
-        );
-        setLoading(false);
-      })
-      .catch((error) => {
-        toast({
-          title:
-            error.response?.data?.error || "Error occured fetching data plan",
-          status: "warning",
-        });
-      });
-  };
-
-  const handlePlanChange = (e: any) => {
-    const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
-    setNairaAmount(tempNairaAmount);
-    setTokenAmount(tempNairaAmount / tokenToNairaRate);
-  };
 
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
     }
-    fetchDataPlans();
+    fetchPlans();
   }, [address, isConnected]);
 
   return (
