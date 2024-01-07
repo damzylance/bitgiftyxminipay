@@ -46,30 +46,6 @@ export const AirtimeForm = (props: Props) => {
 
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
-  // const fetchRates = async () => {
-  //   try {
-  //     setIsLoading(true);
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log(responseData);
-  //     setTokenToNairaRate(parseFloat(responseData));
-  //   } catch (error: any) {
-  //     alert(error.message);
-  //     toast({
-  //       title: error.message,
-  //       status: "warning",
-  //     });
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   // setInterval(fetchRates, 60000);
   const rechargeAirtime = async (data: any) => {
@@ -123,9 +99,34 @@ export const AirtimeForm = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
-      // fetchRates();
+      const fetchRates = async () => {
+        try {
+          setIsLoading(true);
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const responseData = await response.json();
+          console.log(responseData);
+          setTokenToNairaRate(parseFloat(responseData));
+        } catch (error: any) {
+          alert(error.message);
+          toast({
+            title: error.message,
+            status: "warning",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchRates();
     }
-  }, [address, isConnected]);
+  }, [address, isConnected, toast]);
   return (
     <VStack my={"40px"} gap={"20px"} width={"full"}>
       <HStack width={"full"} alignItems={"center"}>
