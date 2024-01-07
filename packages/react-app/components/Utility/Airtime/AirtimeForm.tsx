@@ -188,7 +188,7 @@ export const AirtimeForm = (props: Props) => {
                 onChange: handleAmountChange,
 
                 max: {
-                  value: parseFloat(walletBalance) / tokenToNairaRate,
+                  value: parseFloat(walletBalance) * tokenToNairaRate,
                   message: "Insufficient balance",
                 },
                 min: {
