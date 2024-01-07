@@ -1,4 +1,5 @@
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
+import { useBalance } from "@/utils/useBalance";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -32,26 +33,20 @@ export const PowerForm = (props: any) => {
     getValues,
   } = useForm<Inputs>();
   const { address, isConnected } = useAccount();
+  const walletBalance = useBalance(address, isConnected);
+
   const [isLoading, setIsLoading] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
   const [tokenToNairaRate, setTokenToNairaRate] = useState(1100);
   const [currency, setCurrency] = useState("cusd");
   const [userAddress, setUserAddress] = useState("");
+  const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
 
-  const handlePlanChange = (e: any) => {
-    const nairaAmount = parseInt(e.target.value.split(",")[1]);
-    setNairaAmount(parseInt(e.target.value.split(",")[1]));
-    setTokenAmount(tokenToNairaRate * nairaAmount);
-  };
   const handleAmountChange = (e: any) => {
-    const tempNairaAmount = e.target.value;
+    const tempNairaAmount = parseFloat(e.target.value);
     setNairaAmount(tempNairaAmount);
-    if (currency === "usdt_tron" || currency === "cusd") {
-      setTokenAmount(tempNairaAmount / tokenToNairaRate);
-    } else {
-      setTokenAmount(tokenToNairaRate * tempNairaAmount);
-    }
+    setTokenAmount((tempNairaAmount + fee) / tokenToNairaRate);
   };
 
   const buyElectricity = async (data: any) => {
@@ -164,19 +159,32 @@ export const PowerForm = (props: any) => {
             />
           </FormControl>
           <FormControl>
-            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Amount (₦)
-            </FormLabel>
+            <HStack width={"full"} justifyContent={"space-between"}>
+              {" "}
+              <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+                Amount (&#8358;)
+              </FormLabel>
+              <Text fontSize={"xs"} color={"blackAlpha.700"}>
+                Balance(cUSD) : {walletBalance}
+              </Text>
+            </HStack>
 
             <Input
               border={"1px solid #f9f9f9"}
               outline={"none"}
               fontSize={"16px"}
               type="number"
-              min={50}
               required
               {...register("amount", {
                 onChange: handleAmountChange,
+                min: {
+                  value: 1000,
+                  message: `Minimum recharge amount is N1000`,
+                },
+                max: {
+                  value: parseFloat(walletBalance) / tokenToNairaRate,
+                  message: "Insufficient balance",
+                },
               })}
             />
             <HStack

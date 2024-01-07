@@ -1,4 +1,5 @@
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
+import { useBalance } from "@/utils/useBalance";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -35,39 +36,40 @@ export const AirtimeForm = (props: Props) => {
   } = useForm<Inputs>();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [walletBalance, setWalletBalance] = useState(0);
+  // const [walletBalance, setWalletBalance] = useState(0);
   const [nairaAmount, setNairaAmount] = useState();
-  const [tokenToNairaRate, setTokenToNairaRate] = useState(1100);
+  const [tokenToNairaRate, setTokenToNairaRate] = useState(1200);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [currency, setCurrency] = useState("cusd");
   const [minAmount, setMinAmount] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
   const { address, isConnected } = useAccount();
-  const fetchRates = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
-      );
+  const walletBalance = useBalance(address, isConnected);
+  // const fetchRates = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
+  //     );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
 
-      const responseData = await response.json();
-      console.log(responseData);
-      setTokenToNairaRate(parseFloat(responseData));
-    } catch (error: any) {
-      alert(error.message);
-      toast({
-        title: error.message,
-        status: "warning",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     const responseData = await response.json();
+  //     console.log(responseData);
+  //     setTokenToNairaRate(parseFloat(responseData));
+  //   } catch (error: any) {
+  //     alert(error.message);
+  //     toast({
+  //       title: error.message,
+  //       status: "warning",
+  //     });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   // setInterval(fetchRates, 60000);
   const rechargeAirtime = async (data: any) => {
@@ -121,7 +123,7 @@ export const AirtimeForm = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
-      fetchRates();
+      // fetchRates();
     }
   }, [address, isConnected]);
   return (
@@ -165,9 +167,15 @@ export const AirtimeForm = (props: Props) => {
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
           <FormControl>
-            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Amount (&#8358;)
-            </FormLabel>
+            <HStack width={"full"} justifyContent={"space-between"}>
+              {" "}
+              <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+                Amount (&#8358;)
+              </FormLabel>
+              <Text fontSize={"xs"} color={"blackAlpha.700"}>
+                Balance(cUSD) : {walletBalance}
+              </Text>
+            </HStack>
 
             <Input
               border={"1px solid #f9f9f9"}
@@ -178,13 +186,14 @@ export const AirtimeForm = (props: Props) => {
               required
               {...register("amount", {
                 onChange: handleAmountChange,
-                // max: {
-                //   value: walletBalance / tokenToNairaRate,
-                //   message: "Insufficient funds",
-                // },
+
+                max: {
+                  value: parseFloat(walletBalance) / tokenToNairaRate,
+                  message: "Insufficient balance",
+                },
                 min: {
-                  value: minAmount,
-                  message: `Minimum recharge amount is ${minAmount}`,
+                  value: 100,
+                  message: `Minimum recharge amount is N100`,
                 },
               })}
             />

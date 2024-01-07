@@ -19,33 +19,13 @@ import Link from "next/link";
 import { BrowserProvider, formatEther, ethers, Contract } from "ethers";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { useAccount } from "wagmi";
+import { useBalance } from "@/utils/useBalance";
 const Utility = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [balance, setBalance] = useState("0");
 
   const [type, setType] = useState("");
   const { address, isConnected } = useAccount();
-
-  const CUSD_ADDRESS = process.env.NEXT_PUBLIC_SC as string;
-  useEffect(() => {
-    if (isConnected && address) {
-      const provider = new BrowserProvider(window.ethereum);
-      let abi = ["function balanceOf(address account) view returns (uint256)"];
-      const contractBalance = async () => {
-        provider.getBalance(address).then((balance: any) => {
-          console.log(parseFloat(formatEther(balance.toString())).toFixed(2));
-        });
-
-        const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
-        const cusdBalanceInWei = await contract.balanceOf(address);
-        const cusdBalance = parseFloat(
-          formatEther(cusdBalanceInWei.toString())
-        ).toFixed(2);
-        setBalance(cusdBalance);
-      };
-      contractBalance();
-    }
-  }, [address, isConnected]);
+  const balance = useBalance(address, isConnected);
   return (
     <Container>
       <HStack
