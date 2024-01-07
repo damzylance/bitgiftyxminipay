@@ -48,7 +48,7 @@ export const DataForm = (props: any) => {
   const buyData = async (data: any) => {
     if (
       parseInt(data.type.split(",")[1]) <
-      parseFloat(walletBalance) / tokenToNairaRate
+      parseFloat(walletBalance) * tokenToNairaRate
     ) {
       try {
         setIsLoading(true);
