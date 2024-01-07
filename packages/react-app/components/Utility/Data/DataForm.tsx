@@ -50,7 +50,7 @@ export const DataForm = (props: any) => {
     setLoading(true);
     await axios
       .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories/?bill-type=data_bundle`
       )
       .then((response) => {
         console.log(response);
