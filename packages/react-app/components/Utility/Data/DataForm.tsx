@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
+import { useFetchRates } from "@/utils/useFetchRates";
 type Inputs = {
   customer: string;
   amount: string;
@@ -35,11 +36,11 @@ export const DataForm = (props: any) => {
   const toast = useToast();
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
+  const { tokenToNairaRate, isLoading } = useFetchRates();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
-  const [tokenToNairaRate, setTokenToNairaRate] = useState(1100);
   const [currency, setCurrency] = useState("cUSD");
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
@@ -51,7 +52,7 @@ export const DataForm = (props: any) => {
       parseFloat(walletBalance) * tokenToNairaRate
     ) {
       try {
-        setIsLoading(true);
+        setLoading(true);
         data.amount = parseInt(data.type.split(",")[1]);
         data.bill_type = data.type.split(",")[0];
         delete data.type;
@@ -90,7 +91,7 @@ export const DataForm = (props: any) => {
         console.log(error);
         toast({ title: error.message, status: "warning" });
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     } else {
       toast({ title: "insufficient balance ", status: "warning" });
@@ -101,7 +102,7 @@ export const DataForm = (props: any) => {
     // delete data.data;
   };
   const fetchDataPlans = async () => {
-    setIsLoading(true);
+    setLoading(true);
     await axios
       .get(
         `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=data_bundle`
@@ -112,7 +113,7 @@ export const DataForm = (props: any) => {
             return plan.biller_code === props.telco;
           })
         );
-        setIsLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         toast({
@@ -123,37 +124,17 @@ export const DataForm = (props: any) => {
       });
   };
 
-  const fetchRates = async () => {
-    setIsLoading(true);
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
-      .then((response) => {
-        console.log(response);
-        setTokenToNairaRate(parseFloat(response.data));
-        setIsLoading(false);
-        // rate = parseFloat(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-        toast({
-          title: error.response.data.error,
-          status: "warning",
-        });
-      });
-  };
-
   const handlePlanChange = (e: any) => {
-    const nairaAmount = parseInt(e.target.value.split(",")[1]);
-    setNairaAmount(nairaAmount);
-    setTokenAmount(nairaAmount / tokenToNairaRate);
+    const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
+    setNairaAmount(tempNairaAmount);
+    setTokenAmount(tempNairaAmount / tokenToNairaRate);
   };
 
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
     }
-    // fetchRates();
+    fetchDataPlans();
   }, [address, isConnected]);
 
   return (
@@ -178,7 +159,6 @@ export const DataForm = (props: any) => {
 
       <form style={{ width: "100%" }} onSubmit={handleSubmit(buyData)}>
         <VStack width={"full"} gap={"20px"}>
-          <Text onClick={() => fetchDataPlans()}>FetchRate</Text>
           <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}
@@ -259,7 +239,7 @@ export const DataForm = (props: any) => {
           </FormControl> */}
 
           <Button
-            isLoading={isLoading}
+            isLoading={loading || isLoading}
             type="submit"
             width={"full"}
             borderRadius={"none"}

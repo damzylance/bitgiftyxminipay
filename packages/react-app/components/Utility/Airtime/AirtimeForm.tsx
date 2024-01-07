@@ -1,5 +1,6 @@
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
+import { useFetchRates } from "@/utils/useFetchRates";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -32,25 +33,24 @@ export const AirtimeForm = (props: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm<Inputs>();
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const { address, isConnected } = useAccount();
+  const walletBalance = useBalance(address, isConnected);
+  const { tokenToNairaRate, isLoading } = useFetchRates();
+
+  const [loading, setLoading] = useState(false);
   // const [walletBalance, setWalletBalance] = useState(0);
   const [nairaAmount, setNairaAmount] = useState();
-  const [tokenToNairaRate, setTokenToNairaRate] = useState(1200);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [currency, setCurrency] = useState("cusd");
   const [minAmount, setMinAmount] = useState("");
   const [userAddress, setUserAddress] = useState("");
 
-  const { address, isConnected } = useAccount();
-  const walletBalance = useBalance(address, isConnected);
-
   // setInterval(fetchRates, 60000);
   const rechargeAirtime = async (data: any) => {
     try {
-      setIsLoading(true);
+      setLoading(true);
       const amount = data.amount;
       data.bill_type = "AIRTIME";
       data.country = "NG";
@@ -83,7 +83,7 @@ export const AirtimeForm = (props: Props) => {
       console.log(error);
       toast({ title: error.message, status: "warning" });
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
   const handleAmountChange = (e: any) => {
@@ -99,32 +99,6 @@ export const AirtimeForm = (props: Props) => {
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
-      const fetchRates = async () => {
-        try {
-          setIsLoading(true);
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`
-          );
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const responseData = await response.json();
-          console.log(responseData);
-          setTokenToNairaRate(parseFloat(responseData));
-        } catch (error: any) {
-          alert(error.message);
-          toast({
-            title: error.message,
-            status: "warning",
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchRates();
     }
   }, [address, isConnected, toast]);
   return (
@@ -222,7 +196,7 @@ export const AirtimeForm = (props: Props) => {
           </FormControl>
 
           <Button
-            isLoading={isLoading}
+            isLoading={loading || isLoading}
             type="submit"
             width={"full"}
             borderRadius={"none"}

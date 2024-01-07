@@ -24,7 +24,6 @@ export default function Home({}) {
   return (
     <VStack width={"full"} mt={"20px"} gap={"40px"}>
       <UtilityHome />
-      <Text>Address: {userAddress}</Text>
     </VStack>
   );
 }

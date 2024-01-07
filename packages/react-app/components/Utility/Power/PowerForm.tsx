@@ -1,5 +1,6 @@
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
+import { useFetchRates } from "@/utils/useFetchRates";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -34,11 +35,11 @@ export const PowerForm = (props: any) => {
   } = useForm<Inputs>();
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
+  const { tokenToNairaRate, isLoading } = useFetchRates();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
-  const [tokenToNairaRate, setTokenToNairaRate] = useState(1100);
   const [currency, setCurrency] = useState("cusd");
   const [userAddress, setUserAddress] = useState("");
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
@@ -51,7 +52,7 @@ export const PowerForm = (props: any) => {
 
   const buyElectricity = async (data: any) => {
     try {
-      setIsLoading(true);
+      setLoading(true);
       const amount = data.amount;
       data.bill_type = props.name;
       data.country = "NG";
@@ -86,34 +87,13 @@ export const PowerForm = (props: any) => {
       console.log(error);
       toast({ title: error.message, status: "warning" });
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
-  };
-
-  const fetchRates = async () => {
-    setIsLoading(true);
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_UTIL_BASE_URL}swap/get-dollar-price`)
-      .then((response) => {
-        console.log(response);
-        setTokenToNairaRate(parseFloat(response.data));
-        setIsLoading(false);
-        // rate = parseFloat(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsLoading(false);
-        toast({
-          title: error.response.data.error,
-          status: "warning",
-        });
-      });
   };
 
   useEffect(() => {
     if (isConnected && address) {
       setUserAddress(address);
-      fetchRates();
     }
   }, [address, isConnected]);
   return (
@@ -137,13 +117,6 @@ export const PowerForm = (props: any) => {
       </HStack>
       <form style={{ width: "100%" }} onSubmit={handleSubmit(buyElectricity)}>
         <VStack width={"full"} gap={"20px"}>
-          <FormControl>
-            <FormLabel>Select Meter Type</FormLabel>
-            <Select fontSize={"16px"} disabled>
-              <option value={"prepaid"}>Prepaid</option>
-              <option value={"postpaid"}>Postpaid</option>
-            </Select>
-          </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
               Meter Number
@@ -227,7 +200,7 @@ export const PowerForm = (props: any) => {
           </FormControl>
 
           <Button
-            isLoading={isLoading}
+            isLoading={loading || isLoading}
             type="submit"
             width={"full"}
             borderRadius={"none"}

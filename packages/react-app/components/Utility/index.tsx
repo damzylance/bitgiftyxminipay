@@ -20,12 +20,14 @@ import { BrowserProvider, formatEther, ethers, Contract } from "ethers";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";
+import { useFetchRates } from "@/utils/useFetchRates";
 const Utility = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [type, setType] = useState("");
   const { address, isConnected } = useAccount();
   const balance = useBalance(address, isConnected);
+  const { tokenToNairaRate } = useFetchRates();
   return (
     <Container>
       <HStack
@@ -34,7 +36,8 @@ const Utility = () => {
         padding={"10px"}
         justifyContent={"space-between"}
         alignItems={"flex-start"}
-        bg={"#2d4b85"}
+        bg={"#103D96"}
+        mb={"30px"}
       >
         <VStack
           color={"#fff"}
@@ -61,7 +64,9 @@ const Utility = () => {
             gap={"4px"}
           >
             <Text fontSize={"sm"}>&#8358;</Text>
-            <Text fontSize={"md"}>{balance}</Text>
+            <Text fontSize={"md"}>
+              {parseFloat(balance) * tokenToNairaRate}
+            </Text>
           </HStack>
         </VStack>
         <VStack width={"full"} alignItems={"flex-end"}>
@@ -73,9 +78,7 @@ const Utility = () => {
           </Link>
         </VStack>
       </HStack>
-      <Text textAlign={"center"} fontWeight={"500"} my={"20px"}>
-        Bills Payment
-      </Text>
+
       <Grid
         width={"full"}
         templateColumns="repeat(2, 1fr)"

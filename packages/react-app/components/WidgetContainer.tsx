@@ -30,19 +30,6 @@ const WidgetContainer: FC<Props> = ({ children }) => {
       height={"100vh"}
       justifyContent={"flex-start"}
     >
-      <HStack w={"full"}>
-        <HStack
-          px={"6px"}
-          py={"10px"}
-          w={"full"}
-          maxW={"500px"}
-          margin={"auto"}
-          bg={"#103D96"}
-          justifyContent={"space-between"}
-        >
-          <Image alt="logo" style={{ width: "80px" }} src={logo} />
-        </HStack>
-      </HStack>
       <VStack py={"4px"} width={"full"} maxW={"500px"} marginX={"auto"}>
         {children}
       </VStack>
