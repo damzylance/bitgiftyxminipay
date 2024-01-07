@@ -74,7 +74,7 @@ const History = (props: Props) => {
                   <Avatar bg={"#81a0dc"} icon={<MdPhoneInTalk />} />
                   <VStack gap={"5px"} alignItems={"flex-start"}>
                     <Link
-                      href={`https://explorer.celo.org/alfajores/tx/${transaction.transaction_hash}`}
+                      href={`https://celoscan.io/tx/${transaction.transaction_hash}`}
                     >
                       {" "}
                       <Text
