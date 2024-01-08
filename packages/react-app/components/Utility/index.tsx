@@ -16,7 +16,6 @@ import {
 import { UtilityCard } from "./UtilityCard";
 import { UtilityModal } from "./UtilityModal";
 import Link from "next/link";
-import { BrowserProvider, formatEther, ethers, Contract } from "ethers";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";

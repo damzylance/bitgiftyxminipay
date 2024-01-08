@@ -148,7 +148,11 @@ export const AirtimeForm = (props: Props) => {
                 Amount (&#8358;)
               </FormLabel>
               <Text fontSize={"xs"} color={"blackAlpha.700"}>
-                Balance(&#8358;): {parseFloat(walletBalance) * tokenToNairaRate}
+                Balance(&#8358;):{" "}
+                {(
+                  parseFloat(walletBalance) *
+                  parseFloat(tokenToNairaRate.toString())
+                ).toFixed(2)}
               </Text>
             </HStack>
 
