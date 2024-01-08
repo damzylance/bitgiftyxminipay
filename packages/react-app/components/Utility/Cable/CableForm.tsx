@@ -152,7 +152,19 @@ export const CableForm = (props: any) => {
       <form style={{ width: "100%" }} onSubmit={handleSubmit(buyCable)}>
         <VStack width={"full"} gap={"20px"}>
           <FormControl>
-            <FormLabel>Select Cable Plan</FormLabel>
+            <HStack
+              alignItems={"center"}
+              width={"full"}
+              justifyContent={"space-between"}
+            >
+              {" "}
+              <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+                Select Cable Plan (&#8358;)
+              </FormLabel>
+              <Text fontSize={"xs"} color={"blackAlpha.700"}>
+                Balance(&#8358;): {parseFloat(walletBalance) * tokenToNairaRate}
+              </Text>
+            </HStack>
             <Select
               fontSize={"16px"}
               {...register("plan", { onChange: handlePlanChange })}

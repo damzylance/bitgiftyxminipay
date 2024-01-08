@@ -167,7 +167,7 @@ export const DataForm = (props: any) => {
                 Data Plans (&#8358;)
               </FormLabel>
               <Text fontSize={"xs"} color={"blackAlpha.700"}>
-                Balance(cUSD) : {walletBalance}
+                Balance(&#8358;): {parseFloat(walletBalance) * tokenToNairaRate}
               </Text>
             </HStack>
 

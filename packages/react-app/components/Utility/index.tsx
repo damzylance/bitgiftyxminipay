@@ -27,7 +27,6 @@ const Utility = () => {
   const [type, setType] = useState("");
   const { address, isConnected } = useAccount();
   const balance = useBalance(address, isConnected);
-  const floatedBalance = parseFloat(balance).toFixed(2);
   const { tokenToNairaRate } = useFetchRates();
   return (
     <Container>
