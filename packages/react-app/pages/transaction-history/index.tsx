@@ -27,7 +27,7 @@ const History = (props: Props) => {
         )
         .then((response) => {
           setLoading(false);
-          setTransactions(response.data.results.reverse());
+          setTransactions(response.data.results);
           console.log(response);
           // rate = parseFloat(response.data);
         })
