@@ -22,6 +22,7 @@ type Inputs = {
   customer: string;
   plan: string;
   amount: string;
+  email: string;
 };
 export const CableForm = (props: any) => {
   const toast = useToast();
@@ -200,6 +201,21 @@ export const CableForm = (props: any) => {
                 {errors.amount && errors.amount.message}
               </Text>
             </HStack>
+          </FormControl>
+          <FormControl>
+            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+              Email
+            </FormLabel>
+
+            <Input
+              border={"1px solid #f9f9f9"}
+              outline={"none"}
+              placeholder="Email address"
+              fontSize={"16px"}
+              type="email"
+              required
+              {...register("email")}
+            />
           </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
