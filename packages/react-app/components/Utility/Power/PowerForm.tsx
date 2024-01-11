@@ -159,7 +159,7 @@ export const PowerForm = (props: any) => {
                   message: `Minimum recharge amount is N1000`,
                 },
                 max: {
-                  value: parseFloat(walletBalance) / tokenToNairaRate,
+                  value: parseFloat(walletBalance) * tokenToNairaRate,
                   message: "Insufficient balance",
                 },
               })}
