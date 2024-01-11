@@ -19,8 +19,9 @@ export const useBalance = (
 
           const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
           const cusdBalanceInWei = await contract.balanceOf(address);
-          const cusdBalance = formatEther(cusdBalanceInWei.toString());
-
+          const cusdBalance = parseFloat(
+            formatEther(cusdBalanceInWei.toString())
+          ).toFixed(2);
           setBalance(cusdBalance);
         } catch (error) {
           console.error("Error fetching balance:", error);

@@ -64,9 +64,7 @@ const Utility = () => {
           >
             <Text fontSize={"sm"}>&#8358;</Text>
             <Text fontSize={"md"}>
-              {(
-                parseFloat(balance) * parseFloat(tokenToNairaRate.toString())
-              ).toFixed(2)}
+              {parseFloat(balance) * parseFloat(tokenToNairaRate.toString())}
             </Text>
           </HStack>
         </VStack>
