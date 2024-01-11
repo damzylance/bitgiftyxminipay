@@ -53,7 +53,7 @@ const Utility = () => {
             alignItems={"center"}
             gap={"4px"}
           >
-            <Text fontSize={"lg"}>{balance}</Text>
+            <Text fontSize={"lg"}>{parseFloat(balance).toFixed(2)}</Text>
             <Text fontSize={"md"}>cUSD</Text>
           </HStack>
           <HStack
