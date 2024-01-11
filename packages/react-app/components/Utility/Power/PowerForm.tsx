@@ -71,9 +71,10 @@ export const PowerForm = (props: any) => {
         if (giftCardResponse?.status === 200) {
           // Gift card created successfully
           toast({
-            title: "Airtime purchased succesfully",
+            title: "Electricity purchased succesfully",
             status: "success",
           });
+          props.onClose();
         } else {
           console.log(giftCardResponse);
           toast({ title: "Error occured ", status: "warning" });

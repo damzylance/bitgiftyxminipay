@@ -108,6 +108,7 @@ export const DataForm = (props: any) => {
               title: "Data purchased succesfully",
               status: "success",
             });
+            props.onClose();
           } else {
             toast({ title: "Error occured ", status: "warning" });
           }

@@ -103,9 +103,10 @@ export const CableForm = (props: any) => {
           if (giftCardResponse?.status === 200) {
             // Gift card created successfully
             toast({
-              title: "Data purchased succesfully",
+              title: "Cable subscription successful",
               status: "success",
             });
+            props.onClose();
           } else {
             toast({ title: "Error occured ", status: "warning" });
           }
