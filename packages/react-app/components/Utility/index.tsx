@@ -6,6 +6,7 @@ import {
   Text,
   VStack,
   useDisclosure,
+  Button,
 } from "@chakra-ui/react";
 import {
   MdConnectedTv,
@@ -31,55 +32,76 @@ const Utility = () => {
     <Container>
       <HStack
         width={"full"}
-        borderRadius={"10px"}
         padding={"10px"}
         justifyContent={"space-between"}
         alignItems={"flex-start"}
-        bg={"#103D96"}
-        mb={"30px"}
+        color={"#000"}
       >
         <VStack
-          color={"#fff"}
+          color={"#000"}
           width={"full"}
           gap={"5px"}
           alignItems={"flex-start"}
         >
-          <HStack fontSize={"xs"} alignItems={"center"}>
-            <Text>Available Balance</Text>
+          <HStack
+            fontSize={"sm"}
+            color={"#747474"}
+            fontWeight={600}
+            alignItems={"center"}
+          >
+            <Text>Your Available Balance</Text>
           </HStack>
           <HStack
             fontWeight={"600"}
             justifyContent={"flex-start"}
             alignItems={"center"}
             gap={"4px"}
+            fontSize={"xl"}
           >
-            <Text fontSize={"lg"}>{parseFloat(balance).toFixed(2)}</Text>
-            <Text fontSize={"md"}>cUSD</Text>
-          </HStack>
-          <HStack
-            fontWeight={"400"}
-            justifyContent={"flex-start"}
-            alignItems={"center"}
-            gap={"4px"}
-          >
-            <Text fontSize={"sm"}>&#8358;</Text>
-            <Text fontSize={"md"}>
+            <Text>&#8358;</Text>
+            <Text>
               {(
                 parseFloat(balance) * parseFloat(tokenToNairaRate.toString())
               ).toFixed(2)}
             </Text>
           </HStack>
-        </VStack>
-        <VStack width={"full"} alignItems={"flex-end"}>
-          <Link href={"/transaction-history"}>
-            <HStack width={"full"} justifyContent={"center"} color={"#fff"}>
-              <Text fontSize={"xs"}>Transaction History</Text>
-              <ChevronRightIcon fontSize={"lg"} />
-            </HStack>
-          </Link>
+          <HStack
+            fontWeight={"500"}
+            justifyContent={"flex-start"}
+            alignItems={"center"}
+            gap={"4px"}
+            fontSize={"sm"}
+          >
+            <Text>{parseFloat(balance).toFixed(2)}</Text>
+            <Text>cUSD</Text>
+          </HStack>
         </VStack>
       </HStack>
 
+      <HStack
+        fontSize={"sm"}
+        fontWeight={600}
+        alignItems={"center"}
+        width={"full"}
+        my={"30px"}
+        padding={"10px"}
+        justifyContent={"space-between"}
+        bg={"rgb(237, 250, 253)"}
+      >
+        <Text>Transaction History</Text>
+        <Link href={"/transaction-history"}>
+          <Text
+            color={"#fff"}
+            padding={"15px 30px"}
+            textAlign={"center"}
+            bg={
+              "linear-gradient(106deg, rgb(16, 61, 150) 27.69%, rgb(48, 111, 233) 102.01%)"
+            }
+          >
+            View All
+          </Text>
+        </Link>
+      </HStack>
       <Grid
         width={"full"}
         templateColumns="repeat(2, 1fr)"

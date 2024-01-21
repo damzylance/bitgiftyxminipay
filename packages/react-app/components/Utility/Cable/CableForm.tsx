@@ -38,6 +38,8 @@ export const CableForm = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [userAddress, setUserAddress] = useState("");
   const [plans, setPlans] = useState([]);
+  const [loadingText, setLoadingText] = useState("");
+
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
   const [currency, setCurrency] = useState("");
@@ -53,7 +55,7 @@ export const CableForm = (props: any) => {
     setLoading(true);
     await axios
       .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=cable`
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories/?bill-type=cable`
       )
       .then((response) => {
         console.log(response);
@@ -82,6 +84,7 @@ export const CableForm = (props: any) => {
         data.country = "NG";
         data.bill_type = data.plan.split(",")[0];
         data.amount = data.plan.split(",")[1];
+        const itemCode = data.plan.split(",")[2];
         delete data.plan;
         data.country = "NG";
         data.chain = "cusd";
@@ -89,31 +92,56 @@ export const CableForm = (props: any) => {
         data.crypto_amount = tokenAmount;
 
         console.log(data);
+        setLoadingText("Validating Meter Number...");
+        const validate = await axios
+          .get(
+            `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${itemCode}&biller-code=${props.cable}&customer=${data.customer}`
+          )
+          .then((response) => {
+            return response;
+          })
+          .catch((error) => {
+            return error;
+          });
+        console.log(validate);
 
-        const response = await transferCUSD(
-          userAddress,
-          tokenAmount.toString()
-        );
+        if (validate?.data?.data?.response_message === "Successful") {
+          setLoadingText("Requesting transfer...");
+          const response = await transferCUSD(
+            userAddress,
+            tokenAmount.toString()
+          );
 
-        if (response.hash) {
-          data.transaction_hash = response.hash;
-          const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
-          console.log(giftCardResponse);
+          if (response.hash) {
+            data.transaction_hash = response.hash;
+            setLoadingText("Connecting to cable provider");
+            const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+            console.log(giftCardResponse);
 
-          if (giftCardResponse?.status === 200) {
-            // Gift card created successfully
+            if (giftCardResponse?.status === 200) {
+              // Gift card created successfully
+              toast({
+                title: "Cable subscription successful",
+                status: "success",
+              });
+              props.onClose();
+            } else {
+              toast({ title: "Error occured ", status: "warning" });
+            }
+          } else if (response.message.includes("ethers-user-denied")) {
             toast({
-              title: "Cable subscription successful",
-              status: "success",
+              title: "User rejected transaction",
+              status: "warning",
             });
-            props.onClose();
           } else {
-            toast({ title: "Error occured ", status: "warning" });
+            toast({ title: "An error occurred", status: "warning" });
           }
-        } else if (response.message.includes("ethers-user-denied")) {
-          toast({ title: "User rejected transaction", status: "warning" });
         } else {
-          toast({ title: "An error occurred", status: "warning" });
+          setLoading(false);
+          toast({
+            title: "Could not verify electricity provider",
+            status: "warning",
+          });
         }
       } catch (error: any) {
         console.log(error);
@@ -179,7 +207,10 @@ export const CableForm = (props: any) => {
               <option>Choose Plan</option>;
               {plans.map((plan: any, index) => {
                 return (
-                  <option value={[plan.biller_name, plan.amount]} key={index}>
+                  <option
+                    value={[plan.biller_name, plan.amount, plan.item_code]}
+                    key={index}
+                  >
                     {plan.biller_name} {plan.validity} (N{plan.amount})
                   </option>
                 );
@@ -195,7 +226,7 @@ export const CableForm = (props: any) => {
                 ≈{" "}
                 {currency === "btc"
                   ? tokenAmount.toFixed(6)
-                  : tokenAmount.toFixed(3)}{" "}
+                  : tokenAmount.toFixed(3)}
                 {currency}
               </Text>
               <Text color={"red"} fontSize={"xx-small"}>
@@ -234,6 +265,7 @@ export const CableForm = (props: any) => {
 
           <Button
             isLoading={loading || isLoading}
+            loadingText={loadingText}
             type="submit"
             width={"full"}
             borderRadius={"none"}

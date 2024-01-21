@@ -10,26 +10,41 @@ import { ProviderCard } from "../ProviderCard";
 const Electricity = (props: any) => {
   const [page, setPage] = useState("list");
   const [merchants, setMerchants] = useState([
-    { name: "IKEDC  PREPAID", id: "BIL113" },
-    { name: "EKEDC PREPAID TOPUP", id: "BIL112" },
+    { name: "IKEDC  PREPAID", id: "BIL113", item_code: "UB159" },
+    { name: "EKEDC PREPAID TOPUP", id: "BIL112", item_code: "UB157" },
     {
       name: "ABUJA DISCO Prepaid",
       id: "BIL204",
+      item_code: "UB584",
     },
     {
       name: "IBADAN DISCO ELECTRICITY PREPAID",
       id: "BIL114",
+      item_code: "",
     },
-    { name: "KANO DISCO PREPAID TOPUP", id: "BIL120" },
+    { name: "KANO DISCO PREPAID TOPUP", id: "BIL120", item_code: "UB169" },
 
     {
-      name: "KADUNA PREPAID",
+      name: "Kaduna Prepaid",
       id: "BIL119",
+      item_code: "UB602",
     },
   ]);
-
   const [merchantName, setMerchantName] = useState("");
   const [merchantId, setMerchantId] = useState("");
+  const [itemCode, setItemCode] = useState("");
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=power`
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <>
       {page === "list" && (
@@ -49,6 +64,7 @@ const Electricity = (props: any) => {
                         setPage("buy");
                         setMerchantId(provider.id);
                         setMerchantName(provider.name);
+                        setItemCode(provider.item_code);
                       }}
                       name={provider.name}
                       logo={provider.link}
@@ -64,6 +80,7 @@ const Electricity = (props: any) => {
           onClose={props.action}
           name={merchantName}
           disco={merchantId}
+          item_code={itemCode}
           back={() => setPage("list")}
         />
       )}
