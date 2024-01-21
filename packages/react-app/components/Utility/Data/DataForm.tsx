@@ -39,6 +39,7 @@ export const DataForm = (props: any) => {
   const { tokenToNairaRate, isLoading } = useFetchRates();
 
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
   const [currency, setCurrency] = useState("cUSD");
@@ -82,6 +83,7 @@ export const DataForm = (props: any) => {
     ) {
       try {
         setLoading(true);
+        setLoadingText("Validating provider");
         data.amount = parseInt(data.type.split(",")[1]);
         data.bill_type = data.type.split(",")[0];
         delete data.type;
@@ -91,13 +93,14 @@ export const DataForm = (props: any) => {
         data.crypto_amount = tokenAmount;
 
         console.log(data);
-
+        setLoadingText("Requesting transfer...");
         const response = await transferCUSD(
           userAddress,
           tokenAmount.toString()
         );
 
         if (response.hash) {
+          setLoadingText("Connecting To Provider...");
           data.transaction_hash = response.hash;
           const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
           console.log(giftCardResponse);
@@ -246,6 +249,7 @@ export const DataForm = (props: any) => {
 
           <Button
             isLoading={loading || isLoading}
+            loadingText={loadingText}
             type="submit"
             width={"full"}
             borderRadius={"none"}

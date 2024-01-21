@@ -1,6 +1,6 @@
 import { HStack, Text, VStack } from "@chakra-ui/react";
 import React, { FC, ReactNode, useEffect, useState } from "react";
-import logo from "../public/assets/logo-inline-transparent.png";
+import whatsapp from "../public/assets/whatsapplogo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useConnect } from "wagmi";
@@ -33,6 +33,9 @@ const WidgetContainer: FC<Props> = ({ children }) => {
       <VStack py={"4px"} width={"full"} maxW={"500px"} marginX={"auto"}>
         {children}
       </VStack>
+      <Link href={""} style={{ position: "fixed", bottom: "1%", right: "1%" }}>
+        <Image src={whatsapp} width={80} height={80} alt={"Whatsapp Logo"} />
+      </Link>
     </VStack>
   );
 };

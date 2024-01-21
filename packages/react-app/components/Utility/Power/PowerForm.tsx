@@ -42,6 +42,7 @@ export const PowerForm = (props: any) => {
   const [nairaAmount, setNairaAmount] = useState(0);
   const [currency, setCurrency] = useState("cusd");
   const [userAddress, setUserAddress] = useState("");
+  const [loadingText, setLoadingText] = useState("");
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
 
   const handleAmountChange = (e: any) => {
@@ -61,28 +62,55 @@ export const PowerForm = (props: any) => {
       data.wallet_address = address;
       console.log(data);
 
-      const response = await transferCUSD(userAddress, tokenAmount.toString());
+      setLoadingText("Validating Meter Number...");
 
-      if (response.hash) {
-        data.transaction_hash = response.hash;
-        const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
-        console.log("electricity", giftCardResponse);
+      const validate = await axios
+        .get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.item_code}&biller-code=${props.disco}&customer=${data.customer}`
+        )
+        .then((response) => {
+          return response;
+        })
+        .catch((error) => {
+          return error;
+        });
+      console.log(validate);
+      if (validate?.data?.data?.response_message === "Successful") {
+        setLoadingText("Requesting transfer...");
 
-        if (giftCardResponse?.status === 200) {
-          // Gift card created successfully
-          toast({
-            title: "Electricity purchased succesfully",
-            status: "success",
-          });
-          props.onClose();
+        const response = await transferCUSD(
+          userAddress,
+          tokenAmount.toString()
+        );
+
+        if (response.hash) {
+          data.transaction_hash = response.hash;
+          setLoadingText("Connecting To Provider...");
+          const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+          console.log("electricity", giftCardResponse);
+
+          if (giftCardResponse?.status === 200) {
+            // Gift card created successfully
+            toast({
+              title: "Electricity purchased succesfully. ",
+              status: "success",
+            });
+            props.onClose();
+          } else {
+            console.log(giftCardResponse);
+            toast({ title: "Error occured ", status: "warning" });
+          }
+        } else if (response.message.includes("ethers-user-denied")) {
+          toast({ title: "User rejected transaction", status: "warning" });
         } else {
-          console.log(giftCardResponse);
-          toast({ title: "Error occured ", status: "warning" });
+          toast({ title: "An error occurred", status: "warning" });
         }
-      } else if (response.message.includes("ethers-user-denied")) {
-        toast({ title: "User rejected transaction", status: "warning" });
       } else {
-        toast({ title: "An error occurred", status: "warning" });
+        setLoading(false);
+        toast({
+          title: "Could not verify electricity provider",
+          status: "warning",
+        });
       }
     } catch (error: any) {
       console.log(error);
@@ -189,7 +217,7 @@ export const PowerForm = (props: any) => {
           </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Email
+              Email to receive recharge token
             </FormLabel>
 
             <Input
@@ -206,6 +234,7 @@ export const PowerForm = (props: any) => {
 
           <Button
             isLoading={loading || isLoading}
+            loadingText={loadingText}
             type="submit"
             width={"full"}
             borderRadius={"none"}

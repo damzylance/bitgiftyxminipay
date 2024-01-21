@@ -38,9 +38,8 @@ export const AirtimeForm = (props: Props) => {
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
   const { tokenToNairaRate, isLoading } = useFetchRates();
-
   const [loading, setLoading] = useState(false);
-  // const [walletBalance, setWalletBalance] = useState(0);
+  const [loadingText, setLoadingText] = useState("");
   const [nairaAmount, setNairaAmount] = useState();
   const [tokenAmount, setTokenAmount] = useState(0);
   const [currency, setCurrency] = useState("cusd");
@@ -57,8 +56,10 @@ export const AirtimeForm = (props: Props) => {
       data.chain = "cusd";
       data.wallet_address = address;
       data.crypto_amount = tokenAmount;
+      setLoadingText("Requesting transfer...");
       const response = await transferCUSD(userAddress, tokenAmount.toString());
       if (response.hash) {
+        setLoadingText("Connecting To Provider...");
         data.transaction_hash = response.hash;
         console.log(data);
         const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
@@ -201,6 +202,7 @@ export const AirtimeForm = (props: Props) => {
 
           <Button
             isLoading={loading || isLoading}
+            loadingText={loadingText}
             type="submit"
             width={"full"}
             borderRadius={"none"}
