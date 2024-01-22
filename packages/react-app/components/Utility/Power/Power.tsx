@@ -20,12 +20,12 @@ const Electricity = (props: any) => {
     {
       name: "IBADAN DISCO ELECTRICITY PREPAID",
       id: "BIL114",
-      item_code: "",
+      item_code: "UB161",
     },
     { name: "KANO DISCO PREPAID TOPUP", id: "BIL120", item_code: "UB169" },
 
     {
-      name: "Kaduna Prepaid",
+      name: "KADUNA DISCO ELECTRICITY BILLSß",
       id: "BIL119",
       item_code: "UB602",
     },
@@ -36,7 +36,7 @@ const Electricity = (props: any) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories?bill-type=power`
+        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories/?bill-type=power`
       )
       .then((response) => {
         console.log(response);

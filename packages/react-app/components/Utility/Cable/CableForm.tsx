@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useAccount } from "wagmi";
@@ -44,6 +44,18 @@ export const CableForm = (props: any) => {
   const [nairaAmount, setNairaAmount] = useState(0);
   const [currency, setCurrency] = useState("");
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
+
+  const rotateMessages = ()=>{
+    if(loadingText === "Connecting To Provider..."){
+      setTimeout(()=>{
+        setLoadingText("Processing Payment...")
+      },2000)
+      
+    }
+    
+  }
+
+  setInterval(rotateMessages, 1000);
 
   const handlePlanChange = (e: any) => {
     const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
@@ -92,7 +104,7 @@ export const CableForm = (props: any) => {
         data.crypto_amount = tokenAmount;
 
         console.log(data);
-        setLoadingText("Validating Meter Number...");
+        setLoadingText("Validating Smart Card Number...");
         const validate = await axios
           .get(
             `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${itemCode}&biller-code=${props.cable}&customer=${data.customer}`
@@ -116,6 +128,7 @@ export const CableForm = (props: any) => {
             data.transaction_hash = response.hash;
             setLoadingText("Connecting to cable provider");
             const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+            setLoadingText("processing payment")
             console.log(giftCardResponse);
 
             if (giftCardResponse?.status === 200) {
@@ -139,7 +152,7 @@ export const CableForm = (props: any) => {
         } else {
           setLoading(false);
           toast({
-            title: "Could not verify electricity provider",
+            title: "Invalid smart card number",
             status: "warning",
           });
         }
@@ -204,7 +217,7 @@ export const CableForm = (props: any) => {
               {...register("plan", { onChange: handlePlanChange })}
               required
             >
-              <option>Choose Plan</option>;
+             
               {plans.map((plan: any, index) => {
                 return (
                   <option
@@ -227,12 +240,29 @@ export const CableForm = (props: any) => {
                 {currency === "btc"
                   ? tokenAmount.toFixed(6)
                   : tokenAmount.toFixed(3)}
-                {currency}
+                {" cUSD"}
               </Text>
               <Text color={"red"} fontSize={"xx-small"}>
                 {errors.amount && errors.amount.message}
               </Text>
             </HStack>
+          </FormControl>
+          
+          <FormControl>
+            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+              Smart Card Number
+            </FormLabel>
+
+            <Input
+              fontSize={"16px"}
+              border={"1px solid #f9f9f9"}
+              outline={"none"}
+              required
+              {...register("customer",{minLength:{value:10,message:"Smart card number should be 10 digits"},maxLength:{value:10,message:"Smart card number should be 10 digits"}})}
+            />
+            <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
+                {errors.customer && errors.customer.message}
+              </Text></HStack>
           </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
@@ -249,19 +279,7 @@ export const CableForm = (props: any) => {
               {...register("email")}
             />
           </FormControl>
-          <FormControl>
-            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Smart Card Number
-            </FormLabel>
-
-            <Input
-              fontSize={"16px"}
-              border={"1px solid #f9f9f9"}
-              outline={"none"}
-              required
-              {...register("customer")}
-            />
-          </FormControl>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
 
           <Button
             isLoading={loading || isLoading}
@@ -278,7 +296,7 @@ export const CableForm = (props: any) => {
             }}
             variant={"solid"}
           >
-            Pay
+            Subscribe
           </Button>
         </VStack>
       </form>

@@ -1,7 +1,7 @@
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   Button,
   FormControl,
@@ -25,7 +25,6 @@ type Inputs = {
 };
 
 export const PowerForm = (props: any) => {
-  console.log(props.disco);
   const toast = useToast();
   const {
     register,
@@ -44,6 +43,19 @@ export const PowerForm = (props: any) => {
   const [userAddress, setUserAddress] = useState("");
   const [loadingText, setLoadingText] = useState("");
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
+
+  const rotateMessages = ()=>{
+    if(loadingText === "Connecting To Provider..."){
+      setTimeout(()=>{
+        setLoadingText("Processing Payment...")
+      },2000)
+      
+    }
+    
+  }
+
+  setInterval(rotateMessages, 1000);
+
 
   const handleAmountChange = (e: any) => {
     const tempNairaAmount = parseFloat(e.target.value);
@@ -92,7 +104,7 @@ export const PowerForm = (props: any) => {
           if (giftCardResponse?.status === 200) {
             // Gift card created successfully
             toast({
-              title: "Electricity purchased succesfully. ",
+              title: "Electricity purchased succesfully. Check email for token ",
               status: "success",
             });
             props.onClose();
@@ -108,7 +120,7 @@ export const PowerForm = (props: any) => {
       } else {
         setLoading(false);
         toast({
-          title: "Could not verify electricity provider",
+          title: "Could not verify meter number",
           status: "warning",
         });
       }
@@ -117,6 +129,7 @@ export const PowerForm = (props: any) => {
       toast({ title: error.message, status: "warning" });
     } finally {
       setLoading(false);
+      
     }
   };
 
@@ -155,10 +168,13 @@ export const PowerForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #f9f9f9"}
               outline={"none"}
-              type="tel"
+              type="number"
               required
-              {...register("customer")}
+              {...register("customer",{minLength:{value:11,message:"Meter number should be 11 digits"},maxLength:{value:11,message:"Meter number should be 11 digits"}})}
             />
+            <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
+                {errors.customer && errors.customer.message}
+              </Text></HStack>
           </FormControl>
           <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
@@ -217,7 +233,7 @@ export const PowerForm = (props: any) => {
           </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Email to receive recharge token
+              Email to receive token
             </FormLabel>
 
             <Input
@@ -247,8 +263,9 @@ export const PowerForm = (props: any) => {
             }}
             variant={"solid"}
           >
-            Pay
+            Buy Electricity
           </Button>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
         </VStack>
       </form>
     </VStack>

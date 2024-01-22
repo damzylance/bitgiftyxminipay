@@ -1,7 +1,7 @@
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   Button,
   FormControl,
@@ -45,8 +45,20 @@ export const AirtimeForm = (props: Props) => {
   const [currency, setCurrency] = useState("cusd");
   const [minAmount, setMinAmount] = useState("");
   const [userAddress, setUserAddress] = useState("");
+ 
+  const rotateMessages = ()=>{
+    if(loadingText === "Connecting To Provider..."){
+      setTimeout(()=>{
+        setLoadingText("Processing Payment...")
+      },2000)
+      
+    }
+    
+  }
+  setInterval(rotateMessages, 1000);
 
-  // setInterval(fetchRates, 60000);
+
+  
   const rechargeAirtime = async (data: any) => {
     try {
       setLoading(true);
@@ -85,6 +97,7 @@ export const AirtimeForm = (props: Props) => {
       toast({ title: error.message, status: "warning" });
     } finally {
       setLoading(false);
+      
     }
   };
   const handleAmountChange = (e: any) => {
@@ -136,11 +149,12 @@ export const AirtimeForm = (props: Props) => {
               type="tel"
               placeholder="080***"
               required
-              minLength={11}
-              maxLength={11}
-              {...register("customer")}
-            />
-            <FormErrorMessage></FormErrorMessage>
+              
+              {...register("customer",{minLength:{value:11,message:"Phone number should be 11 digits"},maxLength:{value:11,message:"Phone number should be 11 digits"}})}
+              />
+              <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
+                  {errors.customer && errors.customer.message}
+                </Text></HStack>
           </FormControl>
           <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
@@ -199,6 +213,7 @@ export const AirtimeForm = (props: Props) => {
               {errors.amount && errors.amount.message}
             </FormErrorMessage>
           </FormControl>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
 
           <Button
             isLoading={loading || isLoading}
