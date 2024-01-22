@@ -22,7 +22,7 @@ export default function Home({}) {
   }, [address, isConnected]);
 
   return (
-    <VStack width={"full"} mt={"20px"} gap={"40px"}>
+    <VStack width={"full"} >
       <UtilityHome />
     </VStack>
   );

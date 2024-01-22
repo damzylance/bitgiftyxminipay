@@ -50,7 +50,7 @@ const Utility = () => {
 </g>
 <defs>
 <filter id="filter0_b_1429_622" x="-133" y="-93" width="326.57" height="233.99" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feFlood floodOpacity="0" result="BackgroundImageFix"/>
 <feGaussianBlur in="BackgroundImageFix" stdDeviation="2"/>
 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1429_622"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1429_622" result="shape"/>
@@ -65,7 +65,7 @@ const Utility = () => {
   </g>
   <defs>
     <filter id="filter0_b_1429_621" x="-3.59497" y="-19.0728" width="325.266" height="270.033" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
       <feGaussianBlur in="BackgroundImageFix" stdDeviation="2"/>
       <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1429_621"/>
       <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1429_621" result="shape"/>
@@ -80,7 +80,7 @@ const Utility = () => {
   </g>
   <defs>
     <filter id="filter0_b_1429_619" x="-20" y="-4" width="391" height="101" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
       <feGaussianBlur in="BackgroundImageFix" stdDeviation="2"/>
       <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1429_619"/>
       <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1429_619" result="shape"/>
