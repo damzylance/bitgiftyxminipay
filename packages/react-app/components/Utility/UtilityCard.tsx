@@ -76,7 +76,7 @@ export const UtilityCard = (props: Props) => {
         justifyContent={"center"}
         background={"#f9f9f9"}
         boxShadow={
-          "-6.98333px -24.4417px 23.2778px #fff, 6.98333px 24.4417px 23.2778px #e8f2ff"
+          "0px 3px 9.8px rgba(220, 230, 249, 0.80)"
         }
         borderRadius={"50%"}
         fontSize={"28px"}
