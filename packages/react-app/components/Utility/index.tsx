@@ -31,7 +31,7 @@ const Utility = () => {
   const balance = useBalance(address, isConnected);
   const { tokenToNairaRate } = useFetchRates();
   return (
-    <Container position={"relative"}>
+    <VStack width={"full"} position={"relative"}>
       
         <VStack
         height={"232px"}
@@ -180,7 +180,7 @@ const Utility = () => {
      
 
       <UtilityModal type={type} isOpen={isOpen} onClose={onClose} />
-    </Container>
+    </VStack>
   );
 };
 

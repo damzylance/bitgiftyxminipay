@@ -198,7 +198,9 @@ export const DataForm = (props: any) => {
               {...register("type", { onChange: handlePlanChange })}
               required
             >
+              <option>Select Plan</option>
               {plans.map((plan: Plan, index) => {
+
                 return (
                   <option value={[plan.biller_name, plan.amount]} key={index}>
                     {plan.biller_name} (N{plan.amount})
@@ -245,8 +247,7 @@ export const DataForm = (props: any) => {
               </Text></HStack>
           </FormControl>
 
-          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
-
+          
 
           <Button
             isLoading={loading || isLoading}
@@ -265,6 +266,8 @@ export const DataForm = (props: any) => {
           >
             Buy Data
           </Button>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
+
         </VStack>
       </form>
     </VStack>

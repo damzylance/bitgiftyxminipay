@@ -213,8 +213,7 @@ export const AirtimeForm = (props: Props) => {
               {errors.amount && errors.amount.message}
             </FormErrorMessage>
           </FormControl>
-          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
-
+          
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
@@ -232,6 +231,8 @@ export const AirtimeForm = (props: Props) => {
           >
             Buy Airtime
           </Button>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
+
         </VStack>
       </form>
     </VStack>
