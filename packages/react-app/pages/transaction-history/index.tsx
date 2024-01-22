@@ -74,12 +74,21 @@ const History = (props: Props) => {
         ) : transactions.length > 0 ? (
           transactions.map((transaction: any, id) => {
             let statusColor;
+            let statusMessage
             if (transaction.status === "success") {
               statusColor = "#476621";
+              statusMessage ="Success"
             } else if (transaction.status === "pending") {
               statusColor = "#fe8d59";
-            } else {
+              statusMessage ="Processing"
+
+            } else if(transaction.status ==="handled") {
               statusColor = "#f44336";
+              statusMessage ="Refunded"
+
+            }else{
+              statusColor = "#f44336";
+              statusMessage =transaction.status
             }
             return (
               <HStack key={id} width={"full"} justifyContent={"space-between"}>
@@ -107,8 +116,7 @@ const History = (props: Props) => {
                           textTransform: "capitalize",
                         }}
                       >
-                        {" "}
-                        {transaction.status}
+                        {statusMessage}
                       </span>
                     </Text>
                   </VStack>
