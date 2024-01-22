@@ -19,6 +19,19 @@ const History = (props: Props) => {
     return `${prefix}...${suffix}`;
   }
 
+  function formatDate (date:string){
+    const toDate =new Date(date)
+    const day = toDate.toLocaleDateString("en-NG")
+    .toString()
+    .replaceAll("/", "-");
+    const time = toDate.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const formatedDate = `${day} ${time}`
+    return formatedDate
+  }
   useEffect(() => {
     if (isConnected && address) {
       axios
@@ -107,6 +120,8 @@ const History = (props: Props) => {
                   <Text fontSize={"xs"} fontWeight={"400"} color={"#464646"}>
                     -{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
                   </Text>
+                  
+                  <Text fontSize={"xs"} fontWeight={"400"} color={"#464646"}>{formatDate(transaction.time)}</Text>
                 </VStack>
               </HStack>
             );

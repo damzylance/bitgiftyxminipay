@@ -19,7 +19,7 @@ type Props = {
 
 export const UtilityModal = (props: Props) => {
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose}>
+    <Modal closeOnOverlayClick={false} isOpen={props.isOpen} onClose={props.onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />

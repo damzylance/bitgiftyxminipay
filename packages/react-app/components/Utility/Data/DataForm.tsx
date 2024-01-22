@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
@@ -46,6 +46,20 @@ export const DataForm = (props: any) => {
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
+  const rotateMessages = ()=>{
+    if(loadingText === "Connecting To Provider..."){
+      setTimeout(()=>{
+        setLoadingText("Processing Payment...")
+      },2000)
+      
+    }
+    
+  }
+
+  setInterval(rotateMessages, 1000);
+
+
+  
 
   const fetchPlans = async () => {
     setLoading(true);
@@ -83,7 +97,6 @@ export const DataForm = (props: any) => {
     ) {
       try {
         setLoading(true);
-        setLoadingText("Validating provider");
         data.amount = parseInt(data.type.split(",")[1]);
         data.bill_type = data.type.split(",")[0];
         delete data.type;
@@ -125,6 +138,7 @@ export const DataForm = (props: any) => {
         toast({ title: error.message, status: "warning" });
       } finally {
         setLoading(false);
+        
       }
     } else {
       toast({ title: "insufficient balance ", status: "warning" });
@@ -184,7 +198,6 @@ export const DataForm = (props: any) => {
               {...register("type", { onChange: handlePlanChange })}
               required
             >
-              <option>Choose Plan</option>;
               {plans.map((plan: Plan, index) => {
                 return (
                   <option value={[plan.biller_name, plan.amount]} key={index}>
@@ -221,31 +234,19 @@ export const DataForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #f9f9f9"}
               outline={"none"}
-              type="tel"
+              type="number"
               required
               minLength={11}
               maxLength={11}
-              {...register("customer")}
+              {...register("customer",{minLength:{value:11,message:"Phone number should be 11 digits"},maxLength:{value:11,message:"Phone number should be 11 digits"}})}
             />
-            <FormErrorMessage></FormErrorMessage>
+            <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
+                {errors.customer && errors.customer.message}
+              </Text></HStack>
           </FormControl>
 
-          {/* <FormControl>
-            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-              Amount
-            </FormLabel>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
 
-            <Input
-              border={"1px solid #f9f9f9"}
-              value={amount}
-              outline={"none"}
-              fontSize={"14px"}
-              type="number"
-              min={100}
-              required
-            />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl> */}
 
           <Button
             isLoading={loading || isLoading}
