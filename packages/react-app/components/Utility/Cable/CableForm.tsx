@@ -217,7 +217,7 @@ export const CableForm = (props: any) => {
               {...register("plan", { onChange: handlePlanChange })}
               required
             >
-             
+             <option>Select Plan</option>
               {plans.map((plan: any, index) => {
                 return (
                   <option
@@ -279,7 +279,6 @@ export const CableForm = (props: any) => {
               {...register("email")}
             />
           </FormControl>
-          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
 
           <Button
             isLoading={loading || isLoading}
@@ -298,6 +297,8 @@ export const CableForm = (props: any) => {
           >
             Subscribe
           </Button>
+          <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
+
         </VStack>
       </form>
     </VStack>

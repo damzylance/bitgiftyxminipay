@@ -29,8 +29,9 @@ const WidgetContainer: FC<Props> = ({ children }) => {
       bg={"#fff"}
       height={"100vh"}
       justifyContent={"flex-start"}
+      mt={0}
     >
-      <VStack py={"4px"} width={"full"} maxW={"500px"} marginX={"auto"}>
+      <VStack width={"full"} maxW={"500px"} marginX={"auto"}>
         {children}
       </VStack>
       <Link href={""} style={{ position: "fixed", bottom: "1%", right: "1%" }}>
