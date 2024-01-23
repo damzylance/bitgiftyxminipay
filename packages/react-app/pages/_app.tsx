@@ -14,7 +14,7 @@ import logo from "../public/assets/logo-inline-transparent.png";
 import WidgetContainer from "@/components/WidgetContainer";
 const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
 const { chains, publicClient } = configureChains(
-  [Celo, Alfajores],
+  [Celo],
   [publicProvider()]
 );
 
