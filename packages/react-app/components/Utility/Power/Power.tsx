@@ -25,9 +25,14 @@ const Electricity = (props: any) => {
     { name: "KANO DISCO PREPAID TOPUP", id: "BIL120", item_code: "UB169" },
 
     {
-      name: "KADUNA DISCO ELECTRICITY BILLSß",
+      name: "KADUNA DISCO ELECTRICITY BILLS",
       id: "BIL119",
       item_code: "UB602",
+    },
+    {
+      name: "ENUGU DISCO ELECTRIC BILLS PREPAID TOPUP",
+      id: "BIL115",
+      item_code: "UB163",
     },
   ]);
   const [merchantName, setMerchantName] = useState("");
