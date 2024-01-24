@@ -83,12 +83,12 @@ const History = (props: Props) => {
               statusMessage ="Processing"
 
             } else if(transaction.status ==="handled") {
-              statusColor = "#f44336";
-              statusMessage ="Refunded"
+              statusColor = "#476621";
+              statusMessage ="Success"
 
             }else{
               statusColor = "#f44336";
-              statusMessage =transaction.status
+              statusMessage = transaction.status
             }
             return (
               <HStack key={id} width={"full"} justifyContent={"space-between"}>
