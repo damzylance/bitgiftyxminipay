@@ -42,6 +42,7 @@ export const PowerForm = (props: any) => {
   const [currency, setCurrency] = useState("cusd");
   const [userAddress, setUserAddress] = useState("");
   const [loadingText, setLoadingText] = useState("");
+  const [customerDetails,setCustomerDetails] = useState("")
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
 
   const rotateMessages = ()=>{
@@ -63,6 +64,41 @@ export const PowerForm = (props: any) => {
     setTokenAmount((tempNairaAmount + fee) / tokenToNairaRate);
   };
 
+  const validateMeter = async (e:any)=>{
+    setLoadingText("Validating Meter Number...");
+    setLoading(true)
+    const customer =e.target.value
+    if(customer.length===11){
+      const validate = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.item_code}&biller-code=${props.disco}&customer=${customer}`
+      )
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      }).finally(()=>{
+        setLoading(false)
+      });
+    console.log(validate);
+    if (validate?.data?.data?.response_message === "Successful") {
+      console.log(validate.data.data.response_message)
+      setCustomerDetails(`${validate.data.data.name} | ${validate?.data?.data?.address}`)
+    } else {
+      setLoading(false);
+      toast({
+        title: "Could not verify meter number",
+        status: "warning",
+      });
+    }
+    }else{
+      setLoading(false)
+      setCustomerDetails("")
+    }
+    
+  }
+
   const buyElectricity = async (data: any) => {
     try {
       setLoading(true);
@@ -74,21 +110,7 @@ export const PowerForm = (props: any) => {
       data.wallet_address = address;
       console.log(data);
 
-      setLoadingText("Validating Meter Number...");
-
-      const validate = await axios
-        .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.item_code}&biller-code=${props.disco}&customer=${data.customer}`
-        )
-        .then((response) => {
-          return response;
-        })
-        .catch((error) => {
-          return error;
-        });
-      console.log(validate);
-      if (validate?.data?.data?.response_message === "Successful") {
-        setLoadingText("Requesting transfer...");
+      setLoadingText("Requesting transfer...");
 
         const response = await transferCUSD(
           userAddress,
@@ -117,13 +139,7 @@ export const PowerForm = (props: any) => {
         } else {
           toast({ title: "An error occurred", status: "warning" });
         }
-      } else {
-        setLoading(false);
-        toast({
-          title: "Could not verify meter number",
-          status: "warning",
-        });
-      }
+
     } catch (error: any) {
       console.log(error);
       toast({ title: error.message, status: "warning" });
@@ -168,13 +184,21 @@ export const PowerForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #f9f9f9"}
               outline={"none"}
-              type="number"
+              type={"string"}
+              maxLength={11}
               required
-              {...register("customer",{minLength:{value:11,message:"Meter number should be 11 digits"},maxLength:{value:11,message:"Meter number should be 11 digits"}})}
+              {...register("customer",{onChange:validateMeter,minLength:{value:11,message:"Meter number should be 11 digits"},maxLength:{value:11,message:"Meter number should be 11 digits"}})}
             />
-            <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
+            <HStack width={"fulll"} mt={"5px"} justifyContent={"space-between"}>
+
+            <Text fontSize={"xs"} color={"blackAlpha.700"}>
+                {customerDetails}
+            </Text>
+              
+              <Text color={"red"} fontSize={"xs"}>
                 {errors.customer && errors.customer.message}
-              </Text></HStack>
+              </Text>
+              </HStack>
           </FormControl>
           <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
