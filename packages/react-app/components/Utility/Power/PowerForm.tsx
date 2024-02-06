@@ -84,7 +84,7 @@ export const PowerForm = (props: any) => {
     console.log(validate);
     if (validate?.data?.data?.response_message === "Successful") {
       console.log(validate.data.data.response_message)
-      setCustomerDetails(`${validate.data.data.name} | ${validate?.data?.data?.address}`)
+      setCustomerDetails(`${validate.data.data.name}`)
     } else {
       setLoading(false);
       toast({
