@@ -4,7 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { MdPhoneInTalk } from "react-icons/md";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 
 type Props = {};
 
@@ -19,6 +19,7 @@ const History = (props: Props) => {
     return `${prefix}...${suffix}`;
   }
 
+  
   function formatDate (date:string){
     const toDate =new Date(date)
     const day = toDate.toLocaleDateString("en-NG")
@@ -48,6 +49,8 @@ const History = (props: Props) => {
           setLoading(false);
           console.log(error);
         });
+        
+      
     } else {
       setLoading(false);
     }
@@ -137,7 +140,7 @@ const History = (props: Props) => {
         ) : (
           <Text>No transactions to display</Text>
         )}
-        {}
+       
       </VStack>
     </VStack>
   );

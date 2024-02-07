@@ -29,7 +29,7 @@ export const useBalance = (
     };
 
     fetchBalance();
-  }, [address, isConnected, CUSD_ADDRESS]);
+  }, [address, isConnected, CUSD_ADDRESS,balance]);
 
   return balance;
 };
