@@ -44,17 +44,17 @@ const Utility = () => {
         const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
         const cusdBalanceInWei = await contract.balanceOf(address);
         const cusdBalance = formatEther(cusdBalanceInWei.toString());
+        console.log(cusdBalance)
         setDollarBalance(cusdBalance);
       } catch (error) {
         console.error("Error fetching balance:", error);
-        setDollarBalance("0");
       }
     }
   };
 
   useEffect(() => {
     fetchBalance();
-  }, []);
+  }, [isConnected,address]);
   const { tokenToNairaRate } = useFetchRates();
   return (
     <VStack width={"full"} position={"relative"}>
