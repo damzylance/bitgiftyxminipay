@@ -23,12 +23,38 @@ import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import Link from "next/link";
+import { BrowserProvider, ethers, formatEther } from "ethers";
 const Utility = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [type, setType] = useState("");
   const { address, isConnected } = useAccount();
   const balance = useBalance(address, isConnected);
+  const CUSD_ADDRESS = process.env.NEXT_PUBLIC_SC as string;
+  const [dollarBalance,setDollarBalance]=useState(balance)
+
+  const fetchBalance = async () => {
+    if (isConnected && address) {
+      try {
+        const provider = new BrowserProvider(window.ethereum);
+        const abi = [
+          "function balanceOf(address account) view returns (uint256)",
+        ];
+
+        const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
+        const cusdBalanceInWei = await contract.balanceOf(address);
+        const cusdBalance = formatEther(cusdBalanceInWei.toString());
+        setDollarBalance(cusdBalance);
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+        setDollarBalance("0");
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance();
+  }, []);
   const { tokenToNairaRate } = useFetchRates();
   return (
     <VStack width={"full"} position={"relative"}>
@@ -115,7 +141,7 @@ const Utility = () => {
             <Text>&#8358;</Text>
             <Text>
               {(
-                parseFloat(balance) * parseFloat(tokenToNairaRate.toString())
+                parseFloat(dollarBalance) * parseFloat(tokenToNairaRate.toString())
               ).toFixed(2)}
             </Text>
           </HStack>
@@ -126,7 +152,7 @@ const Utility = () => {
             gap={"4px"}
             fontSize={"16px"}
           >
-            <Text>{parseFloat(balance).toFixed(2)}</Text>
+            <Text>{parseFloat(dollarBalance).toFixed(2)}</Text>
             <Text>cUSD</Text>
           </HStack>
         </VStack>
@@ -179,7 +205,10 @@ const Utility = () => {
    </VStack>
      
 
-      <UtilityModal type={type} isOpen={isOpen} onClose={onClose} />
+      <UtilityModal type={type} isOpen={isOpen} onClose={()=>{
+        fetchBalance()
+        onClose()
+        }} />
     </VStack>
   );
 };

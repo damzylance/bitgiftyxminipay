@@ -3,19 +3,20 @@ import React, { FC, ReactNode, useEffect, useState } from "react";
 import whatsapp from "../public/assets/whatsapplogo.png";
 import Image from "next/image";
 import Link from "next/link";
-import { useConnect } from "wagmi";
+import { useAccount, useBalance, useConnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 
 interface Props {
   children: ReactNode;
 }
 const WidgetContainer: FC<Props> = ({ children }) => {
+  const {address} = useAccount()
   const [hideConnectBtn, setHideConnectBtn] = useState(false);
-
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
 
+  
   useEffect(() => {
     if (window.ethereum && window.ethereum.isMiniPay) {
       setHideConnectBtn(true);
