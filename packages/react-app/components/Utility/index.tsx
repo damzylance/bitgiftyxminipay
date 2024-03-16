@@ -74,9 +74,9 @@ const Utility = () => {
           alignItems={"flex-start"}
           position={"relative"}
         >
-          <VStack alignItems={"center"} width={"full"} gap={0}>
-          <Image src={bitgiftyLogo} width={100} height={100} alt={"Bitgifty Logo"}/>
-          <Text fontSize={"small"}>
+          <VStack alignItems={"center"} width={"full"} gap={0} mb={"10px"}>
+          <Image src={bitgiftyLogo} width={80} height={80} alt={"Bitgifty Logo"}/>
+          <Text fontSize={"xs"}>
             Pay Bills Easily from MiniPay
           </Text>
           </VStack>
