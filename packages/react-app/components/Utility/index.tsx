@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+
+import bitgiftyLogo from "../../public/assets/bitgifty-logo.png";
+
+
 import {
   Container,
   Grid,
@@ -24,6 +28,7 @@ import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import Link from "next/link";
 import { BrowserProvider, ethers, formatEther } from "ethers";
+import Image from "next/image";
 const Utility = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -61,7 +66,7 @@ const Utility = () => {
       
         <VStack
         height={"232px"}
-        p={"30px 24px"}
+        p={"10px 24px"}
           color={"#fff"}
           width={"full"}
           gap={"10px"}
@@ -69,6 +74,14 @@ const Utility = () => {
           alignItems={"flex-start"}
           position={"relative"}
         >
+          <VStack alignItems={"center"} width={"full"} gap={0}>
+          <Image src={bitgiftyLogo} width={100} height={100} alt={"Bitgifty Logo"}/>
+          <Text fontSize={"small"}>
+            Pay Bills Easily from MiniPay
+          </Text>
+          </VStack>
+         
+
           <Box position={"absolute"}  left={0} top={0}>
           <svg xmlns="http://www.w3.org/2000/svg" width="190" height="137" viewBox="0 0 190 137" fill="none">
 <g filter="url(#filter0_b_1429_622)">
