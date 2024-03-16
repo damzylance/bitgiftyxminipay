@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";
@@ -44,6 +44,8 @@ export const CableForm = (props: any) => {
   const [nairaAmount, setNairaAmount] = useState(0);
   const [currency, setCurrency] = useState("");
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
+  const [customerDetails,setCustomerDetails] = useState("")
+  const [itemCode,setItemCode] = useState("")
 
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
@@ -59,6 +61,7 @@ export const CableForm = (props: any) => {
 
   const handlePlanChange = (e: any) => {
     const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
+    setItemCode(e.target.value.split(",")[2])
     setNairaAmount(tempNairaAmount);
     setTokenAmount((tempNairaAmount + fee) / tokenToNairaRate);
   };
@@ -85,6 +88,41 @@ export const CableForm = (props: any) => {
         });
       });
   };
+  const validateMeter = async (e:any)=>{
+    setLoadingText("Validating Smart Card Number...");
+    setLoading(true)
+    const customer =e.target.value
+    if(customer.length===10){
+      const validate = await axios
+      .get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${itemCode}&biller-code=${props.disco}&customer=${customer}`
+      )
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      }).finally(()=>{
+        setLoading(false)
+      });
+    console.log(validate);
+    if (validate?.data?.data?.response_message === "Successful") {
+      console.log(validate.data.data.response_message)
+      setCustomerDetails(`${validate.data.data.name}`)
+    } else {
+      setLoading(false);
+      setCustomerDetails("")
+      toast({
+        title: "Could not validate Smart Card Number",
+        status: "warning",
+      });
+    }
+    }else{
+      setLoading(false)
+      setCustomerDetails("")
+    }
+    
+  }
 
   const buyCable = async (data: any) => {
     if (
@@ -96,7 +134,6 @@ export const CableForm = (props: any) => {
         data.country = "NG";
         data.bill_type = data.plan.split(",")[0];
         data.amount = data.plan.split(",")[1];
-        const itemCode = data.plan.split(",")[2];
         delete data.plan;
         data.country = "NG";
         data.chain = "cusd";
@@ -104,21 +141,7 @@ export const CableForm = (props: any) => {
         data.crypto_amount = tokenAmount;
 
         console.log(data);
-        setLoadingText("Validating Smart Card Number...");
-        const validate = await axios
-          .get(
-            `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${itemCode}&biller-code=${props.cable}&customer=${data.customer}`
-          )
-          .then((response) => {
-            return response;
-          })
-          .catch((error) => {
-            return error;
-          });
-        console.log(validate);
-
-        if (validate?.data?.data?.response_message === "Successful") {
-          setLoadingText("Requesting transfer...");
+        setLoadingText("Requesting transfer...");
           const response = await transferCUSD(
             userAddress,
             tokenAmount.toString()
@@ -149,13 +172,7 @@ export const CableForm = (props: any) => {
           } else {
             toast({ title: "An error occurred", status: "warning" });
           }
-        } else {
-          setLoading(false);
-          toast({
-            title: "Invalid smart card number",
-            status: "warning",
-          });
-        }
+       
       } catch (error: any) {
         console.log(error);
         toast({ title: error.message, status: "warning" });
@@ -258,9 +275,13 @@ export const CableForm = (props: any) => {
               border={"1px solid #f9f9f9"}
               outline={"none"}
               required
-              {...register("customer",{minLength:{value:10,message:"Smart card number should be 10 digits"},maxLength:{value:10,message:"Smart card number should be 10 digits"}})}
+              {...register("customer",{onChange:validateMeter,minLength:{value:10,message:"Smart card number should be 10 digits"},maxLength:{value:10,message:"Smart card number should be 10 digits"}})}
             />
-            <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
+            <HStack width={"fulll"} mt={"5px"} justifyContent={"space-between"}>
+              <Text fontSize={"xs"} color={"blackAlpha.700"}>
+                {customerDetails}
+              </Text>
+              <Text color={"red"} fontSize={"xs"}>
                 {errors.customer && errors.customer.message}
               </Text></HStack>
           </FormControl>
