@@ -274,9 +274,8 @@ export const PowerForm = (props: any) => {
 
           <Button
             isLoading={loading || isLoading}
-            loadingText={loadingText}
-            disabled
-            type="submit"
+            loadingText={loadingText}    
+            // type="submit"
             width={"full"}
             borderRadius={"none"}
             background={

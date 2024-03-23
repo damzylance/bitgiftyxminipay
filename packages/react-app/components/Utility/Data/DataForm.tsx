@@ -252,8 +252,7 @@ export const DataForm = (props: any) => {
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            disabled
-            type="submit"
+            // type="submit"
             width={"full"}
             borderRadius={"none"}
             background={
