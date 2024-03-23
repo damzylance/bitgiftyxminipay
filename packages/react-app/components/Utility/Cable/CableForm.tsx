@@ -139,16 +139,17 @@ export const CableForm = (props: any) => {
         data.chain = "cusd";
         data.wallet_address = address;
         data.crypto_amount = tokenAmount;
-
-        console.log(data);
         setLoadingText("Requesting transfer...");
           const response = await transferCUSD(
             userAddress,
             tokenAmount.toString()
           );
 
-          if (response.hash) {
+          if (response.status===1) {
             data.transaction_hash = response.hash;
+            const newDate = new Date()
+            data.timestamp= newDate.getTime()
+            data.offset = newDate.getTimezoneOffset() 
             setLoadingText("Connecting to cable provider");
             const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
             setLoadingText("processing payment")
@@ -304,8 +305,7 @@ export const CableForm = (props: any) => {
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            isDisabled
-            // type="submit"
+            type="submit"
             width={"full"}
             borderRadius={"none"}
             background={
