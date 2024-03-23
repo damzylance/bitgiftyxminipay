@@ -274,8 +274,8 @@ export const PowerForm = (props: any) => {
 
           <Button
             isLoading={loading || isLoading}
-            loadingText={loadingText}
-            type="submit"
+            loadingText={loadingText}    
+            // type="submit"
             width={"full"}
             borderRadius={"none"}
             background={
@@ -289,6 +289,7 @@ export const PowerForm = (props: any) => {
           >
             Buy Electricity
           </Button>
+          
           <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
         </VStack>
       </form>

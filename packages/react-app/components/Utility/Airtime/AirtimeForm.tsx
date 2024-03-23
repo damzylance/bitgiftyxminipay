@@ -217,7 +217,7 @@ export const AirtimeForm = (props: Props) => {
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            type="submit"
+            // type="submit"
             width={"full"}
             borderRadius={"none"}
             background={
