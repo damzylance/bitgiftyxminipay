@@ -74,8 +74,8 @@ export const AirtimeForm = (props: Props) => {
         setLoadingText("Connecting To Provider...");
         data.transaction_hash = response.hash;
         const newDate = new Date()
-        data.timestamp= newDate.getTime()
-        data.offset = newDate.getTimezoneOffset() 
+        data.timestamp= newDate.getTime().toString()
+        data.offset = newDate.getTimezoneOffset().toString() 
         console.log(data);
         const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
         console.log(giftCardResponse);
