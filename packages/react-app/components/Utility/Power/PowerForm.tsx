@@ -117,8 +117,11 @@ export const PowerForm = (props: any) => {
           tokenAmount.toString()
         );
 
-        if (response.hash) {
+        if (response.status===1) {
           data.transaction_hash = response.hash;
+          const newDate = new Date()
+          data.timestamp= newDate.getTime()
+          data.offset = newDate.getTimezoneOffset()
           setLoadingText("Connecting To Provider...");
           const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
           console.log("electricity", giftCardResponse);
@@ -275,8 +278,7 @@ export const PowerForm = (props: any) => {
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText} 
-            isDisabled   
-            // type="submit"
+            type="submit"
             width={"full"}
             borderRadius={"none"}
             background={

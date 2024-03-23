@@ -112,9 +112,12 @@ export const DataForm = (props: any) => {
           tokenAmount.toString()
         );
 
-        if (response.hash) {
-          setLoadingText("Connecting To Provider...");
+        if (response.status===1) {
           data.transaction_hash = response.hash;
+          const newDate = new Date()
+          data.timestamp= newDate.getTime()
+          data.offset = newDate.getTimezoneOffset() 
+          setLoadingText("Connecting to cable provider");
           const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
           console.log(giftCardResponse);
 
@@ -252,8 +255,7 @@ export const DataForm = (props: any) => {
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            // type="submit"
-            isDisabled
+            type="submit"
             width={"full"}
             borderRadius={"none"}
             background={

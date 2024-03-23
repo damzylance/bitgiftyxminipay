@@ -67,12 +67,15 @@ export const AirtimeForm = (props: Props) => {
       data.country = "NG";
       data.chain = "cusd";
       data.wallet_address = address;
-      data.crypto_amount = tokenAmount;
+      data.crypto_amount = tokenAmount;     
       setLoadingText("Requesting transfer...");
       const response = await transferCUSD(userAddress, tokenAmount.toString());
-      if (response.hash) {
+      if (response.status === 1) {
         setLoadingText("Connecting To Provider...");
         data.transaction_hash = response.hash;
+        const newDate = new Date()
+        data.timestamp= newDate.getTime()
+        data.offset = newDate.getTimezoneOffset() 
         console.log(data);
         const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
         console.log(giftCardResponse);
@@ -217,8 +220,7 @@ export const AirtimeForm = (props: Props) => {
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            isDisabled
-            // type="submit"
+            type="submit"
             width={"full"}
             borderRadius={"none"}
             background={
