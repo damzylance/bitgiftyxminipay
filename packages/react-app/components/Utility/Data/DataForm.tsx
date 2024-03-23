@@ -253,6 +253,7 @@ export const DataForm = (props: any) => {
             isLoading={loading || isLoading}
             loadingText={loadingText}
             // type="submit"
+            isDisabled
             width={"full"}
             borderRadius={"none"}
             background={
