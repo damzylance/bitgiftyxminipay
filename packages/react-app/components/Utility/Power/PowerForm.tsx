@@ -120,8 +120,8 @@ export const PowerForm = (props: any) => {
         if (response.status===1) {
           data.transaction_hash = response.hash;
           const newDate = new Date()
-          data.timestamp= newDate.getTime()
-          data.offset = newDate.getTimezoneOffset()
+          data.timestamp= newDate.getTime().toString()
+          data.offset = newDate.getTimezoneOffset().toString() 
           setLoadingText("Connecting To Provider...");
           const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
           console.log("electricity", giftCardResponse);
