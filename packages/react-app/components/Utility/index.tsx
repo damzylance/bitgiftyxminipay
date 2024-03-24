@@ -49,8 +49,8 @@ const Utility = () => {
         const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
         const cusdBalanceInWei = await contract.balanceOf(address);
         const cusdBalance = formatEther(cusdBalanceInWei.toString());
-        console.log(cusdBalance)
-        setDollarBalance(cusdBalance);
+        const netCusdBalance=((parseFloat(cusdBalance)-0.002).toString())
+        setDollarBalance(netCusdBalance);
       } catch (error) {
         console.error("Error fetching balance:", error);
       }
