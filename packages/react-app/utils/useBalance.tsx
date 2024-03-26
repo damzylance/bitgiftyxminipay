@@ -21,8 +21,11 @@ export const useBalance = (
           const cusdBalanceInWei = await contract.balanceOf(address);
           const cusdBalance = formatEther(cusdBalanceInWei.toString());
           const netCusdBalance=((parseFloat(cusdBalance)-0.002).toString())
-          console.log(netCusdBalance)
-          setBalance(netCusdBalance);
+          if(parseFloat(cusdBalance)<0.002){
+            setBalance("0")
+          }else{
+            setBalance(netCusdBalance);
+          }
         } catch (error) {
           console.error("Error fetching balance:", error);
           setBalance("0");

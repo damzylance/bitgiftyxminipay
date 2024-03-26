@@ -71,7 +71,7 @@ export const DataForm = (props: any) => {
         console.log(response);
         setPlans(
           response.data.data.filter((plan: any) => {
-            return plan.biller_code === props.telco;
+            return plan.biller_code === props.telco && plan.id!==17202;
           })
         );
         setLoading(false);
