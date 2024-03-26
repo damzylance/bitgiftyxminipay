@@ -129,57 +129,62 @@ export const CableForm = (props: any) => {
       parseInt(data.plan.split(",")[1]) <
       parseFloat(walletBalance) * tokenToNairaRate
     ) {
-      try {
-        setLoading(true);
-        data.country = "NG";
-        data.bill_type = data.plan.split(",")[0];
-        data.amount = data.plan.split(",")[1];
-        delete data.plan;
-        data.country = "NG";
-        data.chain = "cusd";
-        data.wallet_address = address;
-        data.crypto_amount = tokenAmount;
-        setLoadingText("Requesting transfer...");
-          const response = await transferCUSD(
-            userAddress,
-            tokenAmount.toString()
-          );
-
-          if (response.status===1) {
-            data.transaction_hash = response.hash;
-            const newDate = new Date()
-            data.timestamp= newDate.getTime().toString()
-            data.offset = newDate.getTimezoneOffset().toString()  
-            setLoadingText("Connecting to cable provider");
-            const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
-            setLoadingText("processing payment")
-            console.log(giftCardResponse);
-
-            if (giftCardResponse?.status === 200) {
-              // Gift card created successfully
+      if (window.ethereum && window.ethereum.isMiniPay) {
+        try {
+          setLoading(true);
+          data.country = "NG";
+          data.bill_type = data.plan.split(",")[0];
+          data.amount = data.plan.split(",")[1];
+          delete data.plan;
+          data.country = "NG";
+          data.chain = "cusd";
+          data.wallet_address = address;
+          data.crypto_amount = tokenAmount;
+          setLoadingText("Requesting transfer...");
+            const response = await transferCUSD(
+              userAddress,
+              tokenAmount.toString()
+            );
+  
+            if (response.status===1) {
+              data.transaction_hash = response.hash;
+              const newDate = new Date()
+              data.timestamp= newDate.getTime().toString()
+              data.offset = newDate.getTimezoneOffset().toString()  
+              setLoadingText("Connecting to cable provider");
+              const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+              setLoadingText("processing payment")
+              console.log(giftCardResponse);
+  
+              if (giftCardResponse?.status === 200) {
+                // Gift card created successfully
+                toast({
+                  title: "Cable subscription successful",
+                  status: "success",
+                });
+                props.onClose();
+              } else {
+                toast({ title: "Error occured ", status: "warning" });
+              }
+            } else if (response.message.includes("ethers-user-denied")) {
               toast({
-                title: "Cable subscription successful",
-                status: "success",
+                title: "User rejected transaction",
+                status: "warning",
               });
-              props.onClose();
             } else {
-              toast({ title: "Error occured ", status: "warning" });
+              toast({ title: "An error occurred", status: "warning" });
             }
-          } else if (response.message.includes("ethers-user-denied")) {
-            toast({
-              title: "User rejected transaction",
-              status: "warning",
-            });
-          } else {
-            toast({ title: "An error occurred", status: "warning" });
-          }
-       
-      } catch (error: any) {
-        console.log(error);
-        toast({ title: error.message, status: "warning" });
-      } finally {
-        setLoading(false);
+         
+        } catch (error: any) {
+          console.log(error);
+          toast({ title: error.message, status: "warning" });
+        } finally {
+          setLoading(false);
+        }
+      }else{
+        toast({ title: "You can only perfom transaction from MiniPay", status: "warning" });
       }
+     
     } else {
       console.log(parseFloat(walletBalance) * tokenToNairaRate);
       toast({ title: "insufficient balance ", status: "warning" });

@@ -47,7 +47,7 @@ export const buyElectricity = () => {
 // Transfer cusd
 
 export const transferCUSD = async (userAddress: string, amount: string) => {
-  if (window.ethereum) {
+  if (window.ethereum && window.ethereum.isMiniPay) {
     console.log(parseEther(amount));
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider

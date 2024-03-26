@@ -100,7 +100,8 @@ export const PowerForm = (props: any) => {
   }
 
   const buyElectricity = async (data: any) => {
-    try {
+    if (window.ethereum && window.ethereum.isMiniPay) {
+      try {
       setLoading(true);
       const amount = data.amount;
       data.bill_type = props.name;
@@ -150,6 +151,10 @@ export const PowerForm = (props: any) => {
       setLoading(false);
       
     }
+    }else{
+      toast({ title: "You can only perfom transaction from MiniPay", status: "warning" });
+    }
+    
   };
 
   useEffect(() => {

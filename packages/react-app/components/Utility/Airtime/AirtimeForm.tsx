@@ -60,48 +60,53 @@ export const AirtimeForm = (props: Props) => {
 
   
   const rechargeAirtime = async (data: any) => {
-    try {
-      setLoading(true);
-      const amount = data.amount;
-      data.bill_type = "AIRTIME";
-      data.country = "NG";
-      data.chain = "cusd";
-      data.wallet_address = address;
-      data.crypto_amount = tokenAmount;     
-      setLoadingText("Requesting transfer...");
-      const response = await transferCUSD(userAddress, tokenAmount.toString());
-      if (response.status === 1) {
-        setLoadingText("Connecting To Provider...");
-        data.transaction_hash = response.hash;
-        const newDate = new Date()
-        data.timestamp= newDate.getTime().toString()
-        data.offset = newDate.getTimezoneOffset().toString() 
-        console.log(data);
-        const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
-        console.log(giftCardResponse);
-
-        if (giftCardResponse?.status === 200) {
-          // Gift card created successfully
-          toast({
-            title: "Airtime purchased succesfully",
-            status: "success",
-          });
-          props.onClose();
+    if (window.ethereum && window.ethereum.isMiniPay) {
+      try {
+        setLoading(true);
+        const amount = data.amount;
+        data.bill_type = "AIRTIME";
+        data.country = "NG";
+        data.chain = "cusd";
+        data.wallet_address = address;
+        data.crypto_amount = tokenAmount;     
+        setLoadingText("Requesting transfer...");
+        const response = await transferCUSD(userAddress, tokenAmount.toString());
+        if (response.status === 1) {
+          setLoadingText("Connecting To Provider...");
+          data.transaction_hash = response.hash;
+          const newDate = new Date()
+          data.timestamp= newDate.getTime().toString()
+          data.offset = newDate.getTimezoneOffset().toString() 
+          console.log(data);
+          const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+          console.log(giftCardResponse);
+  
+          if (giftCardResponse?.status === 200) {
+            // Gift card created successfully
+            toast({
+              title: "Airtime purchased succesfully",
+              status: "success",
+            });
+            props.onClose();
+          } else {
+            toast({ title: "Error occured ", status: "warning" });
+          }
+        } else if (response.message.includes("ethers-user-denied")) {
+          toast({ title: "User rejected transaction", status: "warning" });
         } else {
-          toast({ title: "Error occured ", status: "warning" });
+          toast({ title: "An error occurred", status: "warning" });
         }
-      } else if (response.message.includes("ethers-user-denied")) {
-        toast({ title: "User rejected transaction", status: "warning" });
-      } else {
-        toast({ title: "An error occurred", status: "warning" });
+      } catch (error: any) {
+        console.log(error);
+        toast({ title: error.message, status: "warning" });
+      } finally {
+        setLoading(false);
+        
       }
-    } catch (error: any) {
-      console.log(error);
-      toast({ title: error.message, status: "warning" });
-    } finally {
-      setLoading(false);
-      
+    }else{
+      toast({ title: "You can only perfom transaction from MiniPay", status: "warning" });
     }
+   
   };
   const handleAmountChange = (e: any) => {
     const tempNairaAmount = e.target.value;
