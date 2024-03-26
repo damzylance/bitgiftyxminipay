@@ -117,7 +117,7 @@ export const DataForm = (props: any) => {
           const newDate = new Date()
           data.timestamp= newDate.getTime().toString()
         data.offset = newDate.getTimezoneOffset().toString() 
-          setLoadingText("Connecting to cable provider");
+          setLoadingText("Connecting to provider");
           const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
           console.log(giftCardResponse);
 
