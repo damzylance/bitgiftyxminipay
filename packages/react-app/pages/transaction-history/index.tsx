@@ -121,6 +121,11 @@ const History = (props: Props) => {
                       >
                         {statusMessage}
                       </span>
+                      <br/>
+                      <span
+                      >
+                        {transaction.customer}
+                      </span>
                     </Text>
                   </VStack>
                 </HStack>
