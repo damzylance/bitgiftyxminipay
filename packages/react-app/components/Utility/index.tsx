@@ -28,8 +28,11 @@ import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import Link from "next/link";
 import { BrowserProvider, ethers, formatEther } from "ethers";
+import { useUserCountry } from "@/utils/UserCountryContext";
 import Image from "next/image";
 const Utility = () => {
+  const {userCountry} = useUserCountry()
+  console.log(userCountry)
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [type, setType] = useState("");

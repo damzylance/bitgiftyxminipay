@@ -12,6 +12,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../Theme";
 import logo from "../public/assets/logo-inline-transparent.png";
 import WidgetContainer from "@/components/WidgetContainer";
+import { UserCountryProvider } from "@/utils/UserCountryContext";
 const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
 const { chains, publicClient } = configureChains(
   [Celo],
@@ -33,7 +34,8 @@ const wagmiConfig = createConfig({
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
+    <UserCountryProvider>
+<ChakraProvider theme={theme}>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains} appInfo={appInfo} coolMode={true}>
           <WidgetContainer>
@@ -42,6 +44,8 @@ function App({ Component, pageProps }: AppProps) {
         </RainbowKitProvider>
       </WagmiConfig>
     </ChakraProvider>
+    </UserCountryProvider>
+    
   );
 }
 
