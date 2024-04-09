@@ -44,7 +44,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [supportedCountries, setSupportedCountries] = useState<SupportedCountries[]>([
     { country: "NG", currency: "NGN", flag: "🇳🇬",ticker:"₦",countryCode:"+234" },
     { country: "GH", currency: "GHS", flag: "🇬🇭",ticker:"₵",countryCode:"+233" },
-    { country: "KE", currency: "KES", flag: "🇰🇪",ticker:"KSh",countryCode:"+254" },
+    // { country: "KE", currency: "KES", flag: "🇰🇪",ticker:"KSh",countryCode:"+254" },
     
   ]);
 
@@ -75,12 +75,12 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
 
           break;
 
-        case "Nairobi":
-          country = "KE";
-          currency = "KES";
-          ticker="KSh";
-          countryCode="+254" 
-          break;
+        // case "Nairobi":
+        //   country = "KE";
+        //   currency = "KES";
+        //   ticker="KSh";
+        //   countryCode="+254" 
+        //   break;
 
         default:
           country = "NG";
