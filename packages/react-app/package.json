@@ -26,6 +26,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.2",
     "react-icons": "^4.12.0",
+    "sharp": "^0.33.3",
     "viem": "^0.3.30",
     "wagmi": "^1.4.12"
   },
