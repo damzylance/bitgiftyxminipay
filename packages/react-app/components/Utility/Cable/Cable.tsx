@@ -35,7 +35,7 @@ const Cable = (props: any) => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_BASE_URL}v2/get-bill-info/?biller_code=BIL138`)
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}v2/get-bill-info/?biller_code=BIL099`)
       .then((response) => {
         console.log(response);
       })

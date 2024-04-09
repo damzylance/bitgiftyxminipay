@@ -22,7 +22,7 @@ type Props = { action: any };
 const Airtime = (props: Props) => {
   const telcos = [
     {country:"NG",telcos:[ 
-  { name: "mtn", logo: mtnLogo, id: "BIL099",item_code:"AT009" },
+  { name: "mtn", logo: mtnLogo, id: "BIL099",item_code:"AT099" },
   { name: "airtel", logo: airtelLogo, id: "BIL100",item_code:"AT100" },
   { name: "glo", logo: gloLogo, id: "BIL102", item_code:"AT133" },
   { name: "9mobile", logo: nineMobileLogo, id: "BIL103",item_code:"AT134"},]},
