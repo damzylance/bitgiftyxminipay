@@ -12,6 +12,7 @@ import {
   useDisclosure,
   Button,
   Box,
+  Select,
   
 } from "@chakra-ui/react";
 import {
@@ -28,8 +29,13 @@ import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import Link from "next/link";
 import { BrowserProvider, ethers, formatEther } from "ethers";
+import { useUserCountry } from "@/utils/UserCountryContext";
 import Image from "next/image";
 const Utility = () => {
+  const {userCountry,setUserCountry,supportedCountries,userCurrencyTicker,setUserCurrencyTicker,setUserCountryCode} = useUserCountry()
+  supportedCountries.map(()=>{
+    
+  })
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [type, setType] = useState("");
@@ -37,6 +43,16 @@ const Utility = () => {
   const balance = useBalance(address, isConnected);
   const CUSD_ADDRESS = process.env.NEXT_PUBLIC_SC as string;
   const [dollarBalance,setDollarBalance]=useState(balance)
+const handleCountryChange = (e:any)=>{
+  let country = e.target.value
+  country =country.split(",")
+  console.log(country[0])
+  setUserCountry(country[0])
+  setUserCountryCode(country[1])
+  setUserCurrencyTicker(country[2])
+  localStorage.setItem("userCountry",country)
+
+}
 
   const fetchBalance = async () => {
     if (isConnected && address) {
@@ -74,12 +90,28 @@ const Utility = () => {
           alignItems={"flex-start"}
           position={"relative"}
         >
-          <VStack alignItems={"center"} width={"full"} gap={0} mb={"10px"}>
+        <HStack position={"relative"} width={"full"}> <VStack alignItems={"center"} width={"full"} gap={0} mb={"10px"}>
           <Image src={bitgiftyLogo} width={80} height={80} alt={"Bitgifty Logo"}/>
           <Text fontSize={"xs"}>
             Pay Bills Easily from MiniPay
           </Text>
           </VStack>
+         <VStack position={"absolute"} right={"-20px"} top={"2"} >
+        <Select zIndex={1}
+ size={"xs"} onChange={handleCountryChange}>
+        {supportedCountries.filter((country)=>{
+            return country.country==userCountry
+          }).map((country) => {
+  return <option value={[country.country,country.countryCode,country.ticker]} key={country.currency}>{country.country}  {country.flag}</option>;
+})}          {supportedCountries.filter((country)=>{
+            return country.country!=userCountry
+          }).map((country) => {
+  return <option value={[country.country,country.countryCode,country.ticker]} key={country.currency}>{country.country}  {country.flag}</option>;
+})}
+        </Select>
+        
+        </VStack>
+        </HStack>
          
 
           <Box position={"absolute"}  left={0} top={0}>
@@ -151,7 +183,7 @@ const Utility = () => {
             fontSize={"32px"}
 
           >
-            <Text>&#8358;</Text>
+            <Text>{userCurrencyTicker}</Text>
             <Text>
               {(
                 parseFloat(dollarBalance) * parseFloat(tokenToNairaRate.toString())

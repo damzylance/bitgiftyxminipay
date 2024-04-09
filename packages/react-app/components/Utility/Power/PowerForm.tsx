@@ -1,3 +1,4 @@
+import { useUserCountry } from "@/utils/UserCountryContext";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
@@ -35,6 +36,7 @@ export const PowerForm = (props: any) => {
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
   const { tokenToNairaRate, isLoading } = useFetchRates();
+  const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
 
   const [loading, setLoading] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
@@ -44,6 +46,7 @@ export const PowerForm = (props: any) => {
   const [loadingText, setLoadingText] = useState("");
   const [customerDetails,setCustomerDetails] = useState("")
   const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
+  const minAmount = userCountry==="NG"?500:userCountry==="KE"?50:userCountry==="GH"?5:0
 
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
@@ -67,8 +70,9 @@ export const PowerForm = (props: any) => {
   const validateMeter = async (e:any)=>{
     setLoadingText("Validating Meter Number...");
     setLoading(true)
+    const maxMeterLength=userCountry==="NG"?11:12
     const customer =e.target.value
-    if(customer.length===11){
+    if(customer.length===maxMeterLength){
       const validate = await axios
       .get(
         `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.item_code}&biller-code=${props.disco}&customer=${customer}`
@@ -100,12 +104,14 @@ export const PowerForm = (props: any) => {
   }
 
   const buyElectricity = async (data: any) => {
-    if (window.ethereum && window.ethereum.isMiniPay) {
+    if (window.ethereum) {
       try {
       setLoading(true);
       const amount = data.amount;
-      data.bill_type = props.name;
-      data.country = "NG";
+      data.bill_type = "UTILITYBILLS";
+      data.biller_code=props.disco;
+      data.item_code=props.item_code
+      data.country = userCountry;
       data.chain = "cusd";
       data.crypto_amount = tokenAmount;
       data.wallet_address = address;
@@ -193,9 +199,9 @@ export const PowerForm = (props: any) => {
               border={"1px solid #f9f9f9"}
               outline={"none"}
               type={"string"}
-              maxLength={11}
+              maxLength={12}
               required
-              {...register("customer",{onChange:validateMeter,minLength:{value:11,message:"Meter number should be 11 digits"},maxLength:{value:11,message:"Meter number should be 11 digits"}})}
+              {...register("customer",{onChange:validateMeter,minLength:{value:11,message:"Invalid Meter Number"},maxLength:{value:12,message:"Invalid Meter Number"}})}
             />
             <HStack width={"fulll"} mt={"5px"} justifyContent={"space-between"}>
 
@@ -212,10 +218,10 @@ export const PowerForm = (props: any) => {
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}
               <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-                Amount (&#8358;)
+                Amount ({userCurrencyTicker})
               </FormLabel>
               <Text fontSize={"xs"} color={"blackAlpha.700"}>
-                Balance(&#8358;):{" "}
+                Balance({userCurrencyTicker}):{" "}
                 {(
                   parseFloat(walletBalance) *
                   parseFloat(tokenToNairaRate.toString())
@@ -232,8 +238,8 @@ export const PowerForm = (props: any) => {
               {...register("amount", {
                 onChange: handleAmountChange,
                 min: {
-                  value: 1000,
-                  message: `Minimum recharge amount is N1000`,
+                  value: minAmount,
+                  message: `Minimum recharge amount is ${minAmount}`,
                 },
                 max: {
                   value: parseFloat(walletBalance) * tokenToNairaRate,

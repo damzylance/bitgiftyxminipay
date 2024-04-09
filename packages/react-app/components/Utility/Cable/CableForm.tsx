@@ -17,6 +17,7 @@ import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
+import { useUserCountry } from "@/utils/UserCountryContext";
 
 type Inputs = {
   customer: string;
@@ -25,6 +26,7 @@ type Inputs = {
   email: string;
 };
 export const CableForm = (props: any) => {
+  const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
   const toast = useToast();
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
@@ -43,9 +45,11 @@ export const CableForm = (props: any) => {
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
   const [currency, setCurrency] = useState("");
-  const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
+  const fee = userCountry==="NG"?parseFloat(process.env.NEXT_PUBLIC_TF as string):userCountry==="KE"?10:userCountry==="GH"?1:0;
   const [customerDetails,setCustomerDetails] = useState("")
   const [itemCode,setItemCode] = useState("")
+  const minAmount = userCountry==="NG"?3000:userCountry==="KE"?10:userCountry==="GH"?10:0
+
 
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
@@ -62,6 +66,12 @@ export const CableForm = (props: any) => {
   const handlePlanChange = (e: any) => {
     const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
     setItemCode(e.target.value.split(",")[2])
+    setNairaAmount(tempNairaAmount);
+    setTokenAmount((tempNairaAmount + fee) / tokenToNairaRate);
+  };
+
+  const handleAmountChange = (e: any) => {
+    const tempNairaAmount = parseInt(e.target.value);
     setNairaAmount(tempNairaAmount);
     setTokenAmount((tempNairaAmount + fee) / tokenToNairaRate);
   };
@@ -95,7 +105,7 @@ export const CableForm = (props: any) => {
     if(customer.length===10){
       const validate = await axios
       .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${itemCode}&biller-code=${props.disco}&customer=${customer}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.itemCode||itemCode}&biller-code=${props.cable}&customer=${customer}`
       )
       .then((response) => {
         return response;
@@ -126,20 +136,27 @@ export const CableForm = (props: any) => {
 
   const buyCable = async (data: any) => {
     if (
-      parseInt(data.plan.split(",")[1]) <
-      parseFloat(walletBalance) * tokenToNairaRate
+      parseInt(data?.plan?.split(",")[1])<
+      parseFloat(walletBalance) * tokenToNairaRate || data.amount < parseFloat(walletBalance) * tokenToNairaRate
     ) {
-      if (window.ethereum && window.ethereum.isMiniPay) {
+      if (window.ethereum) {
         try {
           setLoading(true);
-          data.country = "NG";
-          data.bill_type = data.plan.split(",")[0];
+          if(userCountry==="NG"){
+            data.biller_code = data.plan.split(",")[0];
           data.amount = data.plan.split(",")[1];
+          data.item_code=itemCode
           delete data.plan;
-          data.country = "NG";
+          }else{
+            data.biller_code=props.cable
+            data.item_code=props.itemCode
+          }
+          data.bill_type="CABLEBILLS"
+          data.country = userCountry;
           data.chain = "cusd";
           data.wallet_address = address;
           data.crypto_amount = tokenAmount;
+          console.log(data)
           setLoadingText("Requesting transfer...");
             const response = await transferCUSD(
               userAddress,
@@ -225,17 +242,17 @@ export const CableForm = (props: any) => {
             >
               {" "}
               <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-                Select Cable Plan (&#8358;)
+                {userCountry==="NGN"?"Select Cable Plan":"Exact Package Amount"} ({userCurrencyTicker})
               </FormLabel>
               <Text fontSize={"xs"} color={"blackAlpha.700"}>
-                Balance(&#8358;):{" "}
+                Balance({userCurrencyTicker}):{" "}
                 {(
                   parseFloat(walletBalance) *
                   parseFloat(tokenToNairaRate.toString())
                 ).toFixed(2)}
               </Text>
             </HStack>
-            <Select
+            {userCountry==="NG"?<Select
               fontSize={"16px"}
               {...register("plan", { onChange: handlePlanChange })}
               required
@@ -244,14 +261,31 @@ export const CableForm = (props: any) => {
               {plans.map((plan: any, index) => {
                 return (
                   <option
-                    value={[plan.biller_name, plan.amount, plan.item_code]}
+                    value={[plan.biller_code, plan.amount, plan.item_code]}
                     key={index}
                   >
                     {plan.biller_name} {plan.validity} (N{plan.amount})
                   </option>
                 );
               })}
-            </Select>
+            </Select>:<Input
+              border={"1px solid #f9f9f9"}
+              outline={"none"}
+              fontSize={"16px"}
+              type="number"
+              required
+              {...register("amount", {
+                onChange: handleAmountChange,
+                min: {
+                  value: minAmount,
+                  message: `Minimum recharge amount is ${minAmount}`,
+                },
+                max: {
+                  value: parseFloat(walletBalance) * tokenToNairaRate,
+                  message: "Insufficient balance",
+                },
+              })}
+            />}
             <HStack
               width={"full"}
               alignItems={"center"}

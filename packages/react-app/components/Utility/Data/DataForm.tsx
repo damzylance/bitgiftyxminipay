@@ -18,6 +18,7 @@ import { useAccount } from "wagmi";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
+import { useUserCountry } from "@/utils/UserCountryContext";
 type Inputs = {
   customer: string;
   amount: string;
@@ -25,7 +26,7 @@ type Inputs = {
   email: string;
 };
 
-type Plan = { biller_name: string; amount: string };
+type Plan = { biller_name: string,biller_code:string,item_code:string, amount: string };
 export const DataForm = (props: any) => {
   const {
     register,
@@ -37,7 +38,7 @@ export const DataForm = (props: any) => {
   const { address, isConnected } = useAccount();
   const walletBalance = useBalance(address, isConnected);
   const { tokenToNairaRate, isLoading } = useFetchRates();
-
+  const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
@@ -65,18 +66,19 @@ export const DataForm = (props: any) => {
     setLoading(true);
     await axios
       .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}get-bill-categories/?bill-type=data_bundle`
+        `${process.env.NEXT_PUBLIC_BASE_URL}v2/get-bill-info/?biller_code=${props.telco}`
       )
       .then((response) => {
         console.log(response);
+        setLoading(false);
         setPlans(
           response.data.data.filter((plan: any) => {
             return plan.biller_code === props.telco && plan.id!==17202;
           })
         );
-        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         toast({
           title:
             error.response?.data?.error || "Error occured fetching data plan",
@@ -86,23 +88,26 @@ export const DataForm = (props: any) => {
   };
 
   const handlePlanChange = (e: any) => {
-    const tempNairaAmount = parseInt(e.target.value.split(",")[1]);
+    const tempNairaAmount = parseInt(e.target.value.split(",")[2]);
+    console.log(tempNairaAmount)
     setNairaAmount(tempNairaAmount);
     setTokenAmount(tempNairaAmount / tokenToNairaRate);
   };
   const buyData = async (data: any) => {
    
     if (
-      parseInt(data.type.split(",")[1]) <
+      parseInt(data.type.split(",")[2]) <
       parseFloat(walletBalance) * tokenToNairaRate
     ) {
-      if (window.ethereum && window.ethereum.isMiniPay) {
+      if (window.ethereum) {
         try {
           setLoading(true);
-          data.amount = parseInt(data.type.split(",")[1]);
-          data.bill_type = data.type.split(",")[0];
+          data.amount = parseInt(data.type.split(",")[2]);
+          data.biller_code = data.type.split(",")[0];
+          data.item_code=data.type.split(",")[1];
+          data.bill_type="MOBILEDATA"
           delete data.type;
-          data.country = "NG";
+          data.country = userCountry;
           data.chain = "cusd";
           data.wallet_address = address;
           data.crypto_amount = tokenAmount;
@@ -211,7 +216,7 @@ export const DataForm = (props: any) => {
               {plans.map((plan: Plan, index) => {
 
                 return (
-                  <option value={[plan.biller_name, plan.amount]} key={index}>
+                  <option value={[plan.biller_code,plan.item_code, plan.amount]} key={index}>
                     {plan.biller_name} (N{plan.amount})
                   </option>
                 );

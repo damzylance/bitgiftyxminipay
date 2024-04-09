@@ -16,7 +16,7 @@ export const ProviderCard = (props: Props) => {
       onClick={props.action}
       border={"1px solid #bbcdf1"}
     >
-      <Image alt="" width={50} src={props.logo} />
+      <Image alt="" width={50} height={50} src={props.logo} />
       <Text fontSize={"lg"} textTransform={"uppercase"}>
         {props.name}
       </Text>
