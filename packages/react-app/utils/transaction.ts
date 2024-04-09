@@ -18,7 +18,7 @@ export const buyAirtime = async (data: any) => {
   console.log(data);
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}create-bill-transaction/`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}v2/create-bill-transaction/`,
       data
     );
     console.log(response.data);
@@ -34,7 +34,7 @@ export const buyElectricity = () => {
 // Transfer cusd
 
 export const transferCUSD = async (userAddress: string, amount: string) => {
-  if (window.ethereum && window.ethereum.isMiniPay) {
+  if (window.ethereum) {
     console.log(parseEther(amount));
     const provider = new BrowserProvider(window.ethereum);
     const signer = await provider

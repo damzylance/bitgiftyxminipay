@@ -1,3 +1,4 @@
+import { UserCountryProvider, useUserCountry } from "@/utils/UserCountryContext";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
@@ -9,6 +10,8 @@ import {
   FormLabel,
   HStack,
   Input,
+  InputGroup,
+  InputLeftAddon,
   Text,
   VStack,
   useToast,
@@ -21,6 +24,9 @@ type Props = {
   onClose: any;
   back: any;
   telco: any;
+  itemCode:any;
+  billerCode:any;
+
 };
 type Inputs = {
   customer: string;
@@ -36,6 +42,7 @@ export const AirtimeForm = (props: Props) => {
   } = useForm<Inputs>();
   const toast = useToast();
   const { address, isConnected } = useAccount();
+  const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
   const walletBalance = useBalance(address, isConnected);
   const { tokenToNairaRate, isLoading } = useFetchRates();
   const [loading, setLoading] = useState(false);
@@ -43,7 +50,7 @@ export const AirtimeForm = (props: Props) => {
   const [nairaAmount, setNairaAmount] = useState();
   const [tokenAmount, setTokenAmount] = useState(0);
   const [currency, setCurrency] = useState("cusd");
-  const [minAmount, setMinAmount] = useState("");
+  const minAmount = userCountry==="NG"?100:userCountry==="KE"?10:userCountry==="GH"?1:0
   const [userAddress, setUserAddress] = useState("");
  
   const rotateMessages = ()=>{
@@ -60,12 +67,14 @@ export const AirtimeForm = (props: Props) => {
 
   
   const rechargeAirtime = async (data: any) => {
-    if (window.ethereum && window.ethereum.isMiniPay) {
+    if (window.ethereum ) {
       try {
         setLoading(true);
         const amount = data.amount;
-        data.bill_type = "AIRTIME";
-        data.country = "NG";
+        data.bill_type = "AIRTIME"
+        data.biller_code = props.billerCode
+        data.item_code = props.itemCode
+        data.country = userCountry;
         data.chain = "cusd";
         data.wallet_address = address;
         data.crypto_amount = tokenAmount;     
@@ -119,6 +128,9 @@ export const AirtimeForm = (props: Props) => {
   };
 
   useEffect(() => {
+    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}v2/get-biller-info/?country=KE&category=AIRTIME`).then((response:any)=>console.log(response)).catch((error:any)=>{
+console.log(error)
+    })
     if (isConnected && address) {
       setUserAddress(address);
     }
@@ -150,7 +162,11 @@ export const AirtimeForm = (props: Props) => {
               Beneficiary Phone Number
             </FormLabel>
 
-            <Input
+            <InputGroup size={"sm"}>
+    <InputLeftAddon>
+      {userCountryCode}
+          </InputLeftAddon>
+             <Input
               border={"1px solid #f9f9f9"}
               outline={"none"}
               fontSize={"16px"}
@@ -158,8 +174,9 @@ export const AirtimeForm = (props: Props) => {
               placeholder="080***"
               required
               
-              {...register("customer",{minLength:{value:11,message:"Phone number should be 11 digits"},maxLength:{value:11,message:"Phone number should be 11 digits"}})}
+              {...register("customer",{minLength:{value:10,message:"Phone number should be at least 10 digits"},maxLength:{value:13,message:"Phone number should be 11 digits"}})}
               />
+          </InputGroup>
               <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
                   {errors.customer && errors.customer.message}
                 </Text></HStack>
@@ -168,17 +185,17 @@ export const AirtimeForm = (props: Props) => {
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}
               <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
-                Amount (&#8358;)
+                Amount {`(${userCurrencyTicker})`}
               </FormLabel>
               <Text fontSize={"xs"} color={"blackAlpha.700"}>
-                Balance(&#8358;):{" "}
+                Balance ({userCurrencyTicker}):{" "}
                 {(
                   parseFloat(walletBalance) *
                   parseFloat(tokenToNairaRate.toString())
                 ).toFixed(2)}
               </Text>
             </HStack>
-
+           
             <Input
               border={"1px solid #f9f9f9"}
               outline={"none"}
@@ -194,7 +211,7 @@ export const AirtimeForm = (props: Props) => {
                   message: "Insufficient balance",
                 },
                 min: {
-                  value: 100,
+                  value: minAmount,
                   message: `Minimum recharge amount is N100`,
                 },
               })}
