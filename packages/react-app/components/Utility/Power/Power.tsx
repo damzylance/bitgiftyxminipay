@@ -61,7 +61,7 @@ const Electricity = (props: any) => {
   useEffect(() => {
     axios
       .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}v2/get-bill-info/?biller_code=BIL191`
+        `${process.env.NEXT_PUBLIC_BASE_URL}v2/get-bill-info/?biller_code=BIL142`
       )
       .then((response) => {
         console.log(response);

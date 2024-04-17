@@ -70,7 +70,7 @@ export const PowerForm = (props: any) => {
   const validateMeter = async (e:any)=>{
     setLoadingText("Validating Meter Number...");
     setLoading(true)
-    const maxMeterLength=userCountry==="NG"?11:12
+    const maxMeterLength=userCountry==="NG"?11:9
     const customer =e.target.value
     if(customer.length===maxMeterLength){
       const validate = await axios
@@ -199,9 +199,9 @@ export const PowerForm = (props: any) => {
               border={"1px solid #f9f9f9"}
               outline={"none"}
               type={"string"}
-              maxLength={12}
+              maxLength={10}
               required
-              {...register("customer",{onChange:validateMeter,minLength:{value:11,message:"Invalid Meter Number"},maxLength:{value:12,message:"Invalid Meter Number"}})}
+              {...register("customer",{onChange:validateMeter,minLength:{value:10,message:"Invalid Meter Number"},maxLength:{value:10,message:"Invalid Meter Number"}})}
             />
             <HStack width={"fulll"} mt={"5px"} justifyContent={"space-between"}>
 
