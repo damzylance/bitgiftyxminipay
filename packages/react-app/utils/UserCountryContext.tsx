@@ -86,11 +86,15 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
           country = "NG";
           currency = "NGN";
           ticker="₦"
+          countryCode="+234"
+
       }
 
       setUserCountry(country);
       setCurrency(currency);
-      setUserCurrencyTicker(ticker) // Set currency based on the user's country
+      setUserCurrencyTicker(ticker)
+      setUserCountryCode(countryCode)
+       // Set currency based on the user's country
     };
 
     fetchUserCountry();

@@ -50,7 +50,19 @@ export const AirtimeForm = (props: Props) => {
   const [nairaAmount, setNairaAmount] = useState();
   const [tokenAmount, setTokenAmount] = useState(0);
   const [currency, setCurrency] = useState("cusd");
-  const minAmount = userCountry==="NG"?100:userCountry==="KE"?10:userCountry==="GH"?1:0
+  type CountrySettings = {
+    minAmount: number;
+    minPhoneDigits:number;
+    maxPhoneDigits: number;
+    
+};
+const settings: { [key: string]: CountrySettings } = {
+  NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11 },
+  KE: { minAmount: 10, minPhoneDigits:9,maxPhoneDigits: 10 },
+  GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10 }
+};
+const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
+
   const [userAddress, setUserAddress] = useState("");
  
   const rotateMessages = ()=>{
@@ -174,7 +186,7 @@ console.log(error)
               placeholder="080***"
               required
               
-              {...register("customer",{minLength:{value:10,message:"Phone number should be at least 10 digits"},maxLength:{value:13,message:"Phone number should be 11 digits"}})}
+              {...register("customer",{minLength:{value:countrySettings.minPhoneDigits,message:"Invalid phone number"},maxLength:{value:countrySettings.maxPhoneDigits,message:"Invalid phone number"}})}
               />
           </InputGroup>
               <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
@@ -211,7 +223,7 @@ console.log(error)
                   message: "Insufficient balance",
                 },
                 min: {
-                  value: minAmount,
+                  value: countrySettings.minAmount,
                   message: `Minimum recharge amount is N100`,
                 },
               })}
