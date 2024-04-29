@@ -70,7 +70,7 @@ export const PowerForm = (props: any) => {
   const validateMeter = async (e:any)=>{
     setLoadingText("Validating Meter Number...");
     setLoading(true)
-    const maxMeterLength=userCountry==="NG"?11:9
+    const maxMeterLength=userCountry==="NG"?12:9
     const customer =e.target.value
     if(customer.length===maxMeterLength){
       const validate = await axios
