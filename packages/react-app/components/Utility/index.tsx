@@ -78,8 +78,12 @@ const handleCountryChange = (e:any)=>{
   }, [isConnected,address]);
   const { tokenToNairaRate } = useFetchRates();
   return (
-    <VStack width={"full"} position={"relative"}>
-      
+    <VStack width={"full"} position={"relative"} gap={"2px"}>
+      <VStack background={"yellow"} p={"10px"} width={"full"} borderRadius={"md"}>
+        <Text fontSize={"sm"}>
+          Get 10% cashback for bill payments over 1cUSD
+        </Text>
+      </VStack>
         <VStack
         height={"232px"}
         p={"10px 24px"}
