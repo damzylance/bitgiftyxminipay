@@ -79,9 +79,9 @@ const handleCountryChange = (e:any)=>{
   const { tokenToNairaRate } = useFetchRates();
   return (
     <VStack width={"full"} position={"relative"} gap={"2px"}>
-      <VStack background={"yellow"} p={"10px"} width={"full"} borderRadius={"md"}>
+      <VStack background={"#53bfb9"} p={"10px"} width={"full"} borderRadius={"md"}>
         <Text fontSize={"sm"}>
-          Get 10% cashback for bill payments over 1cUSD
+          Get 10% cashback for bill payments over 1 cUSD
         </Text>
       </VStack>
         <VStack
