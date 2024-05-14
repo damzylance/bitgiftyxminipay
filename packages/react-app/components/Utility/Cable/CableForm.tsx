@@ -102,7 +102,6 @@ export const CableForm = (props: any) => {
     setLoadingText("Validating Smart Card Number...");
     setLoading(true)
     const customer =e.target.value
-    if(customer.length===10||customer.length===11){
       const validate = await axios
       .get(
         `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.itemCode||itemCode}&biller-code=${props.cable}&customer=${customer}`
@@ -126,10 +125,6 @@ export const CableForm = (props: any) => {
         title: "Could not validate Smart Card Number",
         status: "warning",
       });
-    }
-    }else{
-      setLoading(false)
-      setCustomerDetails("")
     }
     
   }
@@ -315,7 +310,7 @@ export const CableForm = (props: any) => {
               border={"1px solid #f9f9f9"}
               outline={"none"}
               required
-              {...register("customer",{onChange:validateMeter,minLength:{value:10,message:"Invalid smart card number"},maxLength:{value:11,message:"Invalid smart card number"}})}
+              {...register("customer",{onBlur:validateMeter})}
             />
             <HStack width={"fulll"} mt={"5px"} justifyContent={"space-between"}>
               <Text fontSize={"xs"} color={"blackAlpha.700"}>

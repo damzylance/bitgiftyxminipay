@@ -70,9 +70,7 @@ export const PowerForm = (props: any) => {
   const validateMeter = async (e:any)=>{
     setLoadingText("Validating Meter Number...");
     setLoading(true)
-    const maxMeterLength=userCountry==="NG"?12:9
     const customer =e.target.value
-    if(customer.length===maxMeterLength){
       const validate = await axios
       .get(
         `${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.item_code}&biller-code=${props.disco}&customer=${customer}`
@@ -96,10 +94,7 @@ export const PowerForm = (props: any) => {
         status: "warning",
       });
     }
-    }else{
-      setLoading(false)
-      setCustomerDetails("")
-    }
+    
     
   }
 
@@ -198,10 +193,9 @@ export const PowerForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #f9f9f9"}
               outline={"none"}
-              type={"string"}
-              maxLength={10}
+              type={"number"}
               required
-              {...register("customer",{onChange:validateMeter,minLength:{value:10,message:"Invalid Meter Number"},maxLength:{value:10,message:"Invalid Meter Number"}})}
+              {...register("customer",{onBlur:validateMeter})}
             />
             <HStack width={"fulll"} mt={"5px"} justifyContent={"space-between"}>
 
