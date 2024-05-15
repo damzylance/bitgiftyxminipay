@@ -75,12 +75,12 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
 
           break;
 
-        // case "Nairobi":
-        //   country = "KE";
-        //   currency = "KES";
-        //   ticker="KSh";
-        //   countryCode="+254" 
-        //   break;
+        case "Nairobi":
+          country = "KE";
+          currency = "KES";
+          ticker="KSh";
+          countryCode="+254" 
+          break;
 
         default:
           country = "NG";
