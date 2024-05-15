@@ -256,7 +256,6 @@ console.log(error)
             loadingText={loadingText}
             type="submit"
             width={"full"}
-            isDisabled
             borderRadius={"none"}
             background={
               " linear-gradient(106deg, #103D96 27.69%, #306FE9 102.01%)"
