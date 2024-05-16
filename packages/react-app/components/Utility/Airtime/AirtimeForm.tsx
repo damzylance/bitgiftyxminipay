@@ -58,7 +58,7 @@ export const AirtimeForm = (props: Props) => {
 };
 const settings: { [key: string]: CountrySettings } = {
   NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11 },
-  KE: { minAmount: 10, minPhoneDigits:9,maxPhoneDigits: 10 },
+  KE: { minAmount: 30, minPhoneDigits:9,maxPhoneDigits: 10 },
   GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10 }
 };
 const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
@@ -224,7 +224,7 @@ console.log(error)
                 },
                 min: {
                   value: countrySettings.minAmount,
-                  message: `Minimum recharge amount is N100`,
+                  message: `Minimum recharge amount is ${countrySettings.minAmount}`,
                 },
               })}
             />
@@ -254,6 +254,7 @@ console.log(error)
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
+            isDisabled
             type="submit"
             width={"full"}
             borderRadius={"none"}

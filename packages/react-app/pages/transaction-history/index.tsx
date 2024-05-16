@@ -1,4 +1,4 @@
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowLeftIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { Avatar, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import Link from "next/link";
@@ -57,21 +57,21 @@ const History = (props: Props) => {
     // fetchRates();
   }, [address, isConnected]);
   return (
-    <VStack width={"full"} px={"10px"} gap={"20px"}>
+    <VStack width={"full"} p={"10px"} gap={"20px"} bg={"#152654"}>
       <HStack width={"full"} justifyContent={"center"}>
         {" "}
         <Link href={"/"}>
-          <ChevronLeftIcon fontSize={"30px"} color={"#464646"} />
+          <ArrowBackIcon fontSize={"24px"} color={"#fff"} />
         </Link>
         <HStack width={"full"} justifyContent={"center"}>
           {" "}
-          <Text fontSize={"lg"} fontWeight={"600"}>
-            Transaction History
-          </Text>
+          <Text fontSize={"16px"} color={"#fff"} fontWeight={"600"}>
+      History
+    </Text>
         </HStack>
       </HStack>
 
-      <VStack width={"full"} gap={"20px"}>
+      <VStack width={"full"} height={"100vh"} overflowY={"scroll"} gap={"20px"}>
         {loading ? (
           <Spinner />
         ) : transactions.length > 0 ? (
@@ -96,7 +96,7 @@ const History = (props: Props) => {
             return (
               <HStack key={id} width={"full"} justifyContent={"space-between"}>
                 <HStack gap={"10px"}>
-                  <Avatar bg={"#81a0dc"} icon={<MdPhoneInTalk />} />
+                  <Avatar bg={"#81a0dc"} size={"sm"} icon={<MdPhoneInTalk />} />
                   <VStack gap={"5px"} alignItems={"flex-start"}>
                     <Link
                       href={`https://celoscan.io/tx/${transaction.transaction_hash}`}
@@ -105,13 +105,13 @@ const History = (props: Props) => {
                       <Text
                         fontSize={"14px"}
                         fontWeight={"500"}
-                        color={"#464646"}
+                        color={"#fff"}
                       >
                         {shortify(transaction.transaction_hash)}
                       </Text>
                     </Link>
 
-                    <Text fontSize={"xs"} fontWeight={"400"}>
+                    <Text fontSize={"xs"} color={"#fff"} fontWeight={"400"}>
                       {transaction.transaction_type} <br />
                       <span
                         style={{
@@ -130,14 +130,14 @@ const History = (props: Props) => {
                   </VStack>
                 </HStack>
                 <VStack gap={"5px"} alignItems={"flex-end"}>
-                  <Text fontSize={"14px"} fontWeight={"500"} color={"#464646"}>
+                  <Text fontSize={"14px"} fontWeight={"500"} color={"#fff"}>
                     -&#8358;{transaction.amount}
                   </Text>
-                  <Text fontSize={"xs"} fontWeight={"400"} color={"#464646"}>
+                  <Text fontSize={"xs"} fontWeight={"400"} color={"#fff"}>
                     -{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
                   </Text>
                   
-                  <Text fontSize={"xs"} fontWeight={"400"} color={"#464646"}>{formatDate(transaction.time)}</Text>
+                  <Text fontSize={"xs"} fontWeight={"400"} color={"#FFFFFF80"}>{formatDate(transaction.time)}</Text>
                 </VStack>
               </HStack>
             );
