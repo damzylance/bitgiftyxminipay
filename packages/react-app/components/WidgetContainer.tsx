@@ -35,7 +35,7 @@ const WidgetContainer: FC<Props> = ({ children }) => {
       <VStack width={"full"} maxW={"500px"} marginX={"auto"}>
         {children}
       </VStack>
-      <Link href={"https://wa.me/message/5NRO44DIOIKKH1"} style={{ position: "fixed", bottom: "1%", right: "1%" }}>
+      <Link href={"https://wa.me/message/S7NTWRBRPFYWK1"} style={{ position: "fixed", bottom: "1%", right: "1%" }}>
         <VStack gap={"0px"}>
           <Text fontSize={"sm"} marginBottom={"-12px"}>Need help?</Text>
         <Image src={whatsapp} width={80} height={80} alt={"Whatsapp Logo"} />
