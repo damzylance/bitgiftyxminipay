@@ -7,6 +7,7 @@ interface SupportedCountries {
   flag: string;
   ticker:string;
   countryCode:string
+  cashback:string
 }
 
 type UserCountryContextType = {
@@ -20,6 +21,8 @@ type UserCountryContextType = {
   setUserCurrencyTicker:(value: string) => void;
   supportedCountries: SupportedCountries[];
   setSupportedCountries: (value: SupportedCountries[]) => void; // Corrected type for setting the entire list
+  cashback:string,
+  setCashback:(value: string) => void;
 };
 
 // Create the context
@@ -40,11 +43,12 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [userCurrency, setCurrency] = useState<string>(''); // Corrected to match the type
   const [userCurrencyTicker,setUserCurrencyTicker]=useState<string>('')
   const [userCountryCode,setUserCountryCode]=useState<string>('')
+  const [cashback,setCashback]=useState<string>('')
 
   const [supportedCountries, setSupportedCountries] = useState<SupportedCountries[]>([
-    { country: "NG", currency: "NGN", flag: "🇳🇬",ticker:"₦",countryCode:"+234" },
-    { country: "GH", currency: "GHS", flag: "🇬🇭",ticker:"₵",countryCode:"+233" },
-    { country: "KE", currency: "KES", flag: "🇰🇪",ticker:"KSh",countryCode:"+254" },
+    { country: "NG", currency: "NGN", flag: "🇳🇬",ticker:"₦",countryCode:"+234",cashback:"1500" },
+    { country: "GH", currency: "GHS", flag: "🇬🇭",ticker:"₵",countryCode:"+233",cashback:"15" },
+    { country: "KE", currency: "KES", flag: "🇰🇪",ticker:"KSh",countryCode:"+254",cashback:"150" },
     
   ]);
 
@@ -57,6 +61,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
       let currency = "NGN"; // Default
       let ticker = "₦"
       let countryCode="+234"
+      let cb="1500"
       
       switch (city) {
         case "Lagos":
@@ -64,6 +69,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
           currency = "NGN";
           ticker="₦"
           countryCode="+234"
+          cb="1500"
           
           break;
         
@@ -72,7 +78,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
           currency = "GHS";
           ticker = "₵"
           countryCode="+233" 
-
+          cb="15"
           break;
 
         case "Nairobi":
@@ -80,6 +86,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
           currency = "KES";
           ticker="KSh";
           countryCode="+254" 
+          cb="150"
           break;
 
         default:
@@ -87,6 +94,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
           currency = "NGN";
           ticker="₦"
           countryCode="+234"
+          cb="1500"
 
       }
 
@@ -101,7 +109,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, []);
 
   return (
-    <UserCountryContext.Provider value={{ userCountry, setUserCountry,userCountryCode,setUserCountryCode ,userCurrency, setCurrency,userCurrencyTicker,setUserCurrencyTicker, supportedCountries, setSupportedCountries }}>
+    <UserCountryContext.Provider value={{ userCountry, setUserCountry,userCountryCode,setUserCountryCode ,userCurrency, setCurrency,userCurrencyTicker,setUserCurrencyTicker, supportedCountries, setSupportedCountries,cashback,setCashback }}>
       {children}
     </UserCountryContext.Provider>
   );

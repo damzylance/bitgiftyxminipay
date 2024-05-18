@@ -37,7 +37,7 @@ const History = (props: Props) => {
     if (isConnected && address) {
       axios
         .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}transactions/?wallet_address=${address}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}transactions/?wallet_address=${address}&limi=100`
         )
         .then((response) => {
           setLoading(false);
