@@ -254,7 +254,6 @@ console.log(error)
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            isDisabled = {userCountry==="NG"}
             type="submit"
             width={"full"}
             borderRadius={"none"}
