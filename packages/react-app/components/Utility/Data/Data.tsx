@@ -50,7 +50,7 @@ const telcosBycountry = telcos.find(country => country.country === userCountry)
     <>
       {page === "list" && (
         <VStack width={"full"} gap={"40px"} my={"40px"}>
-          <Text fontSize={"2xl"}>Plese Select Telco Provider</Text>
+                    <Text fontSize={"24px"} fontWeight={700} > Select Telco Provider</Text>
 
           <VStack width={"full"} gap={"10px"}>
             {telcosBycountry && telcosBycountry.telcos && telcosBycountry.telcos.length > 0

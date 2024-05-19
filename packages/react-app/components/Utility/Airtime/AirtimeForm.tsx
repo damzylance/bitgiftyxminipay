@@ -42,7 +42,7 @@ export const AirtimeForm = (props: Props) => {
   } = useForm<Inputs>();
   const toast = useToast();
   const { address, isConnected } = useAccount();
-  const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
+  const {userCurrencyTicker,userCountryCode,userCountry,cashback} = useUserCountry()
   const walletBalance = useBalance(address, isConnected);
   const { tokenToNairaRate, isLoading } = useFetchRates();
   const [loading, setLoading] = useState(false);
@@ -148,17 +148,15 @@ console.log(error)
     }
   }, [address, isConnected, toast]);
   return (
-    <VStack my={"40px"} gap={"20px"} width={"full"}>
+    <VStack my={"40px"} position={"relative"} gap={"10px"} width={"full"}>
+      <Text fontSize={"xs"} textAlign={"center"}>
+      🔥Get 10% cashback for bill payments over {userCurrencyTicker}{cashback} 
+        </Text>
       <HStack width={"full"} alignItems={"center"}>
-        <ArrowBackIcon
-          fontSize={"20px"}
-          cursor={"pointer"}
-          onClick={props.onClose}
-        />
         <HStack width={"full"} justifyContent={"center"}>
           <Text
-            textAlign={"center"}
-            fontSize={"2xl"}
+            fontSize={"24px"}
+            fontWeight={"700"}
             textTransform={"uppercase"}
             width={"full"}
           >
@@ -170,7 +168,7 @@ console.log(error)
       <form style={{ width: "100%" }} onSubmit={handleSubmit(rechargeAirtime)}>
         <VStack width={"full"} gap={"20px"}>
           <FormControl>
-            <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+            <FormLabel fontSize={"sm"} color={"#000"}>
               Beneficiary Phone Number
             </FormLabel>
 
@@ -196,10 +194,10 @@ console.log(error)
           <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}
-              <FormLabel fontSize={"sm"} color={"blackAlpha.700"}>
+              <FormLabel fontSize={"sm"} color={"#000"}>
                 Amount {`(${userCurrencyTicker})`}
               </FormLabel>
-              <Text fontSize={"xs"} color={"blackAlpha.700"}>
+              <Text fontSize={"xs"} color={"#000"}>
                 Balance ({userCurrencyTicker}):{" "}
                 {(
                   parseFloat(walletBalance) *
@@ -209,7 +207,7 @@ console.log(error)
             </HStack>
            
             <Input
-              border={"1px solid #f9f9f9"}
+              border={"1px solid #506DBB"}
               outline={"none"}
               fontSize={"16px"}
               type="number"
@@ -255,14 +253,13 @@ console.log(error)
             isLoading={loading || isLoading}
             loadingText={loadingText}
             type="submit"
+            size={"lg"}
             width={"full"}
-            borderRadius={"none"}
-            background={
-              " linear-gradient(106deg, #103D96 27.69%, #306FE9 102.01%)"
-            }
+            borderRadius={"full"}
+            background={"#152654"}
             _hover={{
               background:
-                "linear-gradient(106deg, #103D96 27.69%, #306FE9 102.01%)",
+                "#152654",
             }}
             variant={"solid"}
           >

@@ -9,15 +9,15 @@ export const ProviderCard = (props: Props) => {
       width={"full"}
       padding={"10px"}
       borderRadius={"10px"}
-      background={"#fff"}
+      background={"#F0F4FF"}
       _hover={{ background: "#f0f0f0" }}
       cursor={"pointer"}
       gap={"10px"}
       onClick={props.action}
       border={"1px solid #bbcdf1"}
     >
-      <Image alt="" width={50} height={50} src={props.logo} />
-      <Text fontSize={"lg"} textTransform={"uppercase"}>
+      <Image alt="" width={40} height={40} style={{borderRadius:"8px"}} src={props.logo} />
+      <Text fontSize={"sm"} fontWeight={"600"} textTransform={"uppercase"}>
         {props.name}
       </Text>
     </HStack>

@@ -24,7 +24,7 @@ import {
   MdWifiTethering,
 } from "react-icons/md";
 import { UtilityCard } from "./UtilityCard";
-import { UtilityModal } from "./UtilityModal";
+import { UtilityDrawer } from "./UtilityModal";
 import { ArrowForwardIcon, ArrowRightIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";
@@ -35,7 +35,7 @@ import { useUserCountry } from "@/utils/UserCountryContext";
 import Image from "next/image";
 import axios from "axios";
 const Utility = () => {
-  const {userCountry,setUserCountry,supportedCountries,userCurrencyTicker,setUserCurrencyTicker,setUserCountryCode} = useUserCountry()
+  const {userCountry,setUserCountry,supportedCountries,userCurrencyTicker,setUserCurrencyTicker,setUserCountryCode,cashback,setCashback} = useUserCountry()
   supportedCountries.map(()=>{
     
   })
@@ -56,6 +56,7 @@ const handleCountryChange = (e:any)=>{
   setUserCountry(country[0])
   setUserCountryCode(country[1])
   setUserCurrencyTicker(country[2])
+  setCashback(country[3])
   localStorage.setItem("userCountry",country)
 
 }
@@ -130,7 +131,7 @@ const handleCountryChange = (e:any)=>{
     <VStack width={"full"} position={"relative"} gap={"2px"}>
       <VStack background={"#53bfb9"} p={"10px"} width={"full"} borderRadius={"md"}>
         <Text fontSize={"sm"}>
-          Get 10% cashback for bill payments over 1 cUSD
+          Get 10% cashback for bill payments over {userCurrencyTicker}{cashback} 
         </Text>
       </VStack>
       <VStack width={"full"} pb={"10px"} gap={"40px"} bg={"#152654"}>
@@ -155,11 +156,11 @@ const handleCountryChange = (e:any)=>{
         {supportedCountries.filter((country)=>{
             return country.country==userCountry
           }).map((country) => {
-  return <option value={[country.country,country.countryCode,country.ticker]} key={country.currency}>{country.country}  {country.flag}</option>;
+  return <option value={[country.country,country.countryCode,country.ticker,country.cashback]} key={country.currency}>{country.country}  {country.flag}</option>;
 })}          {supportedCountries.filter((country)=>{
             return country.country!=userCountry
           }).map((country) => {
-  return <option value={[country.country,country.countryCode,country.ticker]} key={country.currency}>{country.country}  {country.flag}</option>;
+  return <option value={[country.country,country.countryCode,country.ticker,country.cashback]} key={country.currency}>{country.country}  {country.flag}</option>;
 })}
         </Select>
         
@@ -320,7 +321,7 @@ const handleCountryChange = (e:any)=>{
             );
           })
         ) : (
-          <Text>No transactions to display</Text>
+          <Text color={"#fff"}>No transactions to display</Text>
         )}
        
       </VStack>
@@ -336,7 +337,7 @@ const handleCountryChange = (e:any)=>{
        
      
 
-      <UtilityModal type={type} isOpen={isOpen} onClose={()=>{
+      <UtilityDrawer type={type} isOpen={isOpen} onClose={()=>{
         fetchBalance()
         onClose()
         }} />

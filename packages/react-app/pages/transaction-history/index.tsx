@@ -143,7 +143,7 @@ const History = (props: Props) => {
             );
           })
         ) : (
-          <Text>No transactions to display</Text>
+          <Text color={"#fff"}>No transactions to display</Text>
         )}
        
       </VStack>

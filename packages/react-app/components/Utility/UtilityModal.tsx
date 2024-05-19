@@ -1,9 +1,10 @@
 import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalOverlay,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerOverlay,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import Airtime from "./Airtime/Airtime";
@@ -17,15 +18,14 @@ type Props = {
   isOpen: any;
 };
 
-export const UtilityModal = (props: Props) => {
+export const UtilityDrawer = (props: Props) => {
   return (
-    <Modal closeOnOverlayClick={false} isOpen={props.isOpen} onClose={props.onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalCloseButton />
-        <ModalBody>
+    <Drawer  closeOnOverlayClick={false} isOpen={props.isOpen} onClose={props.onClose} placement={"bottom"}>
+      <DrawerOverlay />
+      <DrawerContent borderTopRadius={"24px"}>
+        <DrawerCloseButton />
+        <DrawerBody>
           <VStack width={"full"}>
-            {" "}
             {props.type === "airtime" && <Airtime action={props.onClose} />}
             {props.type === "electricity" && (
               <Electricity action={props.onClose} />
@@ -36,8 +36,8 @@ export const UtilityModal = (props: Props) => {
             
             */}
           </VStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 };

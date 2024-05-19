@@ -102,6 +102,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({ childre
       setCurrency(currency);
       setUserCurrencyTicker(ticker)
       setUserCountryCode(countryCode)
+      setCashback(cb)
        // Set currency based on the user's country
     };
 

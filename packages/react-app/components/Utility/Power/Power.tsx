@@ -74,8 +74,7 @@ const Electricity = (props: any) => {
     <>
       {page === "list" && (
         <VStack width={"full"} gap={"40px"} my={"40px"}>
-          <Text fontSize={"2xl"} textAlign={"center"}>
-            {" "}
+          <Text fontSize={"24px"} fontWeight={700} >
             Plese Select Your Disco
           </Text>
           <VStack width={"full"} gap={"10px"}>
