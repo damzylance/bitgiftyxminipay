@@ -58,7 +58,7 @@ export const AirtimeForm = (props: Props) => {
 };
 const settings: { [key: string]: CountrySettings } = {
   NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11 },
-  KE: { minAmount: 30, minPhoneDigits:9,maxPhoneDigits: 10 },
+  KE: { minAmount: 30, minPhoneDigits:10,maxPhoneDigits: 10 },
   GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10 }
 };
 const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
@@ -184,7 +184,7 @@ console.log(error)
               placeholder="080***"
               required
               
-              {...register("customer",{minLength:{value:countrySettings.minPhoneDigits,message:"Invalid phone number"},maxLength:{value:countrySettings.maxPhoneDigits,message:"Invalid phone number"}})}
+              {...register("customer",{minLength:{value:countrySettings.minPhoneDigits,message:"The mobile must be 10 digits"},maxLength:{value:countrySettings.maxPhoneDigits,message:"The mobile must be 10 digits"}})}
               />
           </InputGroup>
               <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
