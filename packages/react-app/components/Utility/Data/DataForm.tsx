@@ -212,7 +212,7 @@ export const DataForm = (props: any) => {
               required
             >
               <option>Select Plan</option>
-              {plans.map((plan: Plan, index) => {
+              {plans.filter((plan:Plan)=>plan.item_code!=="MD564" && plan.item_code!== "MD488" && plan.item_code!== "MD142").map((plan: Plan, index) => {
 
                 return (
                   <option value={[plan.biller_code,plan.item_code, plan.amount]} key={index}>
