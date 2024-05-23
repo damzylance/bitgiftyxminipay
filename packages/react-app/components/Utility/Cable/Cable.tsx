@@ -18,13 +18,10 @@ const Cable = (props: any) => {
         { name: "STARTIMES", logo: startimesLogo, id: "BIL123" }] 
     },
     { country: "GH", cables: 
-      [ { name: "DSTV GHANA", logo: dstvLogo, id: "BIL137", itemCode: "CB279" },
-        { name: "GOTV GHANA", logo: gotvLogo, id: "BIL138", itemCode: "CB227" }]
+      [ ]
     },
     { country: "KE", cables: 
-      [ { name: "DSTV KENYA", logo: dstvLogo, id: "BIL190", itemCode: "CB500" },
-        { name: "GOTV KENYA", logo: gotvLogo, id: "BIL92", itemCode: "CB503" }, 
-        { name: "STARTIME KENYA", logo: startimesLogo, id: "BIL93", itemCode: "CB504" }]
+      [ ]
     }
   ]);
   
@@ -69,7 +66,7 @@ const Cable = (props: any) => {
                     />
                   );
                 })
-              : ""}
+              : <Text>Country not supported for cable subscription</Text>}
           </VStack>
         </VStack>
       )}

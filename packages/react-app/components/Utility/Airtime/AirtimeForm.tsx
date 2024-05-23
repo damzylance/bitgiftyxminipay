@@ -54,12 +54,13 @@ export const AirtimeForm = (props: Props) => {
     minAmount: number;
     minPhoneDigits:number;
     maxPhoneDigits: number;
+    placeHolder:string
     
 };
 const settings: { [key: string]: CountrySettings } = {
-  NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11 },
-  KE: { minAmount: 30, minPhoneDigits:10,maxPhoneDigits: 10 },
-  GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10 }
+  NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11,placeHolder:"8012345890" },
+  KE: { minAmount: 30, minPhoneDigits:10,maxPhoneDigits: 10,placeHolder:"0712345890" },
+  GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10, placeHolder:"212345678" }
 };
 const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
 
@@ -181,7 +182,7 @@ console.log(error)
               outline={"none"}
               fontSize={"16px"}
               type="tel"
-              placeholder="080***"
+              placeholder={countrySettings.placeHolder}
               required
               
               {...register("customer",{minLength:{value:countrySettings.minPhoneDigits,message:"The mobile must be 10 digits"},maxLength:{value:countrySettings.maxPhoneDigits,message:"The mobile must be 10 digits"}})}

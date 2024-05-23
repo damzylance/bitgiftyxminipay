@@ -32,11 +32,7 @@ const Data = (props: any) => {
     { name: "airtel", logo: airtelLogo, id: "BIL110" },
     { name: "9mobile", logo: nineMobileLogo, id: "BIL111" },]},
     {country:"KE",telcos:[]},
-    {country:"GH",telcos:[
-      {name:"Vodafone ADSL",logo:vodafoneLogo,id:"BIL139",},
-      {name:"SURFLINE",logo:vodafoneLogo,id:"BIL141",}
-
-    ]},
+    {country:"GH",telcos:[]},
   ];
  
 const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
@@ -68,7 +64,7 @@ const telcosBycountry = telcos.find(country => country.country === userCountry)
                     />
                   );
                 })
-              : <Text>Country Not Supported for Data Subscription</Text>}
+              : <Text>Country not supported for data subscription</Text>}
           </VStack>
         </VStack>
       )}

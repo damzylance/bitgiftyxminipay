@@ -36,18 +36,18 @@ const Electricity = (props: any) => {
     item_code: "UB163",
   },]},
   {country:"GH",billers:[
-    {
-      name: "Electricity Company of Ghana",
-      id: "BIL142",
-      item_code: "UB231",
-    }
+    // {
+    //   name: "Electricity Company of Ghana",
+    //   id: "BIL142",
+    //   item_code: "UB231",
+    // }
   ]},
   {country:"KE",billers:[
-    {
-      name: "KPLC Electricity Prepaid",
-      id: "BIL191",
-      item_code: "UB501",
-    }
+    // {
+    //   name: "KPLC Electricity Prepaid",
+    //   id: "BIL191",
+    //   item_code: "UB501",
+    // }
   ]},
     
   ]);
@@ -95,7 +95,7 @@ const Electricity = (props: any) => {
                     />
                   );
                 })
-              : ""}
+              : <Text>Country not supported yet</Text>}
           </VStack>
         </VStack>
       )}
