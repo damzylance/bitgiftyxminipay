@@ -4,11 +4,12 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { MdPhoneInTalk } from "react-icons/md";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 
 type Props = {};
 
 const History = (props: Props) => {
+  const transactionSetting = {NG:""}
   const { address, isConnected } = useAccount();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,7 @@ const History = (props: Props) => {
     if (isConnected && address) {
       axios
         .get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}transactions/?wallet_address=${address}&limi=100`
+          `${process.env.NEXT_PUBLIC_BASE_URL}transactions/?wallet_address=${address}&limi=500`
         )
         .then((response) => {
           setLoading(false);
@@ -78,7 +79,7 @@ const History = (props: Props) => {
           transactions.map((transaction: any, id) => {
             let statusColor;
             let statusMessage
-            if (transaction.status === "success") {
+            if (transaction.status.toLowerCase() === "success") {
               statusColor = "#476621";
               statusMessage ="Success"
             } else if (transaction.status === "pending") {
