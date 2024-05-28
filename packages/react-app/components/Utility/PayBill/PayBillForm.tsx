@@ -27,7 +27,7 @@ type Inputs = {
 };
 
 type Plan = { biller_name: string,biller_code:string,item_code:string, amount: string };
-export const DataForm = (props: any) => {
+export const PayBillForm = (props: any) => {
   const {
     register,
     handleSubmit,

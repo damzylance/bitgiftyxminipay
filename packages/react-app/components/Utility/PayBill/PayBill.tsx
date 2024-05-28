@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { DataForm } from "./DataForm";
+import { PayBillForm } from "./PayBillForm";
 import mtnLogo from "../../../public/assets/mtn_logo.png";
 import gloLogo from "../../../public/assets/glo_logo.webp";
 import airtelLogo from "../../../public/assets/airtel_logo.png";
@@ -69,7 +69,7 @@ const telcosBycountry = telcos.find(country => country.country === userCountry)
         </VStack>
       )}
       {page === "buy" && (
-        <DataForm
+        <PayBillForm
           telco={telco}
           onClose={props.action}
           name={name}
