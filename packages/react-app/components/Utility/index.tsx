@@ -20,12 +20,12 @@ import {
 import {
   MdConnectedTv,
   MdElectricBolt,
+  MdPayment,
   MdPhoneInTalk,
   MdWifiTethering,
 } from "react-icons/md";
 import { UtilityCard } from "./UtilityCard";
 import { UtilityDrawer } from "./UtilityModal";
-import { ArrowForwardIcon, ArrowRightIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useAccount } from "wagmi";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
@@ -241,6 +241,15 @@ const handleCountryChange = (e:any)=>{
             onOpen();
           }}
         />
+         {userCountry==="KE" &&   <UtilityCard
+          bg={"linear-gradient(87.57deg, rgba(63, 255, 163, 0.35) 0%, rgba(0, 143, 204, 0.35) 100%)"}
+            icon={<MdPayment />}
+            text={"Pay Bills"}
+            action={() => {
+              setType("airtime");
+              onOpen();
+            }}
+          />}
       </VStack>
 
    </VStack>
