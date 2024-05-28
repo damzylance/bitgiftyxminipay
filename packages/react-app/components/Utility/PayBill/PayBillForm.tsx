@@ -173,8 +173,7 @@ export const DataForm = (props: any) => {
   return (
     <VStack my={"40px"} gap={"10px"} width={"full"}>
       <Text fontSize={"xs"} textAlign={"center"}>
-      🔥Spend over {userCurrencyTicker}{cashback} and get 10% back
-
+      🔥Get 10% cashback for bill payments over {userCurrencyTicker}{cashback} 
         </Text>
       <HStack width={"full"} alignItems={"center"}>
         <HStack width={"full"} justifyContent={"cener"}>

@@ -151,7 +151,7 @@ console.log(error)
   return (
     <VStack my={"40px"} position={"relative"} gap={"10px"} width={"full"}>
       <Text fontSize={"xs"} textAlign={"center"}>
-      🔥Get 10% cashback for bill payments over {userCurrencyTicker}{cashback} 
+      🔥Spend over {userCurrencyTicker}{cashback} and get 10% back
         </Text>
       <HStack width={"full"} alignItems={"center"}>
         <HStack width={"full"} justifyContent={"center"}>

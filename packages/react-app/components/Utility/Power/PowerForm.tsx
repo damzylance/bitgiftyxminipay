@@ -165,9 +165,7 @@ export const PowerForm = (props: any) => {
   }, [address, isConnected]);
   return (
     <VStack my={"40px"} gap={"10px"} width={"full"}>
-      <Text fontSize={"xs"} textAlign={"center"}>
-      🔥Get 10% cashback for bill payments over {userCurrencyTicker}{cashback} 
-        </Text>
+      <Text fontSize={"xs"} textAlign={"center"}>🔥Spend over {userCurrencyTicker}{cashback} and get 10% back</Text>
       <HStack width={"full"} alignItems={"center"}>
        
         <HStack width={"full"} justifyContent={"cener"}>
