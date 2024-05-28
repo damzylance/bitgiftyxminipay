@@ -241,7 +241,7 @@ const handleCountryChange = (e:any)=>{
             onOpen();
           }}
         />
-         {userCountry==="KE" &&   <UtilityCard
+         {/* {userCountry==="KE" &&   <UtilityCard
           bg={"linear-gradient(87.57deg, rgba(63, 255, 163, 0.35) 0%, rgba(0, 143, 204, 0.35) 100%)"}
             icon={<MdPayment />}
             text={"Pay Bills"}
@@ -249,7 +249,7 @@ const handleCountryChange = (e:any)=>{
               setType("airtime");
               onOpen();
             }}
-          />}
+          />} */}
       </VStack>
 
    </VStack>
