@@ -20,48 +20,45 @@ import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import { useUserCountry } from "@/utils/UserCountryContext";
 type Inputs = {
-  customer: string;
+  account_number: string;
+  short_code: string;
   amount: string;
   type: string;
   email: string;
 };
 
-type Plan = { biller_name: string,biller_code:string,item_code:string, 
-  amount: string,package:string,cost:string,id:string,category:string };
-export const DataForm = (props: any) => {
+type Plan = { biller_name: string,biller_code:string,item_code:string, amount: string };
+export const ByGoodsForm = (props: any) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
   } = useForm<Inputs>();
-  const toast = useToast();
-  const { address, isConnected } = useAccount();
-  const walletBalance = useBalance(address, isConnected);
-  console.log(walletBalance)
-  const { tokenToNairaRate, isLoading } = useFetchRates();
-  const {userCurrencyTicker,cashback,userCountry} = useUserCountry()
-  const [loading, setLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState("");
-  const [tokenAmount, setTokenAmount] = useState(0);
-  const [nairaAmount, setNairaAmount] = useState(0);
-  const [currency, setCurrency] = useState("cUSD");
-  const [plans, setPlans] = useState([]);
-  const [networkId, setNetworkId] = useState([]);
   type CountrySettings = {
     minAmount: number;
     minPhoneDigits:number;
     maxPhoneDigits: number;
     placeHolder:string
     
-};
-const settings: { [key: string]: CountrySettings } = {
-  NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11,placeHolder:"8012345890" },
-  KE: { minAmount: 30, minPhoneDigits:10,maxPhoneDigits: 10,placeHolder:"0712345890" },
-  GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10, placeHolder:"212345678" }
-};
-const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
+  };
+  const settings: { [key: string]: CountrySettings } = {
+    KE: { minAmount: 10, minPhoneDigits:10,maxPhoneDigits: 10,placeHolder:"10" },
+  };
+  const toast = useToast();
+  const { address, isConnected } = useAccount();
+  const walletBalance = useBalance(address, isConnected);
+  const { tokenToNairaRate, isLoading } = useFetchRates();
+  const {userCurrencyTicker,cashback,userCountry} = useUserCountry()
+  const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("");
+  const [tokenAmount, setTokenAmount] = useState(0);
+  const [nairaAmount, setNairaAmount] = useState(0);
+  const [currency, setCurrency] = useState("cusd");
+  const [plans, setPlans] = useState([]);
+  const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
+  const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
       setTimeout(()=>{
@@ -75,100 +72,27 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
   setInterval(rotateMessages, 1000);
 
 
-  
-
-  const fetchPlans = async () => {
-    setLoading(true);
-    if(userCountry === "KE"){
-      await axios
-      .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}v2/get-data-packages/1/`
-
-      )
-      .then((response) => {
-        console.log(response);
-        setLoading(false);
-        setPlans(
-          response.data.data
-        );
-      })
-      .catch((error) => {
-        setLoading(false);
-        toast({
-          title:
-            error.response?.data?.error || "Error occured fetching data plan",
-          status: "warning",
-        });
-      });
-    }else{
-      await axios
-      .get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}v2/get-bill-info/?biller_code=${props.telco}`
-      )
-      .then((response) => {
-        console.log(response);
-        setLoading(false);
-        setPlans(
-          response.data.data.filter((plan: any) => {
-            return plan.biller_code === props.telco && plan.id!==17202;
-          })
-        );
-      })
-      .catch((error) => {
-        setLoading(false);
-        toast({
-          title:
-            error.response?.data?.error || "Error occured fetching data plan",
-          status: "warning",
-        });
-      });
-    }
-   
-  };
-
-  const handlePlanChange = (e: any) => {
-    let tempNairaAmount
-    if(userCountry==="KE"){
-      tempNairaAmount= parseInt(e.target.value.split(",")[1]);
-
-    }else{
-     tempNairaAmount= parseInt(e.target.value.split(",")[2]);
-    }
-    console.log(tempNairaAmount)
+  const handleAmountChange = (e: any) => {
+    const tempNairaAmount = e.target.value;
     setNairaAmount(tempNairaAmount);
-    setTokenAmount(tempNairaAmount / tokenToNairaRate);
+    if (currency === "usdt_tron" || currency === "cusd") {
+      setTokenAmount(tempNairaAmount / tokenToNairaRate);
+    } else {
+      setTokenAmount(tokenToNairaRate * tempNairaAmount);
+    }
   };
-  const buyData = async (data: any) => {
-   let dataAmount
-   if(userCountry==="KE"){
-    dataAmount =data.type.split(",")[1]
-   }else{
-    dataAmount =data.type.split(",")[2]
-   }
-    if (
-      parseInt(dataAmount) <
-      parseFloat(walletBalance) * tokenToNairaRate
-    ) {
+  const payBill = async (data: any) => {
+   
+   
       if (window.ethereum) {
         try {
           setLoading(true);
-          if(userCountry === "KE"){
-            data.amount = parseInt(data.type.split(",")[1]);
-            data.data_package_id = parseInt(data.type.split(",")[0])
-            console.log("ke data",data.type)
-
-          }else{
-          data.amount = parseInt(data.type.split(",")[2]);
-          data.biller_code = data.type.split(",")[0];
-          data.item_code=data.type.split(",")[1];
-          data.bill_type="MOBILEDATA"
-          }
-          delete data.type;
+          data.bill_type="BUY_GOODS"
           data.country = userCountry;
           data.chain = "cusd";
           data.wallet_address = address;
           data.crypto_amount = tokenAmount;
-  
+          data.customer=data.short_code
           console.log(data);
           setLoadingText("Requesting transfer...");
           const response = await transferCUSD(
@@ -188,7 +112,7 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
             if (giftCardResponse?.status === 200) {
               // Gift card created successfully
               toast({
-                title: "Data purchased succesfully",
+                title: "Payment successful. Processing disbursement..",
                 status: "success",
               });
               props.onClose();
@@ -210,27 +134,12 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
         toast({ title: "You can only perfom transaction from MiniPay", status: "warning" });
       }
 
-     
-    } else {
-      toast({ title: "insufficient balance ", status: "warning" });
-    }
-
-    // data.token_amount = data.data.split(",")[1];
-    // delete data.network;
-    // delete data.data;
   };
 
   useEffect(() => {
-    // axios
-    // .get(
-    //   `${process.env.NEXT_PUBLIC_BASE_URL}v2/get-biller-info/?country=${userCountry}&category=MOBILEDATA`
-    // ).then((response:any)=>{
-    //   console.log(response)
-    // })
     if (isConnected && address) {
       setUserAddress(address);
     }
-    fetchPlans();
   }, [address, isConnected]);
 
   return (
@@ -247,52 +156,48 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
             textTransform={"uppercase"}
             width={"full"}
           >
-            BUY {props.name} DATA
+            Buy Goods
           </Text>
         </HStack>
       </HStack>
 
-      <form style={{ width: "100%" }} onSubmit={handleSubmit(buyData)}>
+      <form style={{ width: "100%" }} onSubmit={handleSubmit(payBill)}>
         <VStack width={"full"} gap={"20px"}>
-          <FormControl>
+        <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}
               <FormLabel fontSize={"sm"} color={"#000"}>
-                Data Plans (&#8358;)
+                Amount {`(${userCurrencyTicker})`}
               </FormLabel>
               <Text fontSize={"xs"} color={"#000"}>
-                Balance({userCurrencyTicker}):{" "}
+                Balance ({userCurrencyTicker}):{" "}
                 {(
                   parseFloat(walletBalance) *
                   parseFloat(tokenToNairaRate.toString())
                 ).toFixed(2)}
               </Text>
             </HStack>
-
-            <Select
-              fontSize={"16px"}
+           
+            <Input
               border={"1px solid #506DBB"}
-              {...register("type", { onChange: handlePlanChange })}
+              outline={"none"}
+              fontSize={"16px"}
+              type="number"
+              placeholder={countrySettings.placeHolder}
               required
-            >
-              <option>Select Plan</option>
-              {userCountry==="KE" && plans.map((plan: Plan, index) => {
+              {...register("amount", {
+                onChange: handleAmountChange,
 
-                return (
-                  <option value={[plan.id,plan.cost]} key={index}>
-                    {plan.package} {plan.category} ({userCurrencyTicker}{plan.cost})
-                  </option>
-                );
+                max: {
+                  value: parseFloat(walletBalance) * tokenToNairaRate,
+                  message: "Insufficient balance",
+                },
+                min: {
+                  value: countrySettings.minAmount,
+                  message: `Minimum recharge amount is ${countrySettings.minAmount}`,
+                },
               })}
-              {userCountry==="NG" && plans.filter((plan:Plan)=>plan.item_code!=="MD564" && plan.item_code!== "MD488" && plan.item_code!== "MD142").map((plan: Plan, index) => {
-
-return (
-  <option value={[plan.biller_code,plan.item_code, plan.amount]} key={index}>
-    {plan.biller_name} (N{plan.amount})
-  </option>
-);
-})}
-            </Select>
+            />
             <HStack
               width={"full"}
               alignItems={"center"}
@@ -303,18 +208,21 @@ return (
                 ≈{" "}
                 {currency === "btc"
                   ? tokenAmount.toFixed(6)
-                  : tokenAmount.toFixed(3)}{" "}
+                  : tokenAmount.toFixed(4)}{" "}
                 {currency}
               </Text>
               <Text color={"red"} fontSize={"xx-small"}>
                 {errors.amount && errors.amount.message}
               </Text>
             </HStack>
-            <FormErrorMessage></FormErrorMessage>
+
+            <FormErrorMessage>
+              {errors.amount && errors.amount.message}
+            </FormErrorMessage>
           </FormControl>
           <FormControl>
             <FormLabel fontSize={"sm"} color={"#000"}>
-              Beneficiary Phone Number
+              Till Number
             </FormLabel>
 
             <Input
@@ -323,17 +231,14 @@ return (
               outline={"none"}
               type="number"
               required
-              minLength={countrySettings.minPhoneDigits}
-              maxLength={countrySettings.maxPhoneDigits}
-              {...register("customer",{minLength:{value:countrySettings.minPhoneDigits,message:"Phone number should be 10 digits"},maxLength:{value:countrySettings.maxPhoneDigits,message:"Phone number should be 10 digits"}})}
+              
+              {...register("short_code")}
             />
             <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
-                {errors.customer && errors.customer.message}
+                {errors.short_code && errors.short_code.message}
               </Text></HStack>
           </FormControl>
-
-          
-
+         
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}

@@ -1,46 +1,35 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-  Select,
+
   Text,
   VStack,
-  useToast,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { DataForm } from "./DataForm";
+import { ByGoodsForm } from "./BuyGoodsForm";
 import mtnLogo from "../../../public/assets/mtn_logo.png";
 import gloLogo from "../../../public/assets/glo_logo.webp";
 import airtelLogo from "../../../public/assets/airtel_logo.png";
 import nineMobileLogo from "../../../public/assets/9mobile_logo.jpeg";
 import safaricomLogo from "../../../public/assets/safaricom_logo.png";
-
 import { ProviderCard } from "../ProviderCard";
 import { useUserCountry } from "@/utils/UserCountryContext";
-const Data = (props: any) => {
+const BuyGoods = (props: any) => {
   const telcos = [
 
     {country:"NG",telcos:[{ name: "mtn", logo: mtnLogo, id: "BIL108" },
     { name: "glo", logo: gloLogo, id: "BIL109" },
     { name: "airtel", logo: airtelLogo, id: "BIL110" },
     { name: "9mobile", logo: nineMobileLogo, id: "BIL111" },]},
-    {country:"KE",telcos:[]},
+    {country:"KE",telcos:[{ name: "Paybill Number", logo: safaricomLogo, id: "BIL111" }]},
     {country:"GH",telcos:[]},
   ];
-
-  //{ name: "safaricom", logo: safaricomLogo, id: "1" }
  
 const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
 const telcosBycountry = telcos.find(country => country.country === userCountry)
 
-  const [page, setPage] = useState("list");
+  const [page, setPage] = useState("buy");
   const [telco, setTelco] = useState("");
   const [name, setName] = useState("");
 
@@ -71,10 +60,10 @@ const telcosBycountry = telcos.find(country => country.country === userCountry)
         </VStack>
       )}
       {page === "buy" && (
-        <DataForm
+        <ByGoodsForm
           telco={telco}
           onClose={props.action}
-          name={name}
+          name={"name"}
           back={() => setPage("list")}
         />
       )}
@@ -82,4 +71,4 @@ const telcosBycountry = telcos.find(country => country.country === userCountry)
   );
 };
 
-export default Data;
+export default BuyGoods;

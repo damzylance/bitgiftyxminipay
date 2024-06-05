@@ -11,6 +11,8 @@ import Airtime from "./Airtime/Airtime";
 import Electricity from "./Power/Power";
 import Data from "./Data/Data";
 import Cable from "./Cable/Cable";
+import PayBill from "./PayBill/PayBill";
+import BuyGoods from "./BuyGoods/BuyGoods";
 
 type Props = {
   type: String;
@@ -32,6 +34,9 @@ export const UtilityDrawer = (props: Props) => {
             )}
             {props.type === "data" && <Data action={props.onClose} />}
             {props.type === "cable" && <Cable action={props.onClose} />}
+            {props.type === "paybill" && <PayBill action={props.onClose} />}
+            {/* {props.type === "buygoods" && <BuyGoods action={props.onClose} />} */}
+
             {/* 
             
             */}

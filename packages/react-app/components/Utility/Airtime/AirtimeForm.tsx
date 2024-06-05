@@ -120,7 +120,7 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
         }
       } catch (error: any) {
         console.log(error);
-        toast({ title: error.message, status: "warning" });
+        toast({ title: error.response?.data?.error || "An error occured", status: "warning" });
       } finally {
         setLoading(false);
         

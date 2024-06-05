@@ -241,15 +241,29 @@ const handleCountryChange = (e:any)=>{
             onOpen();
           }}
         />
-         {/* {userCountry==="KE" &&   <UtilityCard
-          bg={"linear-gradient(87.57deg, rgba(63, 255, 163, 0.35) 0%, rgba(0, 143, 204, 0.35) 100%)"}
+         {userCountry==="KE" &&   <><UtilityCard
+          bg={"linear-gradient(87.4deg, rgba(255, 123, 123, 0.35) 0%, rgba(123, 0, 255, 0.35) 100%)"}
             icon={<MdPayment />}
             text={"Pay Bills"}
             action={() => {
-              setType("airtime");
+              setType("paybill");
               onOpen();
             }}
-          />} */}
+            
+          />
+          {/* <UtilityCard
+          bg={"linear-gradient(87.4deg, rgba(0, 255, 204, 0.35) 0%, rgba(0, 51, 204, 0.35) 100%)"}
+            icon={<MdPayment />}
+            text={"Buy Goods"}
+            action={() => {
+              setType("buygoods");
+              onOpen();
+            }}
+            
+          /> */}
+           </>
+          }
+         
       </VStack>
 
    </VStack>
