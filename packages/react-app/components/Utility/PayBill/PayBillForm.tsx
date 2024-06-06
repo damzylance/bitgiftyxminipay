@@ -99,8 +99,6 @@ export const PayBillForm = (props: any) => {
           if(data.account_number){
             data.customer = `${data.short_code}/${data.account_number}`
           }
-
-          delete data.account_number
   
           console.log(data);
           setLoadingText("Requesting transfer...");

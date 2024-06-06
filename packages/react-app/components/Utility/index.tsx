@@ -246,7 +246,8 @@ const handleCountryChange = (e:any)=>{
         />
         </>}
         
-         {userCountry==="KE" &&   <><UtilityCard
+         {/* {
+         userCountry==="KE" &&   <><UtilityCard
           bg={"linear-gradient(87.4deg, rgba(255, 123, 123, 0.35) 0%, rgba(123, 0, 255, 0.35) 100%)"}
             icon={<MdPayment />}
             text={"Pay Bills"}
@@ -256,7 +257,7 @@ const handleCountryChange = (e:any)=>{
             }}
             
           />
-          {/* <UtilityCard
+          <UtilityCard
           bg={"linear-gradient(87.4deg, rgba(0, 255, 204, 0.35) 0%, rgba(0, 51, 204, 0.35) 100%)"}
             icon={<MdPayment />}
             text={"Buy Goods"}
@@ -265,10 +266,10 @@ const handleCountryChange = (e:any)=>{
               onOpen();
             }}
             
-          /> */}
+          />
            </>
           }
-         
+          */}
       </VStack>
 
    </VStack>
