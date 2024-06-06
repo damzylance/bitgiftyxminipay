@@ -161,8 +161,8 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
           data.amount = parseInt(data.type.split(",")[2]);
           data.biller_code = data.type.split(",")[0];
           data.item_code=data.type.split(",")[1];
-          data.bill_type="MOBILEDATA"
           }
+          data.bill_type="MOBILEDATA"
           delete data.type;
           data.country = userCountry;
           data.chain = "cusd";

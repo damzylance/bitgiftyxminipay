@@ -130,8 +130,9 @@ const handleCountryChange = (e:any)=>{
   return (
     <VStack width={"full"} position={"relative"} gap={"2px"}>
       <VStack background={"#53bfb9"} p={"10px"} width={"full"} borderRadius={"md"}>
-        <Text fontSize={"sm"}>
-          Get 10% cashback for bill payments over {userCurrencyTicker}{cashback} 
+      <Text fontSize={"xs"} textAlign={"center"}>
+      🔥Spend over {userCurrencyTicker}{cashback} and get 10% back
+
         </Text>
       </VStack>
       <VStack width={"full"} pb={"10px"} gap={"40px"} bg={"#152654"}>
@@ -223,6 +224,8 @@ const handleCountryChange = (e:any)=>{
             onOpen();
           }}
         />
+        
+        {userCountry!=="KE" && <>
         <UtilityCard
           bg={"linear-gradient(272.43deg, rgba(255, 184, 0, 0.35) 0%, rgba(255, 74, 128, 0.35) 100%)"}
           icon={<MdElectricBolt />}
@@ -241,6 +244,8 @@ const handleCountryChange = (e:any)=>{
             onOpen();
           }}
         />
+        </>}
+        
          {userCountry==="KE" &&   <><UtilityCard
           bg={"linear-gradient(87.4deg, rgba(255, 123, 123, 0.35) 0%, rgba(123, 0, 255, 0.35) 100%)"}
             icon={<MdPayment />}

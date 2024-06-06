@@ -54,6 +54,7 @@ export const PayBillForm = (props: any) => {
   const [loadingText, setLoadingText] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
+  const [feeInToken,setFeeInToken] = useState(0)
   const [currency, setCurrency] = useState("cusd");
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
@@ -76,6 +77,8 @@ export const PayBillForm = (props: any) => {
     const tempNairaAmount = e.target.value;
     setNairaAmount(tempNairaAmount);
     if (currency === "usdt_tron" || currency === "cusd") {
+      const tempTokenAmount = tempNairaAmount / tokenToNairaRate
+      setFeeInToken(tempTokenAmount*0.05)
       setTokenAmount(tempNairaAmount / tokenToNairaRate);
     } else {
       setTokenAmount(tokenToNairaRate * tempNairaAmount);
@@ -91,7 +94,7 @@ export const PayBillForm = (props: any) => {
           data.country = userCountry;
           data.chain = "cusd";
           data.wallet_address = address;
-          data.crypto_amount = tokenAmount;
+          data.crypto_amount = tokenAmount+feeInToken;
           data.customer=data.short_code
           if(data.account_number){
             data.customer = `${data.short_code}/${data.account_number}`
@@ -103,7 +106,7 @@ export const PayBillForm = (props: any) => {
           setLoadingText("Requesting transfer...");
           const response = await transferCUSD(
             userAddress,
-            tokenAmount.toString()
+            data.crypto_amount.toString()
           );
   
           if (response.status===1) {
@@ -218,16 +221,29 @@ export const PayBillForm = (props: any) => {
             >
               <Text fontSize={"xs"} textAlign={"right"}>
                 ≈{" "}
-                {currency === "btc"
-                  ? tokenAmount.toFixed(6)
-                  : tokenAmount.toFixed(4)}{" "}
+                {tokenAmount.toFixed(4)}{" "}
                 {currency}
+                <br/>
+                
               </Text>
               <Text color={"red"} fontSize={"xx-small"}>
                 {errors.amount && errors.amount.message}
               </Text>
             </HStack>
-
+            <HStack
+              width={"full"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              mt={"5px"}
+            >
+              <Text fontSize={"xs"} textAlign={"right"}>
+              Fee
+                
+              </Text>
+              <Text  fontSize={"xs"}>
+               ≈ {(tokenAmount*0.05).toFixed(4)}
+              </Text>
+            </HStack>
             <FormErrorMessage>
               {errors.amount && errors.amount.message}
             </FormErrorMessage>
@@ -259,10 +275,9 @@ export const PayBillForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #506DBB"}
               outline={"none"}
-              type="number"
               minLength={11}
               maxLength={11}
-              {...register("account_number",{minLength:{value:11,message:"Phone number should be 11 digits"},maxLength:{value:11,message:"Phone number should be 11 digits"}})}
+              {...register("account_number")}
             />
             <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
                 {errors.account_number && errors.account_number.message}
@@ -285,7 +300,7 @@ export const PayBillForm = (props: any) => {
             }}
             variant={"solid"}
           >
-            Buy Data
+            Pay Bill
           </Button>
           <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
 
