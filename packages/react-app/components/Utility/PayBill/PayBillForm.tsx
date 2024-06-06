@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, InfoIcon, WarningIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
@@ -175,6 +175,8 @@ export const PayBillForm = (props: any) => {
           </Text>
         </HStack>
       </HStack>
+      <HStack fontSize={"sm"} fontWeight={400} color={"#8B4000"}> <WarningIcon/> <Text fontSize={"xs"}> Verify details carefully. Transactions sent to wrong details are non-refundable</Text> </HStack>
+
 
       <form style={{ width: "100%" }} onSubmit={handleSubmit(payBill)}>
         <VStack width={"full"} gap={"20px"}>
