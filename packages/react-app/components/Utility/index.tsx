@@ -49,6 +49,8 @@ const Utility = () => {
   const [dollarBalance,setDollarBalance]=useState(balance)
   const [loading,setLoading] = useState(true)
   const [transactions,setTransactions] = useState([])
+  const { tokenToNairaRate } = useFetchRates();
+
 const handleCountryChange = (e:any)=>{
   let country = e.target.value
   country =country.split(",")
@@ -121,12 +123,11 @@ const handleCountryChange = (e:any)=>{
       setLoading(false);
     }
     // fetchRates();
-  }, [address, isConnected]);
+  }, [address, isConnected,dollarBalance]);
 
   useEffect(() => {
     fetchBalance();
   }, [isConnected,address]);
-  const { tokenToNairaRate } = useFetchRates();
   return (
     <VStack width={"full"} position={"relative"} gap={"2px"}>
       <VStack background={"#53bfb9"} p={"10px"} width={"full"} borderRadius={"md"}>
@@ -246,7 +247,7 @@ const handleCountryChange = (e:any)=>{
         />
         </>}
         
-         {/* {
+         {
          userCountry==="KE" &&   <><UtilityCard
           bg={"linear-gradient(87.4deg, rgba(255, 123, 123, 0.35) 0%, rgba(123, 0, 255, 0.35) 100%)"}
             icon={<MdPayment />}
@@ -269,7 +270,7 @@ const handleCountryChange = (e:any)=>{
           />
            </>
           }
-          */}
+         
       </VStack>
 
    </VStack>

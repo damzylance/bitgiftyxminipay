@@ -96,7 +96,10 @@ export const PayBillForm = (props: any) => {
           data.wallet_address = address;
           data.crypto_amount = tokenAmount+feeInToken;
           data.customer=data.short_code
-          if(data.account_number){
+
+          if(data.account_number ===""){
+            delete data.account_number
+          }else{
             data.customer = `${data.short_code}/${data.account_number}`
           }
   
@@ -275,8 +278,6 @@ export const PayBillForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #506DBB"}
               outline={"none"}
-              minLength={11}
-              maxLength={11}
               {...register("account_number")}
             />
             <HStack width={"fulll"} justifyContent={"flex-end"}><Text color={"red"} fontSize={"xs"}>
