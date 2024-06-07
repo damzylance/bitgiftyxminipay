@@ -77,6 +77,21 @@ const History = (props: Props) => {
           <Spinner />
         ) : transactions.length > 0 ? (
           transactions.map((transaction: any, id) => {
+            let currency
+                 switch (transaction.country) {
+                                    case "NG":
+                                        currency = "₦"
+                                        break;
+                                    case "GH":
+                                        currency = "₵" 
+                                        break
+                                    case "KE":
+                                        currency = "KSh"
+                                        break
+                                
+                                    default:
+                                        break;
+                                }
             let statusColor;
             let statusMessage
             if (transaction.status.toLowerCase() === "success") {
@@ -132,7 +147,7 @@ const History = (props: Props) => {
                 </HStack>
                 <VStack gap={"5px"} alignItems={"flex-end"}>
                   <Text fontSize={"14px"} fontWeight={"500"} color={"#fff"}>
-                    -&#8358;{transaction.amount}
+                    -&#8358;{`${currency}${transaction.amount}`}
                   </Text>
                   <Text fontSize={"xs"} fontWeight={"400"} color={"#fff"}>
                     -{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
