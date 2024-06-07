@@ -253,7 +253,7 @@ export const ByGoodsForm = (props: any) => {
             }}
             variant={"solid"}
           >
-            Buy Data
+            Buy Good
           </Button>
           <HStack fontSize={"sm"} fontWeight={400} color={"#4d4c4c"}> <InfoIcon/> <Text>This may take up to 15 seconds</Text> </HStack>
 
