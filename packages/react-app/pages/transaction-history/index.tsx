@@ -78,6 +78,9 @@ const History = (props: Props) => {
         ) : transactions.length > 0 ? (
           transactions.map((transaction: any, id) => {
             let currency
+            let statusColor;
+            let statusMessage
+            let sign
                  switch (transaction.country) {
                                     case "NG":
                                         currency = "₦"
@@ -92,14 +95,13 @@ const History = (props: Props) => {
                                     default:
                                         break;
                                 }
-            let statusColor;
-            let statusMessage
+            
             if (transaction.status.toLowerCase() === "success") {
               statusColor = "#476621";
               statusMessage ="Success"
             } else if (transaction.status === "pending") {
               statusColor = "#fe8d59";
-              statusMessage ="Processing"
+              statusMessage ="Pending"
 
             } else if(transaction.status ==="handled") {
               statusColor = "#476621";
@@ -108,6 +110,12 @@ const History = (props: Props) => {
             }else{
               statusColor = "#f44336";
               statusMessage = transaction.status
+            }
+
+            if(transaction.transaction_type==="refund" || transaction.transaction_type ==="cashback"){
+              sign="+"
+            }else{
+              sign="-"
             }
             return (
               <HStack key={id} width={"full"} justifyContent={"space-between"}>
@@ -147,10 +155,10 @@ const History = (props: Props) => {
                 </HStack>
                 <VStack gap={"5px"} alignItems={"flex-end"}>
                   <Text fontSize={"14px"} fontWeight={"500"} color={"#fff"}>
-                    -&#8358;{`${currency}${transaction.amount}`}
+                  { `${sign}${currency}${transaction.amount}`}
                   </Text>
                   <Text fontSize={"xs"} fontWeight={"400"} color={"#fff"}>
-                    -{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
+                    {sign}{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
                   </Text>
                   
                   <Text fontSize={"xs"} fontWeight={"400"} color={"#FFFFFF80"}>{formatDate(transaction.time)}</Text>

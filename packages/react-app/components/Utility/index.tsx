@@ -286,6 +286,24 @@ const handleCountryChange = (e:any)=>{
           transactions.map((transaction: any, id) => {
             let statusColor;
             let statusMessage
+            let sign
+            let currency
+                 switch (transaction.country) {
+                                    case "NG":
+                                        currency = "₦"
+                                        break;
+                                    case "GH":
+                                        currency = "₵" 
+                                        break
+                                    case "KE":
+                                        currency = "KSh"
+                                        break
+                                
+                                    default:
+                                        break;
+                                }
+
+            
             if (transaction.status === "success") {
               statusColor = "#29C087";
               statusMessage ="Success"
@@ -300,6 +318,12 @@ const handleCountryChange = (e:any)=>{
             }else{
               statusColor = "#f44336";
               statusMessage = transaction.status
+            }
+
+            if(transaction.transaction_type==="refund" || transaction.transaction_type ==="cashback"){
+              sign="+"
+            }else{
+              sign="-"
             }
             return (
               <HStack key={id} width={"full"} justifyContent={"space-between"}>
@@ -339,10 +363,10 @@ const handleCountryChange = (e:any)=>{
                 </HStack>
                 <VStack gap={"5px"} alignItems={"flex-end"}>
                   <Text fontSize={"14px"} fontWeight={"500"} color={"#fff"}>
-                    -&#8358;{transaction.amount}
+                    {transaction.type === "refund"?"+":transaction.type==="cashback"?"+":"-" }{`${currency}${transaction.amount}`}
                   </Text>
                   <Text fontSize={"xs"} fontWeight={"400"} color={"#fff"}>
-                    -{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
+                    {sign}{parseFloat(transaction.crypto_amount).toFixed(2)} cUSD
                   </Text>
                   
                   <Text fontSize={"xs"} fontWeight={"400"} color={"#FFFFFF80"}>{formatDate(transaction.time)}</Text>
