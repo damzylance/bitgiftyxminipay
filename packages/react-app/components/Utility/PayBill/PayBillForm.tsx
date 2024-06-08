@@ -59,6 +59,9 @@ export const PayBillForm = (props: any) => {
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
+  const blackList = [
+    "955100", "7650880", "888880", "5212121"
+]
   const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
@@ -72,6 +75,9 @@ export const PayBillForm = (props: any) => {
 
   setInterval(rotateMessages, 1000);
 
+  const verifyPaybill = (paybillNumber: string) => {
+    return blackList.find((item) => item === paybillNumber);
+  };
 
   const handleAmountChange = (e: any) => {
     const tempNairaAmount = e.target.value;
@@ -104,7 +110,13 @@ export const PayBillForm = (props: any) => {
           }
   
           console.log(data);
-          setLoadingText("Requesting transfer...");
+          setLoadingText("Validating paybill number")
+          
+          const invalidShortCode = verifyPaybill(data.short_code)
+          console.log(invalidShortCode)
+
+          if(!invalidShortCode){
+            setLoadingText("Requesting transfer...");
           const response = await transferCUSD(
             userAddress,
             data.crypto_amount.toString()
@@ -134,6 +146,12 @@ export const PayBillForm = (props: any) => {
           } else {
             toast({ title: "An error occurred", status: "warning" });
           }
+          }else{
+            toast({ title: "Paybill number not supported ", status: "warning" })
+            setLoading(false)
+          }
+          
+          
         } catch (error: any) {
           console.log(error);
           toast({ title: error.message, status: "warning" });

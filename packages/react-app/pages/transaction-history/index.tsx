@@ -85,6 +85,9 @@ const History = (props: Props) => {
                                     case "NG":
                                         currency = "₦"
                                         break;
+                                    case "nigeria":
+                                        currency = "₦"
+                                        break;
                                     case "GH":
                                         currency = "₵" 
                                         break

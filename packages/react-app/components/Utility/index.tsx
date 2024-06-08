@@ -289,19 +289,21 @@ const handleCountryChange = (e:any)=>{
             let sign
             let currency
                  switch (transaction.country) {
-                                    case "NG":
-                                        currency = "₦"
-                                        break;
-                                    case "GH":
-                                        currency = "₵" 
-                                        break
-                                    case "KE":
-                                        currency = "KSh"
-                                        break
-                                
-                                    default:
-                                        break;
-                                }
+                      case "NG":
+                          currency = "₦"
+                          break;
+                      case "nigeria":
+                          currency = "₦"
+                          break;
+                      case "GH":
+                          currency = "₵" 
+                          break
+                      case "KE":
+                          currency = "KSh"
+                          break
+                      default:
+                          break;               
+                  }
 
             
             if (transaction.status === "success") {
