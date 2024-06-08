@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, InfoIcon, WarningIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
@@ -54,6 +54,7 @@ export const ByGoodsForm = (props: any) => {
   const [loadingText, setLoadingText] = useState("");
   const [tokenAmount, setTokenAmount] = useState(0);
   const [nairaAmount, setNairaAmount] = useState(0);
+  const [feeInToken,setFeeInToken] = useState(0)
   const [currency, setCurrency] = useState("cusd");
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
@@ -76,6 +77,8 @@ export const ByGoodsForm = (props: any) => {
     const tempNairaAmount = e.target.value;
     setNairaAmount(tempNairaAmount);
     if (currency === "usdt_tron" || currency === "cusd") {
+      const tempTokenAmount = tempNairaAmount / tokenToNairaRate
+      setFeeInToken(tempTokenAmount*0.05)
       setTokenAmount(tempNairaAmount / tokenToNairaRate);
     } else {
       setTokenAmount(tokenToNairaRate * tempNairaAmount);
@@ -91,13 +94,13 @@ export const ByGoodsForm = (props: any) => {
           data.country = userCountry;
           data.chain = "cusd";
           data.wallet_address = address;
-          data.crypto_amount = tokenAmount;
+          data.crypto_amount = tokenAmount+feeInToken;
           data.customer=data.short_code
           console.log(data);
           setLoadingText("Requesting transfer...");
           const response = await transferCUSD(
             userAddress,
-            tokenAmount.toString()
+            data.crypto_amount.toString()
           );
   
           if (response.status===1) {
@@ -160,6 +163,8 @@ export const ByGoodsForm = (props: any) => {
           </Text>
         </HStack>
       </HStack>
+      <HStack fontSize={"sm"} fontWeight={400} color={"#8B4000"}> <WarningIcon/> <Text fontSize={"xs"}> Verify details carefully. Transactions sent to wrong details are non-refundable</Text> </HStack>
+
 
       <form style={{ width: "100%" }} onSubmit={handleSubmit(payBill)}>
         <VStack width={"full"} gap={"20px"}>
@@ -206,13 +211,27 @@ export const ByGoodsForm = (props: any) => {
             >
               <Text fontSize={"xs"} textAlign={"right"}>
                 ≈{" "}
-                {currency === "btc"
-                  ? tokenAmount.toFixed(6)
-                  : tokenAmount.toFixed(4)}{" "}
+                {tokenAmount.toFixed(4)}{" "}
                 {currency}
+                <br/>
+                
               </Text>
               <Text color={"red"} fontSize={"xx-small"}>
                 {errors.amount && errors.amount.message}
+              </Text>
+            </HStack>
+            <HStack
+              width={"full"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              mt={"5px"}
+            >
+              <Text fontSize={"xs"} textAlign={"right"}>
+              Fee
+                
+              </Text>
+              <Text  fontSize={"xs"}>
+               ≈ {(tokenAmount*0.05).toFixed(4)}
               </Text>
             </HStack>
 
