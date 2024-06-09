@@ -337,6 +337,7 @@ return (
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
+            isDisabled = {userCountry === "NG"?true:false}
             type="submit"
             size={"lg"}
             width={"full"}

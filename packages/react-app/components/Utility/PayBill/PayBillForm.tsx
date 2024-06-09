@@ -60,7 +60,7 @@ export const PayBillForm = (props: any) => {
   const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
   const blackList = [
-    "955100", "7650880", "888880", "5212121"
+    "955100", "7650880", "888880", "5212121", "888888"
 ]
   const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
   const rotateMessages = ()=>{
@@ -303,7 +303,22 @@ export const PayBillForm = (props: any) => {
               </Text></HStack>
           </FormControl>
 
-          
+          <FormControl>
+            <FormLabel fontSize={"sm"} color={"#000"}>
+              Email to receive receipt
+            </FormLabel>
+
+            <Input
+              border={"1px solid #506DBB"}
+              outline={"none"}
+              placeholder="Email address"
+              fontSize={"16px"}
+              type="email"
+              required
+              {...register("email")}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
 
           <Button
             isLoading={loading || isLoading}
