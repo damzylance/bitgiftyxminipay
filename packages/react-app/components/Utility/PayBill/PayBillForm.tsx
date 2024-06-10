@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ArrowBackIcon, InfoIcon, WarningIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, CloseIcon, InfoIcon, WarningIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
@@ -177,7 +177,7 @@ export const PayBillForm = (props: any) => {
   }, [address, isConnected]);
 
   return (
-    <VStack my={"40px"} gap={"10px"} width={"full"}>
+    <VStack my={"20px"} gap={"10px"} width={"full"}>
       <Text fontSize={"xs"} textAlign={"center"}>
       🔥Spend over {userCurrencyTicker}{cashback} and get 10% back
 
@@ -198,7 +198,7 @@ export const PayBillForm = (props: any) => {
 
 
       <form style={{ width: "100%" }} onSubmit={handleSubmit(payBill)}>
-        <VStack width={"full"} gap={"20px"}>
+        <VStack width={"full"} gap={"10px"}>
         <FormControl>
             <HStack width={"full"} justifyContent={"space-between"}>
               {" "}

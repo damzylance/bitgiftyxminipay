@@ -257,7 +257,22 @@ export const ByGoodsForm = (props: any) => {
                 {errors.short_code && errors.short_code.message}
               </Text></HStack>
           </FormControl>
-         
+          <FormControl>
+            <FormLabel fontSize={"sm"} color={"#000"}>
+              Email to receive receipt
+            </FormLabel>
+
+            <Input
+              border={"1px solid #506DBB"}
+              outline={"none"}
+              placeholder="Email address"
+              fontSize={"16px"}
+              type="email"
+              required
+              {...register("email")}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
