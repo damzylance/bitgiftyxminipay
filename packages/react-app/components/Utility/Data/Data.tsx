@@ -31,9 +31,11 @@ const Data = (props: any) => {
     { name: "glo", logo: gloLogo, id: "BIL109" },
     { name: "airtel", logo: airtelLogo, id: "BIL110" },
     { name: "9mobile", logo: nineMobileLogo, id: "BIL111" },]},
-    {country:"KE",telcos:[{ name: "safaricom", logo: safaricomLogo, id: "1" }]},
+    {country:"KE",telcos:[]},
     {country:"GH",telcos:[]},
   ];
+
+  // { name: "safaricom", logo: safaricomLogo, id: "1" }
  
 const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
 const telcosBycountry = telcos.find(country => country.country === userCountry)

@@ -26,11 +26,7 @@ const Airtime = (props: Props) => {
   { name: "airtel", logo: airtelLogo, id: "BIL100",item_code:"AT100" },
   { name: "glo", logo: gloLogo, id: "BIL102", item_code:"AT133" },
   { name: "9mobile", logo: nineMobileLogo, id: "BIL103",item_code:"AT134"},]},
-  {country:"KE",telcos:[
-  { name: "AIRTEL", logo: airtelLogo, id: "BIL187",item_code:"AT497" },
-  { name: "SAFARICOM", logo: safaricomLogo, id: "BIL188",item_code:"AT498" },
-  { name: "TELKOM", logo: telkomLogo, id: "BIL189",item_code: "AT499", },
-  ]},
+  {country:"KE",telcos:[]},
   {country:"GH",telcos:[
     { name: "MTN GHANA", logo: mtnLogo, id: "BIL132",item_code:"AT217" },
     { name: "TIGO", logo: airtelLogo, id: "BIL133", item_code: "AT218", },
@@ -39,6 +35,9 @@ const Airtime = (props: Props) => {
    
   ];
   
+  // { name: "AIRTEL", logo: airtelLogo, id: "BIL187",item_code:"AT497" },
+  // { name: "SAFARICOM", logo: safaricomLogo, id: "BIL188",item_code:"AT498" },
+  // { name: "TELKOM", logo: telkomLogo, id: "BIL189",item_code: "AT499", },
   const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
   const telcosBycountry = telcos.find(country => country.country === userCountry)
   console.log(telcosBycountry)
