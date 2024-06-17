@@ -74,17 +74,17 @@ export const PayBillForm = (props: any) => {
 
   setInterval(rotateMessages, 1000);
 
-  const updateBlacklist =  async() =>{
-    setLoading(true)
-    axios.get("https://pretium.africa/flagged-paybills.json").then((response)=>{
-      console.log(response)
-      setBlackList(response.data.paybills)
-    }).catch((error)=>{
-      toast({title:"Error fetching blacklisted vendors"})
-    }).finally(()=>{
-      setLoading(false)
-    })
-  }
+  // const updateBlacklist =  async() =>{
+  //   setLoading(true)
+  //   axios.get("https://pretium.africa/flagged-paybills.json").then((response)=>{
+  //     console.log(response)
+  //     setBlackList(response.data.paybills)
+  //   }).catch((error)=>{
+  //     toast({title:"Error fetching blacklisted vendors"})
+  //   }).finally(()=>{
+  //     setLoading(false)
+  //   })
+  // }
   const verifyPaybill = (paybillNumber: string) => {
     return blackList.find((item) => item === paybillNumber);
   };
