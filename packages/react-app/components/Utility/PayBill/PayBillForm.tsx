@@ -59,9 +59,8 @@ export const PayBillForm = (props: any) => {
   const [plans, setPlans] = useState([]);
   const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
-  const blackList = [
-    "955100", "7650880", "888880", "5212121", "888888"
-]
+  const [blackList,setBlackList] = useState([
+    "955100", "7650880", "888880", "5212121", "888888"])
   const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
@@ -75,6 +74,17 @@ export const PayBillForm = (props: any) => {
 
   setInterval(rotateMessages, 1000);
 
+  const updateBlacklist =  async() =>{
+    setLoading(true)
+    axios.get("https://pretium.africa/flagged-paybills.json").then((response)=>{
+      console.log(response)
+      setBlackList(response.data.paybills)
+    }).catch((error)=>{
+      toast({title:"Error fetching blacklisted vendors"})
+    }).finally(()=>{
+      setLoading(false)
+    })
+  }
   const verifyPaybill = (paybillNumber: string) => {
     return blackList.find((item) => item === paybillNumber);
   };
@@ -174,6 +184,8 @@ export const PayBillForm = (props: any) => {
     if (isConnected && address) {
       setUserAddress(address);
     }
+    updateBlacklist()
+    
   }, [address, isConnected]);
 
   return (
