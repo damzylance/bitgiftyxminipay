@@ -60,7 +60,7 @@ export const PayBillForm = (props: any) => {
   const [networkId, setNetworkId] = useState([]);
   const [userAddress, setUserAddress] = useState("");
   const [blackList,setBlackList] = useState([
-    "955100", "7650880", "888880", "5212121", "888888"])
+    "955100", "7650880", "888880", "5212121", "888888", "79079", "260680", "247979"])
   const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
   const rotateMessages = ()=>{
     if(loadingText === "Connecting To Provider..."){
@@ -184,7 +184,7 @@ export const PayBillForm = (props: any) => {
     if (isConnected && address) {
       setUserAddress(address);
     }
-    updateBlacklist()
+    // updateBlacklist()
     
   }, [address, isConnected]);
 
