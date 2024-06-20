@@ -199,6 +199,8 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
             toast({ title: "User rejected transaction", status: "warning" });
           } else {
             toast({ title: "An error occurred", status: "warning" });
+            props.onClose();
+
           }
         } catch (error: any) {
           console.log(error);

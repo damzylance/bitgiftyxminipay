@@ -177,6 +177,8 @@ export const CableForm = (props: any) => {
                 props.onClose();
               } else {
                 toast({ title: "Error occured ", status: "warning" });
+                props.onClose();
+
               }
             } else if (response.message.includes("ethers-user-denied")) {
               toast({

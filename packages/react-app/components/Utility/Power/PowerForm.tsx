@@ -136,8 +136,9 @@ export const PowerForm = (props: any) => {
             });
             props.onClose();
           } else {
-            console.log(giftCardResponse);
             toast({ title: "Error occured ", status: "warning" });
+            props.onClose();
+
           }
         } else if (response.message.includes("ethers-user-denied")) {
           toast({ title: "User rejected transaction", status: "warning" });
