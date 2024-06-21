@@ -138,7 +138,7 @@ export const PayBillForm = (props: any) => {
             data.timestamp= newDate.getTime().toString()
           data.offset = newDate.getTimezoneOffset().toString() 
             setLoadingText("Connecting to provider");
-            const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+            const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  functions
             console.log(giftCardResponse);
   
             if (giftCardResponse?.status === 200) {
