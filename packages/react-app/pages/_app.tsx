@@ -14,6 +14,7 @@ import logo from "../public/assets/logo-inline-transparent.png";
 import WidgetContainer from "@/components/WidgetContainer";
 import { UserCountryProvider } from "@/utils/UserCountryContext";
 import { GoogleTagManager } from '@next/third-parties/google'
+import Head from "next/head";
 
 
 const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
@@ -40,7 +41,17 @@ const wagmiConfig = createConfig({
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-    <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GTM_ID}`}/>
+    <Head>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}></script>
+    <script dangerouslySetInnerHTML={{__html:`window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${process.env.NEXT_PUBLIC_GTM_ID}');`}}
+  >
+      
+</script>
+    </Head>
     <UserCountryProvider>
     <ChakraProvider theme={theme}>
     <WagmiConfig config={wagmiConfig}>
