@@ -79,7 +79,8 @@ export const PayBillForm = (props: any) => {
     "779900",
     "290020",
     "565619",
-    "290680"
+    "290680",
+    "880185"
 ])
   const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
   const rotateMessages = ()=>{
