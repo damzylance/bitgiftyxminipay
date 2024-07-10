@@ -378,6 +378,7 @@ export const BetForm = (props: any) => {
               fontSize={"16px"}
               border={"1px solid #506DBB"}
               outline={"none"}
+              required
               placeholder={`Your ${betProvider} account number`}
               {...register("account_number")}
             />
