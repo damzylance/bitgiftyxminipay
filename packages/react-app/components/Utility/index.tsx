@@ -18,10 +18,12 @@ import {
   
 } from "@chakra-ui/react";
 import {
+  MdBookOnline,
   MdConnectedTv,
   MdElectricBolt,
   MdPayment,
   MdPhoneInTalk,
+  MdSportsFootball,
   MdWifiTethering,
 } from "react-icons/md";
 import { UtilityCard } from "./UtilityCard";
@@ -249,6 +251,16 @@ const handleCountryChange = (e:any)=>{
         
          {
          userCountry==="KE" &&   <>
+        <UtilityCard
+          bg={"linear-gradient(272.43deg, rgba(255, 184, 0, 0.35) 0%, rgba(255, 74, 128, 0.35) 100%)"}
+          icon={<MdSportsFootball />}
+          text={"Bet Top up"}
+          action={() => {
+            setType("bettopup");
+            onOpen();
+          }}
+        />
+        
          <UtilityCard
           bg={"linear-gradient(87.4deg, rgba(255, 123, 123, 0.35) 0%, rgba(123, 0, 255, 0.35) 100%)"}
             icon={<MdPayment />}
@@ -269,6 +281,7 @@ const handleCountryChange = (e:any)=>{
             }}
             
           />
+           
            </>
           }
          
