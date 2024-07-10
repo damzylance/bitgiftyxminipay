@@ -358,8 +358,8 @@ export const BetForm = (props: any) => {
               required
             >
              {
-              betProviders.map((provider:any)=>{
-                return <option value={[provider.paybill,provider.name]}>
+              betProviders.map((provider:any,id)=>{
+                return <option key={id} value={[provider.paybill,provider.name]}>
                   {provider.name}
                   </option>
               })

@@ -115,7 +115,7 @@ export const PayBillForm = (props: any) => {
     setNairaAmount(tempNairaAmount);
     if (currency === "usdt_tron" || currency === "cusd") {
       const tempTokenAmount = tempNairaAmount / tokenToNairaRate
-      setFeeInToken(tempTokenAmount*0.05)
+      setFeeInToken(tempTokenAmount*0.03)
       setTokenAmount(tempNairaAmount / tokenToNairaRate);
     } else {
       setTokenAmount(tokenToNairaRate * tempNairaAmount);
