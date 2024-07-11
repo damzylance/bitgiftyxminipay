@@ -36,6 +36,7 @@ import { BrowserProvider, ethers, formatEther } from "ethers";
 import { useUserCountry } from "@/utils/UserCountryContext";
 import Image from "next/image";
 import axios from "axios";
+import Slider from "../Slider";
 const Utility = () => {
   const {userCountry,setUserCountry,supportedCountries,userCurrencyTicker,setUserCurrencyTicker,setUserCountryCode,cashback,setCashback} = useUserCountry()
   supportedCountries.map(()=>{
@@ -132,7 +133,9 @@ const handleCountryChange = (e:any)=>{
   }, [isConnected,address]);
   return (
     <VStack width={"full"} position={"relative"} gap={"2px"}>
+      <Slider/>
       <VStack background={"#53bfb9"} p={"10px"} width={"full"} borderRadius={"md"}>
+        
       <Text fontSize={"xs"} textAlign={"center"}>
       🔥Spend over {userCurrencyTicker}{cashback} and get 10% back
 
