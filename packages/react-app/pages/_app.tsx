@@ -42,7 +42,6 @@ const wagmiConfig = createConfig({
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-    <Head>
     <Script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}></Script>
     <Script dangerouslySetInnerHTML={{__html:`window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -52,7 +51,6 @@ function App({ Component, pageProps }: AppProps) {
   >
       
 </Script>
-    </Head>
     <UserCountryProvider>
     <ChakraProvider theme={theme}>
     <WagmiConfig config={wagmiConfig}>
