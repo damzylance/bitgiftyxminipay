@@ -7,7 +7,17 @@ const nextConfig = {
       fs: false
     }
     return config
-  }
+  },
+  images:{
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pretium.africa',
+        port: '',
+        pathname: '/icons/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

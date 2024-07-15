@@ -206,6 +206,7 @@ const handleCountryChange = (e:any)=>{
 
 
    <VStack width={"full"} padding={"0 24px"} background={"#152654"}  alignItems={"flex-start"} gap={"24px"} >
+
      <VStack
         width={"full"}
 
@@ -221,6 +222,7 @@ const handleCountryChange = (e:any)=>{
             onOpen();
           }}
         />
+    
         <UtilityCard
         bg={"linear-gradient(272.43deg, rgba(255, 74, 128, 0.35) 0%, rgba(0, 87, 255, 0.35) 100%)"}
           icon={<MdWifiTethering />}
@@ -318,6 +320,12 @@ const handleCountryChange = (e:any)=>{
                       case "KE":
                           currency = "KSh"
                           break
+                      case "SA":
+                      currency = "ZAR"
+                      break
+                      case "UG":
+                        currency = "UGX"
+                        break
                       default:
                           break;               
                   }

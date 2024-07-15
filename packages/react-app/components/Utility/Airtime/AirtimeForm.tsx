@@ -60,7 +60,10 @@ export const AirtimeForm = (props: Props) => {
 const settings: { [key: string]: CountrySettings } = {
   NG: { minAmount: 100,minPhoneDigits:10, maxPhoneDigits: 11,placeHolder:"8012345890" },
   KE: { minAmount: 30, minPhoneDigits:10,maxPhoneDigits: 10,placeHolder:"0712345890" },
-  GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10, placeHolder:"212345678" }
+  GH: { minAmount: 1, minPhoneDigits:9,maxPhoneDigits: 10, placeHolder:"212345678" },
+  UG: { minAmount: 100, minPhoneDigits:9,maxPhoneDigits: 10, placeHolder:"71234567" },
+  ZA: { minAmount: 5, minPhoneDigits:9,maxPhoneDigits: 10, placeHolder:"123456789" }
+
 };
 const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits: 0 };
 
@@ -143,9 +146,6 @@ const countrySettings = settings[userCountry] || { minAmount: 0, maxPhoneDigits:
   };
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}v2/get-biller-info/?country=KE&category=AIRTIME`).then((response:any)=>console.log(response)).catch((error:any)=>{
-console.log(error)
-    })
     if (isConnected && address) {
       setUserAddress(address);
     }
@@ -255,7 +255,7 @@ console.log(error)
           <Button
             isLoading={loading || isLoading}
             loadingText={loadingText}
-            // isDisabled = {userCountry === "NG"?true:false}
+            isDisabled = {userCountry === "GH"?true:false}
             type="submit"
             size={"lg"}
             width={"full"}

@@ -35,7 +35,37 @@ const Airtime = (props: Props) => {
     { name: "MTN GHANA", logo: mtnLogo, id: "BIL132",item_code:"AT217" },
     { name: "TIGO", logo: airtelLogo, id: "BIL133", item_code: "AT218", },
     { name: "VODAFONE", logo: telkomLogo, id: "BIL134",item_code:"AT219" },
-  ]}
+/÷/   ]},
+//   {country:"UG",telcos:[
+//     {
+//       id: 3,
+//       name: "Airtel",
+//       logo: "https://pretium.africa/icons/mobiles/airtel.png"
+//   },
+//   {
+//       id: 2,
+//       name: "MTN",
+//       logo: "https://pretium.africa/icons/mobiles/mtn.svg"
+//   }
+//   ]},
+//   {country:"ZA",telcos:[
+//     {
+//       id: 5,
+//       name: "Vodacom",
+//       logo: "https://pretium.africa/icons/mobiles/vodacom_2.jpeg"
+//   },
+//   {
+//       id: 5,
+//       name: "MTN",
+//       logo: "https://pretium.africa/icons/mobiles/mtn.svg"
+//   },
+//   {
+//     id: 6,
+//     name: "MTN",
+//     logo: "https://pretium.africa/icons/mobiles/cellc-logo.png"
+// }
+//   ]}
+  
    
   ];
   

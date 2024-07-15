@@ -15,6 +15,7 @@ import WidgetContainer from "@/components/WidgetContainer";
 import { UserCountryProvider } from "@/utils/UserCountryContext";
 import { GoogleTagManager } from '@next/third-parties/google'
 import Head from "next/head";
+import Script from "next/script";
 
 
 const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
@@ -42,15 +43,15 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
     <Head>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}></script>
-    <script dangerouslySetInnerHTML={{__html:`window.dataLayer = window.dataLayer || [];
+    <Script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}></Script>
+    <Script dangerouslySetInnerHTML={{__html:`window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', '${process.env.NEXT_PUBLIC_GTM_ID}');`}}
   >
       
-</script>
+</Script>
     </Head>
     <UserCountryProvider>
     <ChakraProvider theme={theme}>
