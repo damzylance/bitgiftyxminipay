@@ -42,8 +42,8 @@ const wagmiConfig = createConfig({
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-    <Script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}></Script>
-    <Script dangerouslySetInnerHTML={{__html:`window.dataLayer = window.dataLayer || [];
+    <Script id="init" async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}></Script>
+    <Script id="init2" dangerouslySetInnerHTML={{__html:`window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
