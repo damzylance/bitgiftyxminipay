@@ -5,6 +5,7 @@ import {
 import { buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
+import { useMultipleBalance } from "@/utils/useMultipleBalances";
 import { ArrowBackIcon, InfoIcon } from "@chakra-ui/icons";
 import {
 	Button,
@@ -46,13 +47,22 @@ export const AirtimeForm = (props: Props) => {
 	const { address, isConnected } = useAccount();
 	const { userCurrencyTicker, userCountryCode, userCountry, cashback } =
 		useUserCountry();
-	const walletBalance = useBalance(address, isConnected);
 	const { tokenToNairaRate, isLoading } = useFetchRates();
 	const [loading, setLoading] = useState(false);
 	const [loadingText, setLoadingText] = useState("");
 	const [nairaAmount, setNairaAmount] = useState();
 	const [tokenAmount, setTokenAmount] = useState(0);
-	const [currency, setCurrency] = useState("cusd");
+	const storedToken = localStorage.getItem("bgtPreferredToken") as
+		| "CUSD"
+		| "USDT"
+		| "USDC"
+		| null;
+	const defaultToken: "CUSD" | "USDT" | "USDC" = storedToken ?? "CUSD";
+	const [currency, setCurrency] = useState<"CUSD" | "USDT" | "USDC">(
+		defaultToken
+	);
+	const { tokenBalance } = useMultipleBalance(address, isConnected, currency);
+
 	type CountrySettings = {
 		minAmount: number;
 		minPhoneDigits: number;
@@ -88,7 +98,7 @@ export const AirtimeForm = (props: Props) => {
 			minAmount: 5,
 			minPhoneDigits: 9,
 			maxPhoneDigits: 10,
-			placeHolder: "123456789",
+			placeHolder: "0712345890",
 		},
 	};
 	const countrySettings = settings[userCountry] || {
@@ -116,13 +126,14 @@ export const AirtimeForm = (props: Props) => {
 				data.biller_code = props.billerCode;
 				data.item_code = props.itemCode;
 				data.country = userCountry;
-				data.chain = "cusd";
+				data.chain = currency.toLocaleLowerCase();
 				data.wallet_address = address;
-				data.crypto_amount = tokenAmount;
+				data.crypto_amount = tokenAmount.toFixed(3);
 				setLoadingText("Requesting transfer...");
 				const response = await transferCUSD(
 					userAddress,
-					tokenAmount.toString()
+					tokenAmount.toFixed(5),
+					currency
 				);
 				if (response.status === 1) {
 					setLoadingText("Connecting To Provider...");
@@ -169,7 +180,7 @@ export const AirtimeForm = (props: Props) => {
 	const handleAmountChange = (e: any) => {
 		const tempNairaAmount = e.target.value;
 		setNairaAmount(tempNairaAmount);
-		if (currency === "usdt_tron" || currency === "cusd") {
+		if (currency === "CUSD" || currency === "USDT" || currency === "USDC") {
 			setTokenAmount(tempNairaAmount / tokenToNairaRate);
 		} else {
 			setTokenAmount(tokenToNairaRate * tempNairaAmount);
@@ -243,7 +254,7 @@ export const AirtimeForm = (props: Props) => {
 							<Text fontSize={"xs"} color={"#000"}>
 								Balance ({userCurrencyTicker}):{" "}
 								{(
-									parseFloat(walletBalance) *
+									parseFloat(tokenBalance) *
 									parseFloat(tokenToNairaRate.toString())
 								).toFixed(2)}
 							</Text>
@@ -260,7 +271,7 @@ export const AirtimeForm = (props: Props) => {
 								onChange: handleAmountChange,
 
 								max: {
-									value: parseFloat(walletBalance) * tokenToNairaRate,
+									value: parseFloat(tokenBalance) * tokenToNairaRate,
 									message: "Insufficient balance",
 								},
 								// min: {
@@ -269,18 +280,16 @@ export const AirtimeForm = (props: Props) => {
 								// },
 							})}
 						/>
+
 						<HStack
 							width={"full"}
 							alignItems={"center"}
 							justifyContent={"space-between"}
 							mt={"5px"}
 						>
-							<Text fontSize={"xs"} textAlign={"right"}>
-								≈{" "}
-								{currency === "btc"
-									? tokenAmount.toFixed(6)
-									: tokenAmount.toFixed(4)}{" "}
-								{currency}
+							<Text fontSize={"x-small"}>
+								{parseFloat(tokenAmount.toString()).toFixed(3)}{" "}
+								{localStorage.getItem("bgtPreferredToken")}
 							</Text>
 							<Text color={"red"} fontSize={"xx-small"}>
 								{errors.amount && errors.amount.message}

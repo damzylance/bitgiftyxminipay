@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import bitgiftyLogo from "../../public/assets/bitgifty-logo.png";
 
 import {
-	Container,
-	Grid,
 	HStack,
 	Text,
 	VStack,
@@ -16,12 +14,10 @@ import {
 	Spinner,
 } from "@chakra-ui/react";
 import {
-	MdBookOnline,
 	MdConnectedTv,
 	MdElectricBolt,
 	MdPayment,
 	MdPhoneInTalk,
-	MdSportsFootball,
 	MdWifiTethering,
 } from "react-icons/md";
 import { UtilityCard } from "./UtilityCard";
@@ -35,6 +31,8 @@ import { useUserCountry } from "@/utils/UserCountryContext";
 import Image from "next/image";
 import axios from "axios";
 import Slider from "../Slider";
+import { useMultipleBalance } from "@/utils/useMultipleBalances";
+import { supportedTokens } from "@/utils/supportedTokens";
 const Utility = () => {
 	const {
 		userCountry,
@@ -47,9 +45,7 @@ const Utility = () => {
 		setCashback,
 	} = useUserCountry();
 	supportedCountries.map(() => {});
-
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
 	const [type, setType] = useState("");
 	const { address, isConnected } = useAccount();
 	const balance = useBalance(address, isConnected);
@@ -58,6 +54,35 @@ const Utility = () => {
 	const [loading, setLoading] = useState(true);
 	const [transactions, setTransactions] = useState([]);
 	const { tokenToNairaRate } = useFetchRates();
+	const [dollarToken, setDollarToken] = useState<"CUSD" | "USDT" | "USDC">(
+		"CUSD"
+	);
+
+	useEffect(() => {
+		const storedToken =
+			typeof window !== "undefined"
+				? (localStorage.getItem("bgtPreferredToken") as
+						| "CUSD"
+						| "USDT"
+						| "USDC"
+						| null)
+				: null;
+		const defaultToken: "CUSD" | "USDT" | "USDC" = storedToken ?? "CUSD";
+		console.log("default token is", defaultToken);
+		setDollarToken(defaultToken);
+	}, [isConnected]);
+
+	const { tokenBalance, selectedToken, setSelectedToken } = useMultipleBalance(
+		address,
+		isConnected,
+		dollarToken
+	);
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			localStorage.setItem("bgtPreferredToken", dollarToken);
+		}
+	}, [dollarToken]);
 
 	const handleCountryChange = (e: any) => {
 		let country = e.target.value;
@@ -70,24 +95,24 @@ const Utility = () => {
 		localStorage.setItem("userCountry", country);
 	};
 
-	const fetchBalance = async () => {
-		if (isConnected && address) {
-			try {
-				const provider = new BrowserProvider(window.ethereum);
-				const abi = [
-					"function balanceOf(address account) view returns (uint256)",
-				];
+	// const fetchBalance = async () => {
+	// 	if (isConnected && address) {
+	// 		try {
+	// 			const provider = new BrowserProvider(window.ethereum);
+	// 			const abi = [
+	// 				"function balanceOf(address account) view returns (uint256)",
+	// 			];
 
-				const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
-				const cusdBalanceInWei = await contract.balanceOf(address);
-				const cusdBalance = formatEther(cusdBalanceInWei.toString());
-				const netCusdBalance = (parseFloat(cusdBalance) - 0.002).toString();
-				setDollarBalance(netCusdBalance);
-			} catch (error) {
-				console.error("Error fetching balance:", error);
-			}
-		}
-	};
+	// 			const contract = new ethers.Contract(CUSD_ADDRESS, abi, provider);
+	// 			const cusdBalanceInWei = await contract.balanceOf(address);
+	// 			const cusdBalance = formatEther(cusdBalanceInWei.toString());
+	// 			const netCusdBalance = (parseFloat(cusdBalance) - 0.002).toString();
+	// 			setDollarBalance(netCusdBalance);
+	// 		} catch (error) {
+	// 			console.error("Error fetching balance:", error);
+	// 		}
+	// 	}
+	// };
 	function shortify(hash: String) {
 		const prefix = hash.slice(0, 5);
 		const suffix = hash.slice(hash.length - 3, hash.length);
@@ -129,11 +154,11 @@ const Utility = () => {
 			setLoading(false);
 		}
 		// fetchRates();
-	}, [address, isConnected, dollarBalance]);
+	}, [address, isConnected, tokenBalance]);
 
-	useEffect(() => {
-		fetchBalance();
-	}, [isConnected, address]);
+	// useEffect(() => {
+	// 	fetchBalance();
+	// }, [isConnected, address]);
 	return (
 		<VStack width={"full"} position={"relative"} gap={"2px"}>
 			<Slider />
@@ -225,7 +250,7 @@ const Utility = () => {
 						<Text>{userCurrencyTicker}</Text>
 						<Text>
 							{(
-								parseFloat(dollarBalance) *
+								parseFloat(tokenBalance) *
 								parseFloat(tokenToNairaRate.toString())
 							).toFixed(2)}
 						</Text>
@@ -238,10 +263,26 @@ const Utility = () => {
 						gap={"4px"}
 						fontSize={"16px"}
 					>
-						<Text fontStyle={"italic"}>
-							{parseFloat(dollarBalance).toFixed(2)}
-						</Text>
-						<Text>cUSD</Text>
+						<Text fontStyle={"italic"}>{tokenBalance}</Text>
+						<Select
+							size={"sm"}
+							fontSize={"12px"}
+							width={"80px"}
+							borderRadius={"full"}
+							borderColor={"#7686af"}
+							value={dollarToken} // Set the current value of the select
+							onChange={(e: any) => {
+								setDollarToken(e.target.value);
+								localStorage.setItem("bgtPreferredToken", e.target.value);
+								console.log(e.target.value);
+							}}
+						>
+							{supportedTokens.map((token: string, id) => (
+								<option key={id} value={token}>
+									{token}
+								</option>
+							))}
+						</Select>
 					</HStack>
 				</VStack>
 
@@ -499,7 +540,7 @@ const Utility = () => {
 				type={type}
 				isOpen={isOpen}
 				onClose={() => {
-					fetchBalance();
+					// fetchBalance();
 					onClose();
 				}}
 			/>
