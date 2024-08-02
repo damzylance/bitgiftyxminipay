@@ -96,7 +96,7 @@ export const AirtimeForm = (props: Props) => {
 		},
 		ZA: {
 			minAmount: 5,
-			minPhoneDigits: 9,
+			minPhoneDigits: 10,
 			maxPhoneDigits: 10,
 			placeHolder: "0712345890",
 		},
@@ -230,11 +230,11 @@ export const AirtimeForm = (props: Props) => {
 								{...register("customer", {
 									minLength: {
 										value: countrySettings.minPhoneDigits,
-										message: "The mobile must be 10 digits",
+										message: `The mobile must be ${countrySettings.minPhoneDigits} digits`,
 									},
 									maxLength: {
 										value: countrySettings.maxPhoneDigits,
-										message: "The mobile must be 10 digits",
+										message: `The mobile must be ${countrySettings.maxPhoneDigits} digits`,
 									},
 								})}
 							/>
@@ -274,10 +274,10 @@ export const AirtimeForm = (props: Props) => {
 									value: parseFloat(tokenBalance) * tokenToNairaRate,
 									message: "Insufficient balance",
 								},
-								// min: {
-								//   value: countrySettings.minAmount,
-								//   message: `Minimum recharge amount is ${countrySettings.minAmount}`,
-								// },
+								min: {
+									value: countrySettings.minAmount,
+									message: `Minimum recharge amount is ${countrySettings.minAmount}`,
+								},
 							})}
 						/>
 
