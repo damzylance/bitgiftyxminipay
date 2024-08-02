@@ -41,6 +41,7 @@ export const PowerForm = (props: any) => {
 	const [loading, setLoading] = useState(false);
 	const [tokenAmount, setTokenAmount] = useState(0);
 	const [nairaAmount, setNairaAmount] = useState(0);
+	const [isDabled, setIsDisabled] = useState(true);
 	const storedToken = localStorage.getItem("bgtPreferredToken") as
 		| "CUSD"
 		| "USDT"
@@ -89,20 +90,20 @@ export const PowerForm = (props: any) => {
 				`${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.item_code}&biller-code=${props.disco}&customer=${customer}`
 			)
 			.then((response) => {
+				setLoading(false);
 				return response;
 			})
 			.catch((error) => {
 				return error;
-			})
-			.finally(() => {
-				setLoading(false);
 			});
 		console.log(validate);
 		if (validate?.data?.data?.response_message === "Successful") {
+			setIsDisabled(false);
 			console.log(validate.data.data.response_message);
 			setCustomerDetails(`${validate.data.data.name}`);
 		} else {
 			setLoading(false);
+			setIsDisabled(true);
 			toast({
 				title: "Could not verify meter number",
 				status: "warning",
@@ -290,6 +291,7 @@ export const PowerForm = (props: any) => {
 
 					<Button
 						isLoading={loading || isLoading}
+						isDisabled={isDabled}
 						loadingText={loadingText}
 						type="submit"
 						size={"lg"}
