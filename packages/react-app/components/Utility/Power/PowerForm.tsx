@@ -57,7 +57,7 @@ export const PowerForm = (props: any) => {
 	const fee = parseFloat(process.env.NEXT_PUBLIC_TF as string);
 	const minAmount =
 		userCountry === "NG"
-			? 500
+			? 1000
 			: userCountry === "KE"
 			? 50
 			: userCountry === "GH"
