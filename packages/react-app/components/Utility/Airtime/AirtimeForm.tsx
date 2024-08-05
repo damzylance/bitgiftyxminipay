@@ -52,6 +52,7 @@ export const AirtimeForm = (props: Props) => {
 	const [loadingText, setLoadingText] = useState("");
 	const [nairaAmount, setNairaAmount] = useState();
 	const [tokenAmount, setTokenAmount] = useState(0);
+	const [isDisabled, setIsDisabled] = useState(true);
 	const storedToken = localStorage.getItem("bgtPreferredToken") as
 		| "CUSD"
 		| "USDT"
@@ -116,7 +117,36 @@ export const AirtimeForm = (props: Props) => {
 		}
 	};
 	setInterval(rotateMessages, 1000);
-
+	const validatePhone = async (e: any) => {
+		if (userCountry === "NG") {
+			setLoadingText("Validating Phone Number...");
+			setLoading(true);
+			const customer = e.target.value;
+			const validate = await axios
+				.get(
+					`${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${props.itemCode}&biller-code=${props.billerCode}&customer=${customer}`
+				)
+				.then((response) => {
+					setLoading(false);
+					return response;
+				})
+				.catch((error) => {
+					return error;
+				});
+			console.log(validate);
+			if (validate?.data?.data?.response_message === "Successful") {
+				setIsDisabled(false);
+				console.log(validate.data.data.response_message);
+			} else {
+				setLoading(false);
+				setIsDisabled(true);
+				toast({
+					title: "Invalid phone number",
+					status: "warning",
+				});
+			}
+		}
+	};
 	const rechargeAirtime = async (data: any) => {
 		if (data.customer === "0707755628") {
 			toast({ title: "Invalid phone number", status: "warning" });
@@ -240,6 +270,7 @@ export const AirtimeForm = (props: Props) => {
 										value: countrySettings.maxPhoneDigits,
 										message: `The mobile must be ${countrySettings.maxPhoneDigits} digits`,
 									},
+									onBlur: validatePhone,
 								})}
 							/>
 						</InputGroup>
@@ -308,7 +339,7 @@ export const AirtimeForm = (props: Props) => {
 					<Button
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
-						isDisabled={userCountry === "GH" ? true : false}
+						isDisabled={userCountry === "GH" ? true : false || isDisabled}
 						type="submit"
 						size={"lg"}
 						width={"full"}

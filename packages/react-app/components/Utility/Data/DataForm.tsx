@@ -64,6 +64,8 @@ export const DataForm = (props: any) => {
 	const [nairaAmount, setNairaAmount] = useState(0);
 	const [plans, setPlans] = useState([]);
 	const [networkId, setNetworkId] = useState([]);
+	const [isDisabled, setIsDisabled] = useState(false);
+	const [itemCode, setItemCode] = useState("");
 	type CountrySettings = {
 		minAmount: number;
 		minPhoneDigits: number;
@@ -104,7 +106,36 @@ export const DataForm = (props: any) => {
 	};
 
 	setInterval(rotateMessages, 1000);
-
+	const validatePhone = async (e: any) => {
+		if (userCountry === "NG") {
+			setLoadingText("Validating Phone Number...");
+			setLoading(true);
+			const customer = e.target.value;
+			const validate = await axios
+				.get(
+					`${process.env.NEXT_PUBLIC_BASE_URL}validate-bill-service/?item-code=${itemCode}&biller-code=${props.telco}&customer=${customer}`
+				)
+				.then((response) => {
+					setLoading(false);
+					return response;
+				})
+				.catch((error) => {
+					return error;
+				});
+			console.log(validate);
+			if (validate?.data?.data?.response_message === "Successful") {
+				setIsDisabled(false);
+				console.log(validate.data.data.response_message);
+			} else {
+				setLoading(false);
+				setIsDisabled(true);
+				toast({
+					title: "Invalid phone number",
+					status: "warning",
+				});
+			}
+		}
+	};
 	const fetchPlans = async () => {
 		setLoading(true);
 		if (userCountry === "KE") {
@@ -154,6 +185,7 @@ export const DataForm = (props: any) => {
 			tempNairaAmount = parseInt(e.target.value.split(",")[1]);
 		} else {
 			tempNairaAmount = parseInt(e.target.value.split(",")[2]);
+			setItemCode(e.target.value.split(",")[1]);
 		}
 		console.log(tempNairaAmount);
 		setNairaAmount(tempNairaAmount);
@@ -359,6 +391,7 @@ export const DataForm = (props: any) => {
 									value: countrySettings.maxPhoneDigits,
 									message: "Phone number should be 10 digits",
 								},
+								onBlur: validatePhone,
 							})}
 						/>
 						<HStack width={"fulll"} justifyContent={"flex-end"}>
@@ -371,7 +404,7 @@ export const DataForm = (props: any) => {
 					<Button
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
-						// isDisabled = {userCountry === "NG"?true:false}
+						isDisabled={isDisabled}
 						type="submit"
 						size={"lg"}
 						width={"full"}
