@@ -138,7 +138,7 @@ const Utility = () => {
 		if (isConnected && address) {
 			axios
 				.get(
-					`${process.env.NEXT_PUBLIC_BASE_URL}transactions/?wallet_address=${address}&limit=5`
+					`${process.env.NEXT_PUBLIC_BASE_URL}transactions/?search=${address}&limit=5`
 				)
 				.then((response) => {
 					setLoading(false);
