@@ -133,23 +133,25 @@ const Utility = () => {
 		const formatedDate = `${day} ${time}`;
 		return formatedDate;
 	}
-
+	const fetchTransactions = async () => {
+		await axios
+			.get(
+				`${process.env.NEXT_PUBLIC_BASE_URL}transactions/?search=${address}&limit=5`
+			)
+			.then((response) => {
+				setLoading(false);
+				setTransactions(response.data.results);
+				console.log(response);
+				// rate = parseFloat(response.data);
+			})
+			.catch((error) => {
+				setLoading(false);
+				console.log(error);
+			});
+	};
 	useEffect(() => {
 		if (isConnected && address) {
-			axios
-				.get(
-					`${process.env.NEXT_PUBLIC_BASE_URL}transactions/?search=${address}&limit=5`
-				)
-				.then((response) => {
-					setLoading(false);
-					setTransactions(response.data.results);
-					console.log(response);
-					// rate = parseFloat(response.data);
-				})
-				.catch((error) => {
-					setLoading(false);
-					console.log(error);
-				});
+			fetchTransactions();
 		} else {
 			setLoading(false);
 		}
@@ -542,6 +544,7 @@ const Utility = () => {
 				onClose={() => {
 					// fetchBalance();
 					onClose();
+					fetchTransactions();
 				}}
 			/>
 		</VStack>
