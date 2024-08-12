@@ -153,7 +153,8 @@ export const PayBillForm = (props: any) => {
 				data.country = userCountry;
 				data.chain = "cusd";
 				data.wallet_address = address;
-				data.crypto_amount = tokenAmount + feeInToken;
+				const FeePlusAmount = tokenAmount + feeInToken;
+				data.crypto_amount = parseFloat(FeePlusAmount.toString()).toFixed(5);
 				data.customer = data.short_code;
 
 				if (data.account_number === "") {
@@ -172,7 +173,7 @@ export const PayBillForm = (props: any) => {
 					setLoadingText("Requesting transfer...");
 					const response = await transferCUSD(
 						userAddress,
-						parseFloat(data.crypto_amount).toFixed(5),
+						data.crypto_amount,
 						currency
 					);
 

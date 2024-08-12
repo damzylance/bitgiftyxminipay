@@ -216,7 +216,7 @@ export const DataForm = (props: any) => {
 					data.country = userCountry;
 					data.chain = "cusd";
 					data.wallet_address = address;
-					data.crypto_amount = tokenAmount;
+					data.crypto_amount = tokenAmount.toFixed(5);
 
 					console.log(data);
 					setLoadingText("Requesting transfer...");

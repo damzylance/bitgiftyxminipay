@@ -161,7 +161,7 @@ export const AirtimeForm = (props: Props) => {
 					data.country = userCountry;
 					data.chain = currency.toLocaleLowerCase();
 					data.wallet_address = address;
-					data.crypto_amount = tokenAmount.toFixed(3);
+					data.crypto_amount = tokenAmount.toFixed(5);
 					setLoadingText("Requesting transfer...");
 					const response = await transferCUSD(
 						userAddress,
