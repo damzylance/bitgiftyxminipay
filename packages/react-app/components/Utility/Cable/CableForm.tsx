@@ -173,7 +173,7 @@ export const CableForm = (props: any) => {
 					data.country = userCountry;
 					data.chain = currency.toLocaleLowerCase();
 					data.wallet_address = address;
-					data.crypto_amount = tokenAmount;
+					data.crypto_amount = tokenAmount.toFixed(5);
 					console.log(data);
 					setLoadingText("Requesting transfer...");
 					const response = await transferCUSD(

@@ -121,7 +121,7 @@ export const PowerForm = (props: any) => {
 				data.item_code = props.item_code;
 				data.country = userCountry;
 				data.chain = currency.toLowerCase();
-				data.crypto_amount = tokenAmount;
+				data.crypto_amount = tokenAmount.toFixed(5);
 				data.wallet_address = address;
 				console.log(data);
 

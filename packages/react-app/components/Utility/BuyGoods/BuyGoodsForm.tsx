@@ -110,7 +110,7 @@ export const ByGoodsForm = (props: any) => {
 				data.country = userCountry;
 				data.chain = currency.toLowerCase();
 				data.wallet_address = address;
-				data.crypto_amount = tokenAmount + feeInToken;
+				data.crypto_amount = tokenAmount.toFixed(5) + feeInToken.toFixed(5);
 				data.customer = data.short_code;
 				console.log(data);
 				setLoadingText("Requesting transfer...");
