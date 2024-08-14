@@ -151,7 +151,7 @@ export const PayBillForm = (props: any) => {
 				setLoading(true);
 				data.bill_type = "PAYBILL";
 				data.country = userCountry;
-				data.chain = "cusd";
+				data.chain = currency.toLocaleLowerCase();
 				data.wallet_address = address;
 				const FeePlusAmount = tokenAmount + feeInToken;
 				data.crypto_amount = parseFloat(FeePlusAmount.toString()).toFixed(5);

@@ -108,7 +108,7 @@ export const ByGoodsForm = (props: any) => {
 				setLoading(true);
 				data.bill_type = "BUY_GOODS";
 				data.country = userCountry;
-				data.chain = "cusd";
+				data.chain = currency.toLowerCase();
 				data.wallet_address = address;
 				data.crypto_amount = tokenAmount + feeInToken;
 				data.customer = data.short_code;

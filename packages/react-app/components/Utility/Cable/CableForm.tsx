@@ -171,7 +171,7 @@ export const CableForm = (props: any) => {
 					}
 					data.bill_type = "CABLEBILLS";
 					data.country = userCountry;
-					data.chain = "cusd";
+					data.chain = currency.toLocaleLowerCase();
 					data.wallet_address = address;
 					data.crypto_amount = tokenAmount;
 					console.log(data);

@@ -214,7 +214,7 @@ export const DataForm = (props: any) => {
 					data.bill_type = "MOBILEDATA";
 					delete data.type;
 					data.country = userCountry;
-					data.chain = "cusd";
+					data.chain = currency.toLocaleLowerCase();
 					data.wallet_address = address;
 					data.crypto_amount = tokenAmount.toFixed(5);
 

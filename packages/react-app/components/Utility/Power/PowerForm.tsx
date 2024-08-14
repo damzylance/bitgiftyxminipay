@@ -120,7 +120,7 @@ export const PowerForm = (props: any) => {
 				data.biller_code = props.disco;
 				data.item_code = props.item_code;
 				data.country = userCountry;
-				data.chain = "cusd";
+				data.chain = currency.toLowerCase();
 				data.crypto_amount = tokenAmount;
 				data.wallet_address = address;
 				console.log(data);
