@@ -441,7 +441,7 @@ const Utility = () => {
 									statusMessage = "Success";
 								} else {
 									statusColor = "#f44336";
-									statusMessage = transaction.status;
+									statusMessage = "Failed";
 								}
 
 								if (

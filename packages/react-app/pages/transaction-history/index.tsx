@@ -115,7 +115,7 @@ const History = (props: Props) => {
 							statusMessage = "Success";
 						} else {
 							statusColor = "#f44336";
-							statusMessage = transaction.status;
+							statusMessage = "Failed";
 						}
 
 						if (
