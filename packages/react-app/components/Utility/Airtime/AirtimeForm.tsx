@@ -52,7 +52,9 @@ export const AirtimeForm = (props: Props) => {
 	const [loadingText, setLoadingText] = useState("");
 	const [nairaAmount, setNairaAmount] = useState();
 	const [tokenAmount, setTokenAmount] = useState(0);
-	const [isDisabled, setIsDisabled] = useState(true);
+	const [isDisabled, setIsDisabled] = useState(
+		userCountry === "NG" ? true : false
+	);
 	const storedToken = localStorage.getItem("bgtPreferredToken") as
 		| "CUSD"
 		| "USDT"
