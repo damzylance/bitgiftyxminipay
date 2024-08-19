@@ -404,8 +404,8 @@ export const DataForm = (props: any) => {
 					<Button
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
-						// isDisabled={true}
-						isDisabled={isDisabled}
+						isDisabled={true}
+						// isDisabled={isDisabled}
 						type="submit"
 						size={"lg"}
 						width={"full"}
