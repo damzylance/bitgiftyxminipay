@@ -298,7 +298,6 @@ export const ByGoodsForm = (props: any) => {
 					<Button
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
-						isDisabled={true}
 						type="submit"
 						size={"lg"}
 						width={"full"}
