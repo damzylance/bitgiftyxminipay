@@ -19,6 +19,20 @@ export const buyAirtime = async (data: any) => {
 	}
 };
 
+export const bet9jaTopup = async (data: any) => {
+	console.log(data);
+	try {
+		const response = await axios.post(
+			`${process.env.NEXT_PUBLIC_BASE_URL}bet/create-deposit-notification/`,
+			data
+		);
+		console.log(response.data);
+		return response;
+	} catch (error) {
+		console.error("Error:", error);
+		return error;
+	}
+};
 // Transfer tokens
 const TOKEN_CONFIG = {
 	CUSD: {

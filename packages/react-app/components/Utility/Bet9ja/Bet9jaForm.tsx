@@ -5,6 +5,8 @@ import {
 	FormLabel,
 	HStack,
 	Input,
+	InputGroup,
+	InputLeftAddon,
 	Select,
 	Text,
 	VStack,
@@ -15,28 +17,22 @@ import axios from "axios";
 import { ArrowBackIcon, InfoIcon, WarningIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { buyAirtime, transferCUSD } from "@/utils/transaction";
+import { bet9jaTopup, buyAirtime, transferCUSD } from "@/utils/transaction";
 import { useBalance } from "@/utils/useBalance";
 import { useFetchRates } from "@/utils/useFetchRates";
 import { useUserCountry } from "@/utils/UserCountryContext";
 import { useMultipleBalance } from "@/utils/useMultipleBalances";
 type Inputs = {
 	phone: string;
+	client_id: string;
 	amount: string;
 };
 
-type Plan = {
-	biller_name: string;
-	biller_code: string;
-	item_code: string;
-	amount: string;
-};
-export const ByGoodsForm = (props: any) => {
+export const Bet9jaForm = (props: any) => {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-		getValues,
 	} = useForm<Inputs>();
 	type CountrySettings = {
 		minAmount: number;
@@ -55,7 +51,8 @@ export const ByGoodsForm = (props: any) => {
 	const toast = useToast();
 	const { address, isConnected } = useAccount();
 	const { tokenToNairaRate, isLoading } = useFetchRates();
-	const { userCurrencyTicker, cashback, userCountry } = useUserCountry();
+	const { userCurrencyTicker, cashback, userCountry, userCountryCode } =
+		useUserCountry();
 	const [loading, setLoading] = useState(false);
 	const [loadingText, setLoadingText] = useState("");
 	const [tokenAmount, setTokenAmount] = useState(0);
@@ -74,6 +71,8 @@ export const ByGoodsForm = (props: any) => {
 	const [plans, setPlans] = useState([]);
 	const [networkId, setNetworkId] = useState([]);
 	const [userAddress, setUserAddress] = useState("");
+	const [validationToken, setValidationToken] = useState("");
+	const [accountHolder, setAccountHolder] = useState("");
 	const countrySettings = settings[userCountry] || {
 		minAmount: 0,
 		maxPhoneDigits: 0,
@@ -98,18 +97,45 @@ export const ByGoodsForm = (props: any) => {
 			setTokenAmount(tokenToNairaRate * tempNairaAmount);
 		}
 	};
-	const validateBetUser = (data: any) => {};
+	const validateBetUser = async (data: any) => {
+		data.phone = `234${data.phone}`;
+		try {
+			setLoading(true);
+			await axios
+				.post(`${process.env.NEXT_PUBLIC_BASE_URL}bet/validate-customer/`, data)
+				.then((response) => {
+					console.log(response.data);
+					setValidationToken(response.data.token);
+					setAccountHolder(
+						`${response.data.firstName} ${response.data.lastName}`
+					);
+					setIsValidated(true);
+					setLoading(false);
+				})
+				.catch((error: any) => {
+					toast({ title: error.response.data.error, status: "warning" });
+					setIsValidated(false);
+					setLoading(false);
+				});
+		} catch (error) {
+			toast({ title: "Error validating details", status: "warning" });
+			console.log(error);
+			setLoading(false);
+		}
+
+		// setIsValidated(true);
+	};
 
 	const payBill = async (data: any) => {
 		if (window.ethereum) {
 			try {
 				setLoading(true);
-				data.bill_type = "BUY_GOODS";
+				data.token = validationToken;
+				data.account_holder = accountHolder;
 				data.country = userCountry;
 				data.chain = currency.toLowerCase();
 				data.wallet_address = address;
 				data.crypto_amount = tokenAmount.toFixed(5);
-				data.customer = data.short_code;
 				console.log(data);
 				setLoadingText("Requesting transfer...");
 				const response = await transferCUSD(
@@ -124,18 +150,21 @@ export const ByGoodsForm = (props: any) => {
 					data.timestamp = newDate.getTime().toString();
 					data.offset = newDate.getTimezoneOffset().toString();
 					setLoadingText("Connecting to provider");
-					const giftCardResponse: any = await buyAirtime(data); // Call recharge airtime  function
+					const giftCardResponse: any = await bet9jaTopup(data); // Call recharge airtime  function
 					console.log(giftCardResponse);
 
 					if (giftCardResponse?.status === 200) {
 						// Gift card created successfully
 						toast({
-							title: "Payment successful. Processing disbursement..",
+							title: "Processing top up",
 							status: "success",
 						});
 						props.onClose();
 					} else {
-						toast({ title: "Error occured ", status: "warning" });
+						toast({
+							title: giftCardResponse.response?.data?.error,
+							status: "warning",
+						});
 						props.onClose();
 					}
 				} else if (response.message.includes("ethers-user-denied")) {
@@ -177,7 +206,7 @@ export const ByGoodsForm = (props: any) => {
 						textTransform={"uppercase"}
 						width={"full"}
 					>
-						Buy Goods
+						Bet9ja Topup
 					</Text>
 				</HStack>
 			</HStack>
@@ -191,24 +220,67 @@ export const ByGoodsForm = (props: any) => {
 				</Text>{" "}
 			</HStack>
 
-			<form style={{ width: "100%" }} onSubmit={handleSubmit(payBill)}>
+			<form
+				style={{ width: "100%" }}
+				onSubmit={
+					isValidated ? handleSubmit(payBill) : handleSubmit(validateBetUser)
+				}
+			>
 				<VStack width={"full"} gap={"20px"}>
 					<FormControl>
 						<FormLabel fontSize={"sm"} color={"#000"}>
 							Phone Number
 						</FormLabel>
+						<InputGroup size={"md"}>
+							<InputLeftAddon>{userCountryCode}</InputLeftAddon>
+							<Input
+								fontSize={"16px"}
+								border={"1px solid #506DBB"}
+								outline={"none"}
+								isDisabled={isValidated}
+								type="number"
+								required
+								{...register("phone", {
+									minLength: {
+										value: 10,
+										message: "Account ID must be 10 digits",
+									},
+									maxLength: {
+										value: 10,
+										message: "Account ID must be 10 digits",
+									},
+								})}
+							/>
+						</InputGroup>
+						<HStack width={"fulll"} justifyContent={"flex-end"}>
+							<Text color={"red"} fontSize={"xs"}>
+								{errors.phone && errors.phone.message}
+							</Text>
+						</HStack>
+					</FormControl>
+					<FormControl>
+						<FormLabel fontSize={"sm"} color={"#000"}>
+							Bet9ja Account ID
+						</FormLabel>
 
 						<Input
 							fontSize={"16px"}
 							border={"1px solid #506DBB"}
+							isDisabled={isValidated}
 							outline={"none"}
-							type="number"
+							type="text"
 							required
-							{...register("phone")}
+							{...register(
+								"client_id"
+								// 	 {
+								// 	minLength: { value: 7, message: "Account ID must be 7 digits" },
+								// 	maxLength: { value: 7, message: "Account ID must be 7 digits" },
+								// }
+							)}
 						/>
 						<HStack width={"fulll"} justifyContent={"flex-end"}>
 							<Text color={"red"} fontSize={"xs"}>
-								{errors.phone && errors.phone.message}
+								{errors.client_id && errors.client_id.message}
 							</Text>
 						</HStack>
 					</FormControl>
@@ -245,7 +317,7 @@ export const ByGoodsForm = (props: any) => {
 											message: "Insufficient balance",
 										},
 										min: {
-											value: countrySettings.minAmount,
+											value: 100,
 											message: `Minimum recharge amount is ${countrySettings.minAmount}`,
 										},
 									})}
@@ -272,7 +344,7 @@ export const ByGoodsForm = (props: any) => {
 							<Button
 								isLoading={loading || isLoading}
 								loadingText={loadingText}
-								isDisabled={true}
+								isDisabled={!isValidated}
 								type="submit"
 								size={"lg"}
 								width={"full"}
@@ -283,14 +355,14 @@ export const ByGoodsForm = (props: any) => {
 								}}
 								variant={"solid"}
 							>
-								Buy Good
+								Topup
 							</Button>
 						</>
 					) : (
 						<Button
 							isLoading={loading || isLoading}
 							loadingText={loadingText}
-							isDisabled={true}
+							isDisabled={isValidated}
 							type="submit"
 							size={"lg"}
 							width={"full"}

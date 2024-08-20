@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import bitgiftyLogo from "../../public/assets/bitgifty-logo.png";
+import bet9jaLogo from "../../public/assets/bet9ja-logo.webp";
 
 import {
 	HStack,
@@ -307,6 +308,27 @@ const Utility = () => {
 								onOpen();
 							}}
 						/>
+						{userCountry === "NG" && (
+							<UtilityCard
+								bg={
+									"linear-gradient(272.43deg, rgba(255, 74, 128, 0.35) 0%, rgba(0, 87, 255, 0.35) 100%)"
+								}
+								icon={
+									<Image
+										src={bet9jaLogo}
+										style={{ borderRadius: "6px" }}
+										width={50}
+										height={50}
+										alt=""
+									/>
+								}
+								text={"Bet9ja Topup"}
+								action={() => {
+									setType("bet9ja");
+									onOpen();
+								}}
+							/>
+						)}
 
 						<UtilityCard
 							bg={
