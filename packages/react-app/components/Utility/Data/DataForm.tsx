@@ -405,7 +405,7 @@ export const DataForm = (props: any) => {
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
 						// isDisabled={true}
-						isDisabled={isDisabled}
+						isDisabled={userCountry === "NG" ? true : isDisabled}
 						type="submit"
 						size={"lg"}
 						width={"full"}

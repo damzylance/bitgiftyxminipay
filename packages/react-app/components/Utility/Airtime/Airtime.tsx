@@ -50,15 +50,14 @@ const Airtime = (props: Props) => {
 		{
 			country: "GH",
 			telcos: [
-				{ name: "MTN GHANA", logo: mtnLogo, id: "BIL132", item_code: "AT217" },
-				{ name: "TIGO", logo: airtelLogo, id: "BIL133", item_code: "AT218" },
-				{
-					name: "VODAFONE",
-					logo: telkomLogo,
-					id: "BIL134",
-					item_code: "AT219",
-				},
-				/÷/,
+				// { name: "MTN GHANA", logo: mtnLogo, id: "BIL132", item_code: "AT217" },
+				// { name: "TIGO", logo: airtelLogo, id: "BIL133", item_code: "AT218" },
+				// {
+				// 	name: "VODAFONE",
+				// 	logo: telkomLogo,
+				// 	id: "BIL134",
+				// 	item_code: "AT219",
+				// },
 			],
 		},
 		//   {country:"UG",telcos:[
