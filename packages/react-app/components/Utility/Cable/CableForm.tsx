@@ -369,7 +369,6 @@ export const CableForm = (props: any) => {
 
 					<Button
 						isLoading={loading || isLoading}
-						isDisabled={true}
 						loadingText={loadingText}
 						type="submit"
 						size={"lg"}

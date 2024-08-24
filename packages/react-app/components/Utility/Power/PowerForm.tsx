@@ -291,7 +291,7 @@ export const PowerForm = (props: any) => {
 
 					<Button
 						isLoading={loading || isLoading}
-						isDisabled={true}
+						isDisabled={isDabled}
 						loadingText={loadingText}
 						type="submit"
 						size={"lg"}

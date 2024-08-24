@@ -342,7 +342,7 @@ export const AirtimeForm = (props: Props) => {
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
 						// isDisabled={true}
-						isDisabled={userCountry === "NG" ? true : false || isDisabled}
+						isDisabled={userCountry === "GH" ? true : false || isDisabled}
 						type="submit"
 						size={"lg"}
 						width={"full"}
