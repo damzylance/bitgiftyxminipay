@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {
-
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Text, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { ByGoodsForm } from "./BuyGoodsForm";
@@ -16,59 +12,75 @@ import safaricomLogo from "../../../public/assets/safaricom_logo.png";
 import { ProviderCard } from "../ProviderCard";
 import { useUserCountry } from "@/utils/UserCountryContext";
 const BuyGoods = (props: any) => {
-  const telcos = [
+	const telcos = [
+		{
+			country: "NG",
+			telcos: [
+				{ name: "mtn", logo: mtnLogo, id: "BIL108" },
+				{ name: "glo", logo: gloLogo, id: "BIL109" },
+				{ name: "airtel", logo: airtelLogo, id: "BIL110" },
+				{ name: "9mobile", logo: nineMobileLogo, id: "BIL111" },
+			],
+		},
+		{
+			country: "KE",
+			telcos: [{ name: "Paybill Number", logo: safaricomLogo, id: "BIL111" }],
+		},
+		{ country: "GH", telcos: [] },
+	];
 
-    {country:"NG",telcos:[{ name: "mtn", logo: mtnLogo, id: "BIL108" },
-    { name: "glo", logo: gloLogo, id: "BIL109" },
-    { name: "airtel", logo: airtelLogo, id: "BIL110" },
-    { name: "9mobile", logo: nineMobileLogo, id: "BIL111" },]},
-    {country:"KE",telcos:[{ name: "Paybill Number", logo: safaricomLogo, id: "BIL111" }]},
-    {country:"GH",telcos:[]},
-  ];
- 
-const {userCurrencyTicker,userCountryCode,userCountry} = useUserCountry()
-const telcosBycountry = telcos.find(country => country.country === userCountry)
+	const { userCurrencyTicker, userCountryCode, userCountry } = useUserCountry();
+	const telcosBycountry = telcos.find(
+		(country) => country.country === userCountry
+	);
 
-  const [page, setPage] = useState("buy");
-  const [telco, setTelco] = useState("");
-  const [name, setName] = useState("");
+	const [page, setPage] = useState("buy");
+	const [telco, setTelco] = useState("");
+	const [name, setName] = useState("");
 
-  return (
-    <>
-      {page === "list" && (
-        <VStack width={"full"} gap={"40px"} my={"40px"}>
-                    <Text fontSize={"24px"} fontWeight={700} > Select Telco Provider</Text>
+	return (
+		<>
+			{page === "list" && (
+				<VStack width={"full"} gap={"40px"} my={"40px"}>
+					<Text fontSize={"24px"} fontWeight={700}>
+						{" "}
+						Select Telco Provider
+					</Text>
 
-          <VStack width={"full"} gap={"10px"}>
-            {telcosBycountry && telcosBycountry.telcos && telcosBycountry.telcos.length > 0
-              ? telcosBycountry?.telcos.map((provider: any, id) => {
-                  return (
-                    <ProviderCard
-                      key={id}
-                      action={() => {
-                        setPage("buy");
-                        setTelco(provider.id);
-                        setName(provider.name);
-                      }}
-                      name={provider.name}
-                      logo={provider.logo}
-                    />
-                  );
-                })
-              : <Text>Country not supported for data subscription</Text>}
-          </VStack>
-        </VStack>
-      )}
-      {page === "buy" && (
-        <ByGoodsForm
-          telco={telco}
-          onClose={props.action}
-          name={"name"}
-          back={() => setPage("list")}
-        />
-      )}
-    </>
-  );
+					<VStack width={"full"} gap={"10px"}>
+						{telcosBycountry &&
+						telcosBycountry.telcos &&
+						telcosBycountry.telcos.length > 0 ? (
+							telcosBycountry?.telcos.map((provider: any, id) => {
+								return (
+									<ProviderCard
+										key={id}
+										action={() => {
+											setPage("buy");
+											setTelco(provider.id);
+											setName(provider.name);
+										}}
+										name={provider.name}
+										logo={provider.logo}
+									/>
+								);
+							})
+						) : (
+							<Text>Coming Soon</Text>
+						)}
+					</VStack>
+				</VStack>
+			)}
+			{page === "buy" && (
+				<ByGoodsForm
+					telco={telco}
+					onClose={props.action}
+					name={"name"}
+					back={() => setPage("list")}
+				/>
+			)}
+		</>
+	);
 };
 
 export default BuyGoods;

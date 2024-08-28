@@ -138,9 +138,11 @@ export const DataForm = (props: any) => {
 	};
 	const fetchPlans = async () => {
 		setLoading(true);
-		if (userCountry === "KE") {
+		if (userCountry === "KE" || userCountry === "UG") {
 			await axios
-				.get(`${process.env.NEXT_PUBLIC_BASE_URL}v2/get-data-packages/1/`)
+				.get(
+					`${process.env.NEXT_PUBLIC_BASE_URL}v2/get-data-packages/${props.telco}/`
+				)
 				.then((response) => {
 					console.log(response);
 					setLoading(false);

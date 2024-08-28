@@ -67,7 +67,7 @@ const BetTopUp = (props: any) => {
 								);
 							})
 						) : (
-							<Text>Country not supported for data subscription</Text>
+							<Text>Coming Soon</Text>
 						)}
 					</VStack>
 				</VStack>

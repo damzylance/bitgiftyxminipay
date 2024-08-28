@@ -34,6 +34,7 @@ import axios from "axios";
 import Slider from "../Slider";
 import { useMultipleBalance } from "@/utils/useMultipleBalances";
 import { supportedTokens } from "@/utils/supportedTokens";
+import { shortify } from "@/utils/transaction";
 const Utility = () => {
 	const {
 		userCountry,
@@ -114,11 +115,6 @@ const Utility = () => {
 	// 		}
 	// 	}
 	// };
-	function shortify(hash: String) {
-		const prefix = hash.slice(0, 5);
-		const suffix = hash.slice(hash.length - 3, hash.length);
-		return `${prefix}...${suffix}`;
-	}
 
 	function formatDate(date: string) {
 		const toDate = new Date(date);

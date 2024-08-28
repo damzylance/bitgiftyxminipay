@@ -278,7 +278,8 @@ export const Bet9jaForm = (props: any) => {
 								// }
 							)}
 						/>
-						<HStack width={"fulll"} justifyContent={"flex-end"}>
+						<HStack width={"fulll"} justifyContent={"space-between"} mt={"4px"}>
+							<Text fontSize={"xs"}>{accountHolder}</Text>
 							<Text color={"red"} fontSize={"xs"}>
 								{errors.client_id && errors.client_id.message}
 							</Text>

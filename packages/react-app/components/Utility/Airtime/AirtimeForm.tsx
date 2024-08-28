@@ -93,9 +93,9 @@ export const AirtimeForm = (props: Props) => {
 		},
 		UG: {
 			minAmount: 100,
-			minPhoneDigits: 9,
+			minPhoneDigits: 10,
 			maxPhoneDigits: 10,
-			placeHolder: "71234567",
+			placeHolder: "0712345670",
 		},
 		ZA: {
 			minAmount: 5,

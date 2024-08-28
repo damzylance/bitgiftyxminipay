@@ -85,3 +85,15 @@ export const transferCUSD = async (
 		throw new Error("Ethereum wallet is not available");
 	}
 };
+
+export function shortify(hash: string | null | undefined) {
+	if (typeof hash !== "string" || hash.length === 0) {
+		return ""; // Return an empty string or handle the error appropriately
+	}
+	if (hash.length <= 6) {
+		return hash; // Return the full hash if it's too short to slice
+	}
+	const prefix = hash.slice(0, 3);
+	const suffix = hash.slice(-3); // Simplified way to get the last 3 characters
+	return `${prefix}...${suffix}`;
+}

@@ -1,3 +1,4 @@
+import { shortify } from "@/utils/transaction";
 import {
 	ArrowBackIcon,
 	ArrowLeftIcon,
@@ -17,12 +18,6 @@ const History = (props: Props) => {
 	const { address, isConnected } = useAccount();
 	const [transactions, setTransactions] = useState([]);
 	const [loading, setLoading] = useState(true);
-
-	function shortify(hash: String) {
-		const prefix = hash.slice(0, 5);
-		const suffix = hash.slice(hash.length - 3, hash.length);
-		return `${prefix}...${suffix}`;
-	}
 
 	function formatDate(date: string) {
 		const toDate = new Date(date);

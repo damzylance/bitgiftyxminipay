@@ -60,25 +60,28 @@ const Airtime = (props: Props) => {
 				// },
 			],
 		},
-		//   {country:"UG",telcos:[
-		//     {
-		//       id: 3,
-		//       name: "Airtel",
-		//       logo: "https://pretium.africa/icons/mobiles/airtel.png"
-		//   },
-		//   {
-		//       id: 2,
-		//       name: "MTN",
-		//       logo: "https://pretium.africa/icons/mobiles/mtn.svg"
-		//   }
-		//   ]},
+		{
+			country: "UG",
+			telcos: [
+				{
+					id: 3,
+					name: "Airtel",
+					logo: airtelLogo,
+				},
+				{
+					id: 2,
+					name: "MTN",
+					logo: mtnLogo,
+				},
+			],
+		},
 		{
 			country: "ZA",
 			telcos: [
 				{
 					id: 5,
 					name: "Vodacom",
-					logo: "https:pretium.africa/images/mobile/vodacom_2.jpeg",
+					logo: "https://pretium.africa/images/mobile/vodacom_2.jpeg",
 					itemCode: "",
 				},
 				{
@@ -117,23 +120,25 @@ const Airtime = (props: Props) => {
 						Select Telco Provider
 					</Text>
 					<VStack width={"full"} gap={"10px"}>
-						{telcos.length > 0
-							? telcosBycountry?.telcos.map((provider: any) => {
-									return (
-										<ProviderCard
-											action={() => {
-												setPage("buy");
-												setTelco(provider.name);
-												setBillerCode(provider.id);
-												setItemCode(provider.item_code);
-											}}
-											name={provider.name}
-											logo={provider.logo}
-											key={provider.id}
-										/>
-									);
-							  })
-							: ""}
+						{telcos.length > 0 ? (
+							telcosBycountry?.telcos.map((provider: any) => {
+								return (
+									<ProviderCard
+										action={() => {
+											setPage("buy");
+											setTelco(provider.name);
+											setBillerCode(provider.id);
+											setItemCode(provider.item_code);
+										}}
+										name={provider.name}
+										logo={provider.logo}
+										key={provider.id}
+									/>
+								);
+							})
+						) : (
+							<Text>Coming Soon</Text>
+						)}
 					</VStack>
 				</VStack>
 			)}
