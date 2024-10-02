@@ -19,6 +19,21 @@ export const buyAirtime = async (data: any) => {
 	}
 };
 
+export const flwTransfer = async (data: any) => {
+	console.log(data);
+	try {
+		const response = await axios.post(
+			`${process.env.NEXT_PUBLIC_BASE_URL}flw/transfer/`,
+			data
+		);
+		console.log(response.data);
+		return response;
+	} catch (error) {
+		console.error("Error:", error);
+		return error;
+	}
+};
+
 export const bet9jaTopup = async (data: any) => {
 	console.log(data);
 	try {

@@ -5,6 +5,7 @@ import React, {
 	useEffect,
 	ReactNode,
 } from "react";
+import { servicesByCountry } from "./supportedTokens";
 
 // Define types
 interface SupportedCountries {
@@ -21,14 +22,15 @@ type UserCountryContextType = {
 	setUserCountry: (value: string) => void;
 	userCountryCode: string;
 	setUserCountryCode: (value: string) => void;
-	userCurrency: string; // Added for consistency
-	setCurrency: (value: string) => void; // Corrected for setting user's currency
+	userCurrency: string;
+	setCurrency: (value: string) => void;
 	userCurrencyTicker: string;
 	setUserCurrencyTicker: (value: string) => void;
 	supportedCountries: SupportedCountries[];
-	setSupportedCountries: (value: SupportedCountries[]) => void; // Corrected type for setting the entire list
+	setSupportedCountries: (value: SupportedCountries[]) => void;
 	cashback: string;
 	setCashback: (value: string) => void;
+	services: { name: string; icon: React.JSX.Element; bg: string }[];
 };
 
 // Create the context
@@ -46,15 +48,15 @@ export const useUserCountry = () => {
 };
 
 // Provider component
+
 export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const [userCountry, setUserCountry] = useState<string>("");
-	const [userCurrency, setCurrency] = useState<string>(""); // Corrected to match the type
+	const [userCountry, setUserCountry] = useState<string>("") || "NG";
+	const [userCurrency, setCurrency] = useState<string>("");
 	const [userCurrencyTicker, setUserCurrencyTicker] = useState<string>("");
 	const [userCountryCode, setUserCountryCode] = useState<string>("");
 	const [cashback, setCashback] = useState<string>("");
-
 	const [supportedCountries, setSupportedCountries] = useState<
 		SupportedCountries[]
 	>([
@@ -100,6 +102,11 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 		}, // Uganda
 	]);
 
+	// Step 3: Filter services based on userCountry
+	const [services, setServices] = useState<
+		{ name: string; icon: React.JSX.Element; bg: string }[]
+	>([]);
+
 	useEffect(() => {
 		const fetchUserCountry = () => {
 			const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -118,7 +125,6 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 					countryCode = "+234";
 					cb = "1500";
 					break;
-
 				case "Accra":
 					country = "GH";
 					currency = "GHS";
@@ -126,7 +132,6 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 					countryCode = "+233";
 					cb = "15";
 					break;
-
 				case "Nairobi":
 					country = "KE";
 					currency = "KES";
@@ -134,7 +139,6 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 					countryCode = "+254";
 					cb = "150";
 					break;
-
 				case "Johannesburg":
 				case "Cape_Town":
 				case "Durban":
@@ -144,7 +148,6 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 					countryCode = "+27";
 					cb = "200";
 					break;
-
 				case "Kampala":
 					country = "UG";
 					currency = "UGX";
@@ -152,7 +155,6 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 					countryCode = "+256";
 					cb = "500";
 					break;
-
 				default:
 					country = "NG";
 					currency = "NGN";
@@ -171,6 +173,15 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 		fetchUserCountry();
 	}, []);
 
+	// Effect to update services based on the selected country
+	useEffect(() => {
+		const currentServices =
+			servicesByCountry.find((entry) => entry.country === userCountry)
+				?.services || [];
+
+		setServices(currentServices);
+	}, [userCountry]);
+
 	return (
 		<UserCountryContext.Provider
 			value={{
@@ -186,6 +197,7 @@ export const UserCountryProvider: React.FC<{ children: ReactNode }> = ({
 				setSupportedCountries,
 				cashback,
 				setCashback,
+				services, // Provide services in the context
 			}}
 		>
 			{children}

@@ -21,9 +21,9 @@ const projectId = process.env.NEXT_PUBLIC_WC_ID as string;
 
 const { chains, publicClient } = configureChains([Celo], [publicProvider()]);
 
-const connectors = [new InjectedConnector({ chains })];
+// const connectors = [new InjectedConnector({ chains })];
 
-// const connectors = celoGroups({ chains, projectId });
+const connectors = celoGroups({ chains, projectId });
 
 const appInfo = {
 	appName: "Celo Composer",
@@ -60,9 +60,9 @@ function App({ Component, pageProps }: AppProps) {
 							appInfo={appInfo}
 							coolMode={true}
 						>
-							<WidgetContainer>
+							<Layout>
 								<Component {...pageProps} />
-							</WidgetContainer>
+							</Layout>
 						</RainbowKitProvider>
 					</WagmiConfig>
 				</ChakraProvider>

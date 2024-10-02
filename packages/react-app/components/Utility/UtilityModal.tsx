@@ -15,6 +15,7 @@ import PayBill from "./PayBill/PayBill";
 import BuyGoods from "./BuyGoods/BuyGoods";
 import BetTopUp from "./BetTopup/BetTopup";
 import Bet9jaTopup from "./Bet9ja/Bet9ja";
+import Momo from "./MoMo/MoMo";
 
 type Props = {
 	type: String;
@@ -45,6 +46,7 @@ export const UtilityDrawer = (props: Props) => {
 						{props.type === "buygoods" && <BuyGoods action={props.onClose} />}
 						{props.type === "bettopup" && <BetTopUp action={props.onClose} />}
 						{props.type === "bet9ja" && <Bet9jaTopup action={props.onClose} />}
+						{props.type === "momo" && <Momo action={props.onClose} />}
 
 						{/* 
             
