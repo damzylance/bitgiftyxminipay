@@ -33,7 +33,11 @@ import Image from "next/image";
 import axios from "axios";
 import Slider from "../Slider";
 import { useMultipleBalance } from "@/utils/useMultipleBalances";
-import { supportedTokens } from "@/utils/supportedTokens";
+import {
+	getRandomBackground,
+	servicesByCountry,
+	supportedTokens,
+} from "@/utils/supportedTokens";
 import { shortify } from "@/utils/transaction";
 const Utility = () => {
 	const {
@@ -45,6 +49,7 @@ const Utility = () => {
 		setUserCountryCode,
 		cashback,
 		setCashback,
+		services,
 	} = useUserCountry();
 	supportedCountries.map(() => {});
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -55,10 +60,21 @@ const Utility = () => {
 	const [dollarBalance, setDollarBalance] = useState(balance);
 	const [loading, setLoading] = useState(true);
 	const [transactions, setTransactions] = useState([]);
+
 	const { tokenToNairaRate } = useFetchRates();
 	const [dollarToken, setDollarToken] = useState<"CUSD" | "USDT" | "USDC">(
 		"CUSD"
 	);
+
+	// const getCountryServices = (country: String) => {
+	// 	console.log(userCountry);
+	// 	//return array of single object that has the same country as user country
+	// 	const filteredArray = servicesByCountry.filter(
+	// 		(x) => country === x.country
+	// 	)[0].services;
+	// 	return filteredArray;
+	// 	// return array of services in the object
+	// };
 
 	useEffect(() => {
 		const storedToken =
@@ -196,44 +212,21 @@ const Utility = () => {
 						</VStack>
 						<VStack position={"absolute"} right={"-20px"} top={"2"}>
 							<Select zIndex={1} size={"xs"} onChange={handleCountryChange}>
-								{supportedCountries
-									.filter((country) => {
-										return country.country == userCountry;
-									})
-									.map((country) => {
-										return (
-											<option
-												value={[
-													country.country,
-													country.countryCode,
-													country.ticker,
-													country.cashback,
-												]}
-												key={country.currency}
-											>
-												{country.country} {country.flag}
-											</option>
-										);
-									})}{" "}
-								{supportedCountries
-									.filter((country) => {
-										return country.country != userCountry;
-									})
-									.map((country) => {
-										return (
-											<option
-												value={[
-													country.country,
-													country.countryCode,
-													country.ticker,
-													country.cashback,
-												]}
-												key={country.currency}
-											>
-												{country.country} {country.flag}
-											</option>
-										);
-									})}
+								{supportedCountries.map((country) => {
+									return (
+										<option
+											value={[
+												country.country,
+												country.countryCode,
+												country.ticker,
+												country.cashback,
+											]}
+											key={country.currency}
+										>
+											{country.country} {country.flag}
+										</option>
+									);
+								})}{" "}
 							</Select>
 						</VStack>
 					</HStack>
@@ -293,114 +286,21 @@ const Utility = () => {
 					gap={"24px"}
 				>
 					<VStack width={"full"} borderRadius={"12px"} gap={"20px"}>
-						<UtilityCard
-							bg={
-								"linear-gradient(87.57deg, rgba(63, 255, 163, 0.35) 0%, rgba(0, 143, 204, 0.35) 100%)"
-							}
-							icon={<MdPhoneInTalk />}
-							text={"Buy Airtime"}
-							action={() => {
-								setType("airtime");
-								onOpen();
-							}}
-						/>
-						{userCountry === "NG" && (
-							<UtilityCard
-								bg={
-									"linear-gradient(272.43deg, rgba(255, 74, 128, 0.35) 0%, rgba(0, 87, 255, 0.35) 100%)"
-								}
-								icon={
-									<Image
-										src={bet9jaLogo}
-										style={{ borderRadius: "6px" }}
-										width={50}
-										height={50}
-										alt=""
+						{services.length > 0 &&
+							services.map((service: any) => {
+								return (
+									<UtilityCard
+										key={service.name}
+										bg={service.bg}
+										icon={service.icon} // Use the icon property directly
+										text={service.name} // Use the name property for the text
+										action={() => {
+											setType(service.name.toLowerCase());
+											onOpen();
+										}}
 									/>
-								}
-								text={"Bet9ja Topup"}
-								action={() => {
-									setType("bet9ja");
-									onOpen();
-								}}
-							/>
-						)}
-
-						<UtilityCard
-							bg={
-								"linear-gradient(272.43deg, rgba(255, 74, 128, 0.35) 0%, rgba(0, 87, 255, 0.35) 100%)"
-							}
-							icon={<MdWifiTethering />}
-							text={"Buy Data"}
-							action={() => {
-								setType("data");
-								onOpen();
-							}}
-						/>
-
-						{userCountry !== "KE" && (
-							<>
-								<UtilityCard
-									bg={
-										"linear-gradient(272.43deg, rgba(255, 184, 0, 0.35) 0%, rgba(255, 74, 128, 0.35) 100%)"
-									}
-									icon={<MdElectricBolt />}
-									text={"Pay Electricity"}
-									action={() => {
-										setType("electricity");
-										onOpen();
-									}}
-								/>
-								<UtilityCard
-									bg={
-										"linear-gradient(87.3deg, rgba(186, 102, 255, 0.35) -0.49%, rgba(0, 206, 206, 0.35) 100%)"
-									}
-									icon={<MdConnectedTv />}
-									text={"Pay Cable"}
-									action={() => {
-										setType("cable");
-										onOpen();
-									}}
-								/>
-							</>
-						)}
-
-						{userCountry === "KE" && (
-							<>
-								{/* <UtilityCard
-          bg={"linear-gradient(272.43deg, rgba(255, 184, 0, 0.35) 0%, rgba(255, 74, 128, 0.35) 100%)"}
-          icon={<MdSportsFootball />}
-          text={"Bet Top up"}
-          action={() => {
-            setType("bettopup");
-            onOpen();
-          }}
-        /> */}
-
-								<UtilityCard
-									bg={
-										"linear-gradient(87.4deg, rgba(255, 123, 123, 0.35) 0%, rgba(123, 0, 255, 0.35) 100%)"
-									}
-									icon={<MdPayment />}
-									text={"Pay Bills"}
-									action={() => {
-										setType("paybill");
-										onOpen();
-									}}
-								/>
-								<UtilityCard
-									bg={
-										"linear-gradient(87.4deg, rgba(0, 255, 204, 0.35) 0%, rgba(0, 51, 204, 0.35) 100%)"
-									}
-									icon={<MdPayment />}
-									text={"Buy Goods"}
-									action={() => {
-										setType("buygoods");
-										onOpen();
-									}}
-								/>
-							</>
-						)}
+								);
+							})}
 					</VStack>
 				</VStack>
 
