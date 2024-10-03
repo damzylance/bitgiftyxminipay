@@ -42,8 +42,8 @@ export const UtilityDrawer = (props: Props) => {
 						)}
 						{props.type === "data" && <Data action={props.onClose} />}
 						{props.type === "cable" && <Cable action={props.onClose} />}
-						{props.type === "paybill" && <PayBill action={props.onClose} />}
-						{props.type === "buygoods" && <BuyGoods action={props.onClose} />}
+						{props.type === "pay bills" && <PayBill action={props.onClose} />}
+						{props.type === "buy goods" && <BuyGoods action={props.onClose} />}
 						{props.type === "bettopup" && <BetTopUp action={props.onClose} />}
 						{props.type === "bet9ja" && <Bet9jaTopup action={props.onClose} />}
 						{props.type === "momo" && <Momo action={props.onClose} />}
