@@ -230,6 +230,7 @@ export const DataForm = (props: any) => {
 
 					if (response.status === 1) {
 						data.transaction_hash = response.hash;
+						console.log(response);
 						const newDate = new Date();
 						data.timestamp = newDate.getTime().toString();
 						data.offset = newDate.getTimezoneOffset().toString();
@@ -407,7 +408,7 @@ export const DataForm = (props: any) => {
 						isLoading={loading || isLoading}
 						loadingText={loadingText}
 						// isDisabled={true}
-						isDisabled={isDisabled}
+						isDisabled={isDisabled || userCountry === "KE"}
 						type="submit"
 						size={"lg"}
 						width={"full"}
