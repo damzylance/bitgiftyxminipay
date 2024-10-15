@@ -348,7 +348,7 @@ const Utility = () => {
 										break;
 								}
 
-								if (transaction.status === "success") {
+								if (transaction.status.toLowerCase() === "success") {
 									statusColor = "#29C087";
 									statusMessage = "Success";
 								} else if (transaction.status === "pending") {
