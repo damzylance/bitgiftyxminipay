@@ -354,6 +354,7 @@ export const MomoForm = (props: any) => {
 						loadingText={loadingText}
 						type="submit"
 						size={"lg"}
+						isDisabled
 						width={"full"}
 						borderRadius={"full"}
 						background={"#152654"}

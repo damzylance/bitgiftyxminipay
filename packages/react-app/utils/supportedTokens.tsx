@@ -15,7 +15,6 @@ import {
 	FaMoneyBillWave,
 	FaBolt,
 	FaTv,
-	FaFutbol,
 	FaMobileAlt,
 	FaGlobe,
 } from "react-icons/fa";
